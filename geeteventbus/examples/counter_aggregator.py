@@ -2,7 +2,7 @@
 
 from threading import Lock, Thread
 from time import sleep, time
-from geeteventbus.eventbus import eventbus
+from geeteventbus.async_eventbus import AsynchronousEventBus
 from geeteventbus.event import event
 from geeteventbus.subscriber import subscriber
 from random import randint
@@ -77,7 +77,7 @@ class count_producer:
         print('producer exited')
 
 if __name__ == '__main__':
-    ebus = eventbus()
+    ebus = AsynchronousEventBus()
     counters = ['c1', 'c2', 'c3', 'c4']
     subcr = counter_aggregator(counters)
     producer = count_producer(counters, ebus)

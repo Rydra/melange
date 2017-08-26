@@ -5,11 +5,13 @@ from signal import signal, SIGTERM, SIGINT
 from threading import Lock
 from time import sleep
 import logging
-from geeteventbus.eventbus import eventbus
+from geeteventbus.async_eventbus import AsynchronousEventBus
 from geeteventbus.event import event
 from geeteventbus.subscriber import subscriber
 
 import unittest
+
+from geeteventbus.sync_eventbus import SynchronousEventBus
 
 ebus = None
 
@@ -94,13 +96,13 @@ class test_runner(unittest.TestCase):
 
     def test_asynchronus_eventbus(self):
         global ebus
-        self.ebus = eventbus(subscribers_thread_safe=False)
+        self.ebus = AsynchronousEventBus(subscribers_thread_safe=False)
         ebus = self.ebus
         self.assertTrue(self.alltests())
 
     def test_synchronus_eventbus(self):
         global ebus
-        self.ebus = eventbus(synchronus=True)
+        self.ebus = SynchronousEventBus()
         ebus = self.ebus
         self.assertTrue(self.alltests())
 

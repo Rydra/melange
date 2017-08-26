@@ -26,5 +26,5 @@ class subscriber:
         if not isinstance(eventobj, event):
             logging.error('Invalid object type is passed.')
             return
-        print ('%s %s %s %s' % (current_thread().getName(), 'processing', eventobj.get_topic(),
+        print('%s %s %s %s' % (current_thread().getName(), 'processing', eventobj.get_topic(),
                str(eventobj.get_data())))
