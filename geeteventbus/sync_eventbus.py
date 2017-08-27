@@ -7,7 +7,6 @@ from geeteventbus.subscriber import subscriber
 
 MAX_TOPIC_INDEX = 16  # Must be power of 2
 DEFAULT_EXECUTOR_COUNT = 8
-MAX_EXECUTOR_COUNT = 1024
 MIN_EXECUTOR_COUNT = 1
 MAX_EXECUTOR_COUNT = 128
 MAXIMUM_QUEUE_LENGTH = 25600

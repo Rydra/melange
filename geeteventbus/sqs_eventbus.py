@@ -5,6 +5,7 @@ import logging
 import sys
 from zlib import crc32
 from geeteventbus.event import event
+from geeteventbus.sqs_queue import SQSQueue
 from geeteventbus.subscriber import subscriber
 from queue import Queue, Empty
 import boto3
@@ -22,11 +23,8 @@ def get_crc32(data):
     strbytes = bytes(data, encoding='UTF-8')
     return crc32(strbytes)
 
-class AsynchronousEventBus:
-    def __init__(self,
-                 max_queued_event=10000,
-                 executor_count=DEFAULT_EXECUTOR_COUNT,
-                 subscribers_thread_safe=True):
+class SQSEventBus:
+    def __init__(self, subscribers_thread_safe=True):
         '''
         Creates an eventbus object
 
@@ -53,23 +51,12 @@ class AsynchronousEventBus:
 
         self.index_locks = [Lock()] * MAX_TOPIC_INDEX
 
-        self.event_queue = Queue(max_queued_event)
+        self.event_queue = SQSQueue()
 
-        self.executor_count = min(executor_count, MAX_EXECUTOR_COUNT)
-        self.executors = []
-        self.grouped_events = []
-        self.thread_specific_queue = {}
+        name = 'executor_thread_main'
+        self.event_thread = Thread(target=self, name=name)
 
-        for i in range(self.executor_count):
-            name = 'executor_thread_' + str(i)
-            thrd = Thread(target=self, name=name)
-            self.executors.append(thrd)
-            grouped_events_queue = Queue()
-            self.grouped_events.append(grouped_events_queue)
-            self.thread_specific_queue[name] = grouped_events_queue
-
-        for thrd in self.executors:
-            thrd.start()
+        self.event_thread.start()
 
     def post(self, eventobj):
 
@@ -160,13 +147,7 @@ class AsynchronousEventBus:
         to a proper queue in the same thread. Otherwise just return the default event queue
         '''
 
-        ordered = eventobj.get_ordered()
-        if ordered is not None:
-            indx = (abs(get_crc32(ordered)) & (MAX_EXECUTOR_COUNT - 1)) % self.executor_count
-            queue = self.grouped_events[indx]
-            return queue
-        else:
-            return self.event_queue
+        return self.event_queue
 
     def _get_subscribers(self, topic):
         indexval = self._get_topic_index(topic)
@@ -192,13 +173,8 @@ class AsynchronousEventBus:
         return eventobj  # No harm, announce task done upfront
 
     def _choose_queue_to_pull(self):
-        thread_specific_queue = self.thread_specific_queue[current_thread().getName()]
-        if not thread_specific_queue.empty():
-            timeout = 0
-            return thread_specific_queue, timeout
-        else:
-            timeout = 0.1
-            return self.event_queue, timeout
+
+        return self.event_queue, 0
 
     def _process_event(self, eventobj):
         for subscr in self._get_subscribers(eventobj.get_topic()):
@@ -237,5 +213,4 @@ class AsynchronousEventBus:
             self.keep_running = False
         self.stop_time = time() + 2
 
-        for thrd in self.executors:
-            thrd.join()
+        self.event_thread.join()

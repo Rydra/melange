@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 
+from random import randint
 from threading import Lock, Thread
 from time import sleep, time
-from geeteventbus.async_eventbus import AsynchronousEventBus
+
 from geeteventbus.event import event
+from geeteventbus.eventbus_factory import EventBusFactory
 from geeteventbus.subscriber import subscriber
-from random import randint
 
 
 class counter_aggregator(subscriber, Thread):
@@ -77,7 +78,7 @@ class count_producer:
         print('producer exited')
 
 if __name__ == '__main__':
-    ebus = AsynchronousEventBus()
+    ebus = EventBusFactory.create()
     counters = ['c1', 'c2', 'c3', 'c4']
     subcr = counter_aggregator(counters)
     producer = count_producer(counters, ebus)

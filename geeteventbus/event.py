@@ -1,13 +1,16 @@
 ''' Event super class '''
 
 import logging
+from datetime import datetime
 
 
 class event:
-    def __init__(self, topic, data, ordered=None):
+    def __init__(self, topic, data, ordered=None, event_version=None):
         self.topic = topic
         self.data = data
+        self.event_version = event_version
         self.ordered = ordered
+        self.occureed_on = datetime.now()
         if self.ordered is not None:
             if type(self.ordered) is not str:
                 logging.error('Invalid type' + type(self.ordered))
@@ -40,3 +43,9 @@ class event:
         :rtype: str
         '''
         return self.ordered
+
+    def get_event_version(self):
+        return self.event_version
+
+    def get_occurred_on(self):
+        return self.occureed_on

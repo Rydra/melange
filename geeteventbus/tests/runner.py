@@ -1,17 +1,16 @@
 '''Tests for eventbus operations '''
 
+import logging
 import sys
+import unittest
 from signal import signal, SIGTERM, SIGINT
 from threading import Lock
 from time import sleep
-import logging
-from geeteventbus.async_eventbus import AsynchronousEventBus
+
 from geeteventbus.event import event
+from geeteventbus.eventbus_factory import EventBusFactory
+from geeteventbus.sqs_eventbus import SQSEventBus
 from geeteventbus.subscriber import subscriber
-
-import unittest
-
-from geeteventbus.sync_eventbus import SynchronousEventBus
 
 ebus = None
 
@@ -96,13 +95,19 @@ class test_runner(unittest.TestCase):
 
     def test_asynchronus_eventbus(self):
         global ebus
-        self.ebus = AsynchronousEventBus(subscribers_thread_safe=False)
+        self.ebus = EventBusFactory.create(subscribers_thread_safe=False)
         ebus = self.ebus
         self.assertTrue(self.alltests())
 
     def test_synchronus_eventbus(self):
         global ebus
-        self.ebus = SynchronousEventBus()
+        self.ebus = EventBusFactory.create(synchronous=True)
+        ebus = self.ebus
+        self.assertTrue(self.alltests())
+
+    def test_sqs_eventbus(self):
+        global ebus
+        self.ebus = SQSEventBus()
         ebus = self.ebus
         self.assertTrue(self.alltests())
 
