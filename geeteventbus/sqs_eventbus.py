@@ -4,7 +4,7 @@ from threading import Lock, Thread, current_thread
 import logging
 import sys
 from zlib import crc32
-from geeteventbus.event import event
+from geeteventbus.event import Event
 from geeteventbus.sqs_queue import SQSQueue
 from geeteventbus.subscriber import subscriber
 from queue import Queue, Empty
@@ -60,7 +60,7 @@ class SQSEventBus:
 
     def post(self, eventobj):
 
-        if not isinstance(eventobj, event):
+        if not isinstance(eventobj, Event):
             logging.error('Invalid data passed. You must pass an event instance')
             return False
         if not self.keep_running:
@@ -76,10 +76,12 @@ class SQSEventBus:
         for topic in topic_list:
             self.register_consumer(consumer, topic)
 
-    def register_consumer(self, consumer, topic):
+    def register_consumer(self, consumer, topic, event_type):
 
         if not isinstance(consumer, subscriber):
             return False
+
+        self.event_queue.register_event_type(event_type)
 
         indexval = self._get_topic_index(topic)
         with self.consumers_lock:

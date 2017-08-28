@@ -2,7 +2,7 @@ from atexit import register
 from threading import Lock
 import logging
 from zlib import crc32
-from geeteventbus.event import event
+from geeteventbus.event import Event
 from geeteventbus.subscriber import subscriber
 
 MAX_TOPIC_INDEX = 16  # Must be power of 2
@@ -32,7 +32,7 @@ class SynchronousEventBus:
 
     def post(self, eventobj):
 
-        if not isinstance(eventobj, event):
+        if not isinstance(eventobj, Event):
             logging.error('Invalid data passed. You must pass an event instance')
             return False
 

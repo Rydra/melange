@@ -2,7 +2,7 @@
 
 from threading import current_thread
 import logging
-from geeteventbus.event import event
+from geeteventbus.event import Event
 
 
 class subscriber:
@@ -15,7 +15,7 @@ class subscriber:
         Called by the eventbus.
 
         :param eventobj: The event object
-        :type eventobj: event or subclass of event
+        :type eventobj: Event or subclass of event
 
         This method implements the logic for processing the event. This method should not block for
         long time as that will affect the performance of the eventbus.
@@ -23,7 +23,7 @@ class subscriber:
         if not self.registered:
             logging.error('Subscriber is not registered')
             return
-        if not isinstance(eventobj, event):
+        if not isinstance(eventobj, Event):
             logging.error('Invalid object type is passed.')
             return
         print('%s %s %s %s' % (current_thread().getName(), 'processing', eventobj.get_topic(),

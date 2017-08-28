@@ -4,13 +4,16 @@ import logging
 from datetime import datetime
 
 
-class event:
-    def __init__(self, topic, data, ordered=None, event_version=None):
+class Event:
+    event_type_name = 'Default'
+
+    def __init__(self, topic, event_type_name='Default', ordered=None, event_version=None):
         self.topic = topic
-        self.data = data
         self.event_version = event_version
         self.ordered = ordered
-        self.occureed_on = datetime.now()
+        self.occurred_on = datetime.now()
+        self.event_type_name = event_type_name
+
         if self.ordered is not None:
             if type(self.ordered) is not str:
                 logging.error('Invalid type' + type(self.ordered))
@@ -24,14 +27,6 @@ class event:
         :rtype: str
         '''
         return self.topic
-
-    def get_data(self):
-        '''
-        Returns the data associated with the event object
-
-        :returns: the data of the event object
-        '''
-        return self.data
 
     def get_ordered(self):
         '''
@@ -48,4 +43,8 @@ class event:
         return self.event_version
 
     def get_occurred_on(self):
-        return self.occureed_on
+        return self.occurred_on
+
+    @classmethod
+    def get_event_type_name(cls):
+        return cls.event_type_name

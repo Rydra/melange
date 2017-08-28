@@ -4,7 +4,7 @@ from threading import Lock, Thread, current_thread
 import logging
 import sys
 from zlib import crc32
-from geeteventbus.event import event
+from geeteventbus.event import Event
 from geeteventbus.subscriber import subscriber
 from queue import Queue, Empty
 import boto3
@@ -73,7 +73,7 @@ class AsynchronousEventBus:
 
     def post(self, eventobj):
 
-        if not isinstance(eventobj, event):
+        if not isinstance(eventobj, Event):
             logging.error('Invalid data passed. You must pass an event instance')
             return False
         if not self.keep_running:

@@ -4,10 +4,18 @@ from random import randint
 from threading import Lock, Thread
 from time import sleep, time
 
-from geeteventbus.event import event
+from geeteventbus.event import Event
 from geeteventbus.eventbus_factory import EventBusFactory
 from geeteventbus.subscriber import subscriber
 
+class SampleDomainEvent(Event):
+    def __init__(self, topic, data1):
+        super(SampleDomainEvent, self).__init__(topic)
+
+        self.data1 = data1
+
+    def get_event_type(self):
+        return 'SampleDomainEvent'
 
 class counter_aggregator(subscriber, Thread):
     '''
@@ -72,7 +80,7 @@ class count_producer:
 
     def __call__(self):
         while self.keep_running:
-            ev = event(self.counters[randint(0, self.num_counter - 1)], randint(1, 100))
+            ev = Event(self.counters[randint(0, self.num_counter - 1)], randint(1, 100))
             ebus.post(ev)
             sleep(0.02)
         print('producer exited')

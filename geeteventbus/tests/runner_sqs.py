@@ -16,8 +16,10 @@ ebus = None
 
 
 class event_mine(Event):
-    def __init__(self, topic, data, ident, ordered=None):
-        Event.__init__(self, topic, ordered)
+    event_type_name = 'event_mine'
+
+    def __init__(self, topic, data, ident, ordered=None, event_type_name='event_mine'):
+        Event.__init__(self, topic, event_type_name, ordered)
         self.data = data
         self.id = ident
 
@@ -59,11 +61,11 @@ class test_runner(unittest.TestCase):
         self.ordered_events = []
         self.ebus = None
         i = 0
-        while i < 100:
+        while i < 25:
             self.ordered_events.append(event_mine(self.topic, {'status': 'notprocessed'}, i, 'ord'))
             i += 1
         i = 0
-        while i < 100:
+        while i < 25:
             self.events.append(event_mine(self.topic, {'status': 'notprocessed'}, i))
             i += 1
         self.subscriber = subuscriber_mine()
@@ -76,7 +78,7 @@ class test_runner(unittest.TestCase):
         self.subscriber = None
 
     def alltests(self):
-        self.ebus.register_consumer(self.subscriber, self.topic)
+        self.ebus.register_consumer(self.subscriber, self.topic, event_mine)
         for ev in self.events:
             self.ebus.post(ev)
         for ev in self.ordered_events:
@@ -94,23 +96,11 @@ class test_runner(unittest.TestCase):
                 nextexpectid += 1
         return True
 
-    def test_asynchronus_eventbus(self):
+    def test_sqs_eventbus(self):
         global ebus
-        self.ebus = EventBusFactory.create(subscribers_thread_safe=False)
+        self.ebus = SQSEventBus()
         ebus = self.ebus
         self.assertTrue(self.alltests())
-
-    def test_synchronus_eventbus(self):
-        global ebus
-        self.ebus = EventBusFactory.create(synchronous=True)
-        ebus = self.ebus
-        self.assertTrue(self.alltests())
-
-    #def test_sqs_eventbus(self):
-    #    global ebus
-    #    self.ebus = SQSEventBus()
-    #    ebus = self.ebus
-    #    self.assertTrue(self.alltests())
 
 
 def interuppt_handler(signo, statck):
