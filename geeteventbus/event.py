@@ -3,6 +3,14 @@
 import logging
 from datetime import datetime
 
+from marshmallow import Schema, fields
+
+
+class EventSchema(Schema):
+    event_type_name = fields.Str()
+    occurred_on = fields.Date()
+    topic = fields.Str()
+
 
 class Event:
     event_type_name = 'Default'
@@ -20,12 +28,6 @@ class Event:
                 raise ValueError('Ordered field must be a string')
 
     def get_topic(self):
-        '''
-        Returns the topic associated with the topic
-
-        :returns: the topic of the event
-        :rtype: str
-        '''
         return self.topic
 
     def get_ordered(self):
@@ -45,6 +47,5 @@ class Event:
     def get_occurred_on(self):
         return self.occurred_on
 
-    @classmethod
-    def get_event_type_name(cls):
-        return cls.event_type_name
+    def get_event_type_name(self):
+        return self.event_type_name

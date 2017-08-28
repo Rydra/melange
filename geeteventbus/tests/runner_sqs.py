@@ -7,21 +7,31 @@ from signal import signal, SIGTERM, SIGINT
 from threading import Lock
 from time import sleep
 
-from geeteventbus.event import Event
-from geeteventbus.eventbus_factory import EventBusFactory
-from geeteventbus.sqs_eventbus import SQSEventBus
+from marshmallow import fields, post_load
+
+from geeteventbus.aws.sqs_eventbus import SQSEventBus
+from geeteventbus.event import Event, EventSchema
 from geeteventbus.subscriber import subscriber
 
 ebus = None
 
 
-class event_mine(Event):
+class EventMineSchema(EventSchema):
+    data = fields.Dict()
+    id = fields.Integer()
+
+    @post_load
+    def create_event_mine(self, data):
+        return EventMine(data['topic'], data['data'], data['id'])
+
+
+class EventMine(Event):
     event_type_name = 'event_mine'
 
-    def __init__(self, topic, data, ident, ordered=None, event_type_name='event_mine'):
-        Event.__init__(self, topic, event_type_name, ordered)
+    def __init__(self, topic, data, id):
+        Event.__init__(self, topic, self.event_type_name)
         self.data = data
-        self.id = ident
+        self.id = id
 
     def set_status(self, status):
         self.data['status'] = status
@@ -29,46 +39,38 @@ class event_mine(Event):
     def get_status(self):
         return self.data['status']
 
-    def set_id(self, ident):
-        self.id = ident
-
     def get_id(self):
         return self.id
 
 
-class subuscriber_mine(subscriber):
+class SubscriberMine(subscriber):
     def __init__(self):
+        super().__init__()
         print('Test subscriber initialized')
         self.processed_events = []
-        self.lock = Lock()
 
     def process(self, event):
         event.set_status('processed')
-        with self.lock:
-            self.processed_events.append(event)
+        self.processed_events.append(event)
+
+    def listens_to(self):
+        return EventMine.event_type_name
 
     def get_processed_events(self):
-        with self.lock:
-            ret = self.processed_events[:]
-            return ret
+        return self.processed_events[:]
 
 
-class test_runner(unittest.TestCase):
+class TestRunner(unittest.TestCase):
     def setUp(self):
         print('Setting up')
-        self.topic = 'topic'
-        self.events = []
-        self.ordered_events = []
-        self.ebus = None
-        i = 0
-        while i < 25:
-            self.ordered_events.append(event_mine(self.topic, {'status': 'notprocessed'}, i, 'ord'))
-            i += 1
-        i = 0
-        while i < 25:
-            self.events.append(event_mine(self.topic, {'status': 'notprocessed'}, i))
-            i += 1
-        self.subscriber = subuscriber_mine()
+        self.topic = 'dev-test-topic'
+        self.events = [EventMine(self.topic, {'status': 'notprocessed'}, i) for i in range(50)]
+        self.ebus = SQSEventBus(
+            event_serializer_map={EventMine.event_type_name: EventMineSchema()},
+            event_queue_name='dev-test-queue',
+            topic_to_subscribe=self.topic)
+
+        self.subscriber = SubscriberMine()
 
     def tearDown(self):
         self.ebus.shutdown()
@@ -78,29 +80,19 @@ class test_runner(unittest.TestCase):
         self.subscriber = None
 
     def alltests(self):
-        self.ebus.register_consumer(self.subscriber, self.topic, event_mine)
+        self.ebus.subscribe(self.subscriber)
         for ev in self.events:
-            self.ebus.post(ev)
-        for ev in self.ordered_events:
-            self.ebus.post(ev)
-        sleep(2)
-        nextexpectid = 0
+            self.ebus.publish(ev)
+
+        sleep(3)
+
         processed_events = self.subscriber.get_processed_events()
-        for ev in processed_events:
-            if ev.get_status() != 'processed':
-                return False
-            if ev.get_ordered() is not None:
-                ident = ev.get_id()
-                if ident != nextexpectid:
-                    return False
-                nextexpectid += 1
-        return True
+
+        return len(processed_events) == 50 and all(ev.get_status() == 'processed' for ev in processed_events)
 
     def test_sqs_eventbus(self):
-        global ebus
-        self.ebus = SQSEventBus()
-        ebus = self.ebus
-        self.assertTrue(self.alltests())
+        success = self.alltests()
+        self.assertTrue(success)
 
 
 def interuppt_handler(signo, statck):

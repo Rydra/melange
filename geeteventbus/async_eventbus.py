@@ -2,12 +2,10 @@ from atexit import register
 from time import time
 from threading import Lock, Thread, current_thread
 import logging
-import sys
 from zlib import crc32
 from geeteventbus.event import Event
 from geeteventbus.subscriber import subscriber
 from queue import Queue, Empty
-import boto3
 
 MAX_TOPIC_INDEX = 16  # Must be power of 2
 DEFAULT_EXECUTOR_COUNT = 8

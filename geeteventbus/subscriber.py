@@ -28,3 +28,6 @@ class subscriber:
             return
         print('%s %s %s %s' % (current_thread().getName(), 'processing', eventobj.get_topic(),
                str(eventobj.get_data())))
+
+    def listens_to(self):
+        return None

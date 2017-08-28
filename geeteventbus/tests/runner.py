@@ -9,7 +9,6 @@ from time import sleep
 
 from geeteventbus.event import Event
 from geeteventbus.eventbus_factory import EventBusFactory
-from geeteventbus.sqs_eventbus import SQSEventBus
 from geeteventbus.subscriber import subscriber
 
 ebus = None
