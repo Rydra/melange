@@ -1,22 +1,23 @@
 '''Tests for eventbus operations '''
 
+import logging
 import sys
+import unittest
 from signal import signal, SIGTERM, SIGINT
 from threading import Lock
 from time import sleep
-import logging
-from geeteventbus.eventbus import eventbus
-from geeteventbus.event import event
-from geeteventbus.subscriber import subscriber
 
-import unittest
+from geeteventbus.event import Event
+from geeteventbus.eventbus_factory import EventBusFactory
+from geeteventbus.subscriber import Subscriber
 
 ebus = None
 
 
-class event_mine(event):
+class event_mine(Event):
     def __init__(self, topic, data, ident, ordered=None):
-        event.__init__(self, topic, data, ordered)
+        Event.__init__(self, topic, ordered)
+        self.data = data
         self.id = ident
 
     def set_status(self, status):
@@ -32,7 +33,7 @@ class event_mine(event):
         return self.id
 
 
-class subuscriber_mine(subscriber):
+class subuscriber_mine(Subscriber):
     def __init__(self):
         print('Test subscriber initialized')
         self.processed_events = []
@@ -94,15 +95,21 @@ class test_runner(unittest.TestCase):
 
     def test_asynchronus_eventbus(self):
         global ebus
-        self.ebus = eventbus(subscribers_thread_safe=False)
+        self.ebus = EventBusFactory.create(subscribers_thread_safe=False)
         ebus = self.ebus
         self.assertTrue(self.alltests())
 
     def test_synchronus_eventbus(self):
         global ebus
-        self.ebus = eventbus(synchronus=True)
+        self.ebus = EventBusFactory.create(synchronous=True)
         ebus = self.ebus
         self.assertTrue(self.alltests())
+
+    #def test_sqs_eventbus(self):
+    #    global ebus
+    #    self.ebus = SQSEventBus()
+    #    ebus = self.ebus
+    #    self.assertTrue(self.alltests())
 
 
 def interuppt_handler(signo, statck):

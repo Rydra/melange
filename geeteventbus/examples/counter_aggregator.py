@@ -1,14 +1,23 @@
 #!/usr/bin/env python
 
+from random import randint
 from threading import Lock, Thread
 from time import sleep, time
-from geeteventbus.eventbus import eventbus
-from geeteventbus.event import event
-from geeteventbus.subscriber import subscriber
-from random import randint
 
+from geeteventbus.event import Event
+from geeteventbus.eventbus_factory import EventBusFactory
+from geeteventbus.subscriber import Subscriber
 
-class counter_aggregator(subscriber, Thread):
+class SampleDomainEvent(Event):
+    def __init__(self, topic, data1):
+        super(SampleDomainEvent, self).__init__(topic)
+
+        self.data1 = data1
+
+    def get_event_type(self):
+        return 'SampleDomainEvent'
+
+class counter_aggregator(Subscriber, Thread):
     '''
     Aggregator for a set of counters. Multiple threads updates the counts which
     are aggregated by this class and output the aggregated value periodically.
@@ -71,13 +80,13 @@ class count_producer:
 
     def __call__(self):
         while self.keep_running:
-            ev = event(self.counters[randint(0, self.num_counter - 1)], randint(1, 100))
+            ev = Event(self.counters[randint(0, self.num_counter - 1)], randint(1, 100))
             ebus.post(ev)
             sleep(0.02)
         print('producer exited')
 
 if __name__ == '__main__':
-    ebus = eventbus()
+    ebus = EventBusFactory.create()
     counters = ['c1', 'c2', 'c3', 'c4']
     subcr = counter_aggregator(counters)
     producer = count_producer(counters, ebus)

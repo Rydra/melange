@@ -11,7 +11,7 @@ def read(fname):
 
 setup(
     name='geeteventbus',
-    version='1.0',
+    version='1.2',
     description='An eventbus for highly concurrent system',
     long_description=read('README.rst'),
     author='Nipun Talukdar',
@@ -21,7 +21,7 @@ setup(
     url='https://github.com/nipuntalukdar/NipunTalukdarExamples',
     license='MIT',
     packages=find_packages(),
-    install_requires=[],
+    install_requires=['boto3', 'marshmallow', ],
     extras_require={},
     entry_points={},
     platforms=['all'],
