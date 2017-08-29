@@ -4,7 +4,7 @@ from threading import Lock, Thread, current_thread
 import logging
 from zlib import crc32
 from geeteventbus.event import Event
-from geeteventbus.subscriber import subscriber
+from geeteventbus.subscriber import Subscriber
 from queue import Queue, Empty
 
 MAX_TOPIC_INDEX = 16  # Must be power of 2
@@ -89,7 +89,7 @@ class AsynchronousEventBus:
 
     def register_consumer(self, consumer, topic):
 
-        if not isinstance(consumer, subscriber):
+        if not isinstance(consumer, Subscriber):
             return False
 
         indexval = self._get_topic_index(topic)
@@ -137,7 +137,7 @@ class AsynchronousEventBus:
                             del self.topics[indexval][topic]
 
     def is_subscribed(self, consumer, topic):
-        if not isinstance(consumer, subscriber):
+        if not isinstance(consumer, Subscriber):
             logging.error('Invalid object passed')
             return False
 

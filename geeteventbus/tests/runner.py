@@ -9,7 +9,7 @@ from time import sleep
 
 from geeteventbus.event import Event
 from geeteventbus.eventbus_factory import EventBusFactory
-from geeteventbus.subscriber import subscriber
+from geeteventbus.subscriber import Subscriber
 
 ebus = None
 
@@ -33,7 +33,7 @@ class event_mine(Event):
         return self.id
 
 
-class subuscriber_mine(subscriber):
+class subuscriber_mine(Subscriber):
     def __init__(self):
         print('Test subscriber initialized')
         self.processed_events = []

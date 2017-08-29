@@ -2,16 +2,14 @@ import json
 import logging
 from atexit import register
 from queue import Empty
-from threading import Lock, Thread
+from threading import Thread, Lock
 from time import time
 
 from geeteventbus.aws.messaging_manager import MessagingManager
-from geeteventbus.event import Event
 from geeteventbus.subscriber import Subscriber
 
 
-class SQSEventBus(Thread):
-    _instance = None
+class MessageConsumer(Thread):
 
     def __init__(self, event_serializer, event_queue_name, topic_to_subscribe):
 
@@ -31,43 +29,6 @@ class SQSEventBus(Thread):
         self.shutdown_lock = Lock()
 
         self.start()
-
-    @staticmethod
-    def init(event_serializer_map, event_queue_name, topic_to_subscribe):
-        SQSEventBus._instance = SQSEventBus(event_serializer_map, event_queue_name, topic_to_subscribe)
-
-    @staticmethod
-    def get_instance():
-        if not SQSEventBus._instance:
-            raise Exception("The event bus has not been initialized. Call init first!")
-
-        return SQSEventBus._instance
-
-    @staticmethod
-    def set_instance(instance):
-        """
-        Only used for mocking purposes
-        """
-        SQSEventBus._instance = instance
-
-    def publish(self, event):
-
-        if not isinstance(event, Event):
-            logging.error('Invalid data passed. You must pass an event instance')
-            return False
-        if not self.keep_running:
-            return False
-
-        topic_name = event.get_topic()
-
-        topic = MessagingManager.declare_topic(topic_name)
-
-        response = topic.publish(Message=self.event_serializer.serialize(event))
-
-        if 'MessageId' not in response:
-            raise ConnectionError('Could not send the event to the SNS TOPIC')
-
-        return True
 
     def subscribe(self, consumer):
 

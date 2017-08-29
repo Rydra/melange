@@ -5,7 +5,7 @@ import logging
 from geeteventbus.event import Event
 
 
-class subscriber:
+class Subscriber:
 
     def __init__(self):
         pass

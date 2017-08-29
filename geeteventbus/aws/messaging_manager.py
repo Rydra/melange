@@ -42,4 +42,4 @@ class MessagingManager:
 
             sns_topic_to_bind.subscribe(Protocol='sqs', Endpoint=queue_arn)
 
-        return (queue, queue_arn)
+        return queue, queue_arn

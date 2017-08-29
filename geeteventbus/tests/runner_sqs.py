@@ -9,9 +9,10 @@ from time import sleep
 
 from marshmallow import fields, post_load
 
+from geeteventbus.aws.event_serializer import EventSerializer
 from geeteventbus.aws.sqs_eventbus import SQSEventBus
 from geeteventbus.event import Event, EventSchema
-from geeteventbus.subscriber import subscriber
+from geeteventbus.subscriber import Subscriber
 
 ebus = None
 
@@ -43,7 +44,7 @@ class EventMine(Event):
         return self.id
 
 
-class SubscriberMine(subscriber):
+class SubscriberMine(Subscriber):
     def __init__(self):
         super().__init__()
         print('Test subscriber initialized')
@@ -66,7 +67,7 @@ class TestRunner(unittest.TestCase):
         self.topic = 'dev-test-topic'
         self.events = [EventMine(self.topic, {'status': 'notprocessed'}, i) for i in range(50)]
         SQSEventBus.init(
-            event_serializer_map={EventMine.event_type_name: EventMineSchema()},
+            event_serializer_map=EventSerializer({EventMine.event_type_name: EventMineSchema()}),
             event_queue_name='dev-test-queue',
             topic_to_subscribe=self.topic)
 

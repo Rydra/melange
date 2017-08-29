@@ -3,7 +3,7 @@ from threading import Lock
 import logging
 from zlib import crc32
 from geeteventbus.event import Event
-from geeteventbus.subscriber import subscriber
+from geeteventbus.subscriber import Subscriber
 
 MAX_TOPIC_INDEX = 16  # Must be power of 2
 DEFAULT_EXECUTOR_COUNT = 8
@@ -46,7 +46,7 @@ class SynchronousEventBus:
 
     def register_consumer(self, consumer, topic):
 
-        if not isinstance(consumer, subscriber):
+        if not isinstance(consumer, Subscriber):
             return False
 
         indexval = self._get_topic_index(topic)
@@ -81,7 +81,7 @@ class SynchronousEventBus:
 
     def is_subscribed(self, consumer, topic):
 
-        if not isinstance(consumer, subscriber):
+        if not isinstance(consumer, Subscriber):
             logging.error('Invalid object passed')
             return False
 

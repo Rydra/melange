@@ -6,7 +6,7 @@ from time import sleep, time
 
 from geeteventbus.event import Event
 from geeteventbus.eventbus_factory import EventBusFactory
-from geeteventbus.subscriber import subscriber
+from geeteventbus.subscriber import Subscriber
 
 class SampleDomainEvent(Event):
     def __init__(self, topic, data1):
@@ -17,7 +17,7 @@ class SampleDomainEvent(Event):
     def get_event_type(self):
         return 'SampleDomainEvent'
 
-class counter_aggregator(subscriber, Thread):
+class counter_aggregator(Subscriber, Thread):
     '''
     Aggregator for a set of counters. Multiple threads updates the counts which
     are aggregated by this class and output the aggregated value periodically.
