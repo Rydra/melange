@@ -65,7 +65,7 @@ class TestRunner(unittest.TestCase):
         print('Setting up')
         self.topic = 'dev-test-topic'
         self.events = [EventMine(self.topic, {'status': 'notprocessed'}, i) for i in range(50)]
-        self.ebus = SQSEventBus(
+        SQSEventBus.init(
             event_serializer_map={EventMine.event_type_name: EventMineSchema()},
             event_queue_name='dev-test-queue',
             topic_to_subscribe=self.topic)
@@ -73,16 +73,15 @@ class TestRunner(unittest.TestCase):
         self.subscriber = SubscriberMine()
 
     def tearDown(self):
-        self.ebus.shutdown()
-        self.ebus = None
+        SQSEventBus.get_instance().shutdown()
         self.events = None
         self.ordered_events = None
         self.subscriber = None
 
     def alltests(self):
-        self.ebus.subscribe(self.subscriber)
+        SQSEventBus.get_instance().subscribe(self.subscriber)
         for ev in self.events:
-            self.ebus.publish(ev)
+            SQSEventBus.get_instance().publish(ev)
 
         sleep(3)
 

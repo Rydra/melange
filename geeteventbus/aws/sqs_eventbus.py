@@ -5,14 +5,18 @@ from queue import Empty
 from threading import Lock, Thread
 from time import time
 
+from geeteventbus.aws import Singleton
 from geeteventbus.aws.messaging_manager import MessagingManager
 from geeteventbus.event import Event
 from geeteventbus.subscriber import subscriber
 
-class SQSEventBus:
+class SQSEventBus():
+    _instance = None
+
     def __init__(self, event_serializer_map, event_queue_name, topic_to_subscribe):
 
         # TODO: Validate that every map is a marshmallow Schema
+        super().__init__()
         self.event_serializer_map = event_serializer_map
 
         register(self.shutdown)
@@ -29,6 +33,24 @@ class SQSEventBus:
         name = 'executor_thread_main'
         self.event_thread = Thread(target=self, name=name)
         self.event_thread.start()
+
+    @staticmethod
+    def init(event_serializer_map, event_queue_name, topic_to_subscribe):
+        SQSEventBus._instance = SQSEventBus(event_serializer_map, event_queue_name, topic_to_subscribe)
+
+    @staticmethod
+    def get_instance():
+        if not SQSEventBus._instance:
+            raise Exception("The event bus has not been initialized. Call init first!")
+
+        return SQSEventBus._instance
+
+    @staticmethod
+    def set_instance(instance):
+        """
+        Only used for mocking purposes
+        """
+        SQSEventBus._instance = instance
 
     def publish(self, event):
 
