@@ -5,12 +5,12 @@ from queue import Empty
 from threading import Thread, Lock
 from time import time
 
-from geeteventbus.aws.messaging_manager import MessagingManager
 from geeteventbus.subscriber import Subscriber
+
+from geeteventbus.aws.messaging_manager import MessagingManager
 
 
 class MessageConsumer(Thread):
-
     def __init__(self, event_serializer, event_queue_name, topic_to_subscribe):
 
         super().__init__()

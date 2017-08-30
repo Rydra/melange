@@ -1,7 +1,8 @@
+import logging
 from atexit import register
 from threading import Lock
-import logging
 from zlib import crc32
+
 from geeteventbus.event import Event
 from geeteventbus.subscriber import Subscriber
 

@@ -1,9 +1,8 @@
 ''' Subscriber super-class '''
 
-from threading import current_thread
 import logging
+from threading import current_thread
 from geeteventbus.event import Event
-
 
 class Subscriber:
 

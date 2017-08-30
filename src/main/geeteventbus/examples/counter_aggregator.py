@@ -6,7 +6,9 @@ from time import sleep, time
 
 from geeteventbus.event import Event
 from geeteventbus.eventbus_factory import EventBusFactory
-from geeteventbus.subscriber import Subscriber
+
+from src.geeteventbus.subscriber import Subscriber
+
 
 class SampleDomainEvent(Event):
     def __init__(self, topic, data1):

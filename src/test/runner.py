@@ -9,6 +9,7 @@ from time import sleep
 
 from geeteventbus.event import Event
 from geeteventbus.eventbus_factory import EventBusFactory
+
 from geeteventbus.subscriber import Subscriber
 
 ebus = None

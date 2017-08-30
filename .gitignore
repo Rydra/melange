@@ -1,0 +1,14 @@
+
+src/main/geeteventbus/__pycache__/
+
+src/main/__pycache__/
+
+src/main/geeteventbus/aws/__pycache__/
+
+src/main/geeteventbus/examples/__pycache__/
+
+src/main/geeteventbus/infrastructure/__pycache__/
+
+src/test/__pycache__/
+
+target/
