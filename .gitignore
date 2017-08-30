@@ -1,0 +1,7 @@
+*.pyc
+target/*
+.idea/
+.directory
+target/
+.cache/
+.coverage

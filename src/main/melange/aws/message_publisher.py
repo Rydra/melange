@@ -1,13 +1,11 @@
 import logging
 
-from geeteventbus.aws.messaging_manager import MessagingManager
-from geeteventbus.event import Event
+from melange.event import Event
+from melange.aws.messaging_manager import MessagingManager
 
 
 class MessagePublisher:
     def __init__(self, event_serializer):
-        super().__init__()
-
         self.event_serializer = event_serializer
 
     def publish(self, event):

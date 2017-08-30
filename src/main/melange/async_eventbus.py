@@ -1,11 +1,12 @@
-from atexit import register
-from time import time
-from threading import Lock, Thread, current_thread
 import logging
-from zlib import crc32
-from geeteventbus.event import Event
-from geeteventbus.subscriber import Subscriber
+from atexit import register
 from queue import Queue, Empty
+from threading import Lock, Thread, current_thread
+from time import time
+from zlib import crc32
+
+from melange.subscriber import Subscriber
+from melange.event import Event
 
 MAX_TOPIC_INDEX = 16  # Must be power of 2
 DEFAULT_EXECUTOR_COUNT = 8

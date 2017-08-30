@@ -4,18 +4,18 @@ import logging
 import sys
 import unittest
 from signal import signal, SIGTERM, SIGINT
-from threading import Lock
 from time import sleep
 
+from melange.aws.event_serializer import EventSerializer
+from melange.aws.sqs_eventbus import SQSEventBus
+from melange.event import Event, EventSchema
 from marshmallow import fields, post_load
 
-from geeteventbus.aws.event_serializer import EventSerializer
-from geeteventbus.aws.sqs_eventbus import SQSEventBus
-from geeteventbus.event import Event, EventSchema
-from geeteventbus.subscriber import Subscriber
+from melange.subscriber import Subscriber
 
 ebus = None
 
+NUM_EVENTS_TO_PUBLISH = 10
 
 class EventMineSchema(EventSchema):
     data = fields.Dict()
@@ -65,7 +65,7 @@ class TestRunner(unittest.TestCase):
     def setUp(self):
         print('Setting up')
         self.topic = 'dev-test-topic'
-        self.events = [EventMine(self.topic, {'status': 'notprocessed'}, i) for i in range(50)]
+        self.events = [EventMine(self.topic, {'status': 'notprocessed'}, i) for i in range(NUM_EVENTS_TO_PUBLISH)]
         SQSEventBus.init(
             event_serializer_map=EventSerializer({EventMine.event_type_name: EventMineSchema()}),
             event_queue_name='dev-test-queue',
@@ -88,7 +88,7 @@ class TestRunner(unittest.TestCase):
 
         processed_events = self.subscriber.get_processed_events()
 
-        return len(processed_events) == 50 and all(ev.get_status() == 'processed' for ev in processed_events)
+        return len(processed_events) == NUM_EVENTS_TO_PUBLISH and all(ev.get_status() == 'processed' for ev in processed_events)
 
     def test_sqs_eventbus(self):
         success = self.alltests()

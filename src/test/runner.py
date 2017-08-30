@@ -7,9 +7,10 @@ from signal import signal, SIGTERM, SIGINT
 from threading import Lock
 from time import sleep
 
-from geeteventbus.event import Event
-from geeteventbus.eventbus_factory import EventBusFactory
-from geeteventbus.subscriber import Subscriber
+from melange.event import Event
+from melange.eventbus_factory import EventBusFactory
+
+from melange.subscriber import Subscriber
 
 ebus = None
 

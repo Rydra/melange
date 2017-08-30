@@ -1,9 +1,8 @@
 ''' Subscriber super-class '''
 
-from threading import current_thread
 import logging
-from geeteventbus.event import Event
-
+from threading import current_thread
+from melange.event import Event
 
 class Subscriber:
 
