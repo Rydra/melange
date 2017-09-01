@@ -14,11 +14,9 @@ MAXIMUM_QUEUE_LENGTH = 25600
 MINIMUM_QUEUE_LENGTH = 16
 
 
-def get_crc32(data):
-    '''Returns the crc32 value of the input string. '''
+def compute_crc32(data):
     strbytes = bytes(data, encoding='UTF-8')
     return crc32(strbytes)
-
 
 
 class SynchronousEventBus:
@@ -74,8 +72,7 @@ class SynchronousEventBus:
             for topic in subscribed_topics:
                 indexval = self._get_topic_index(topic)
                 with self.index_locks[indexval]:
-                    if (topic in self.topics[indexval]) and (consumer in
-                                                                 self.topics[indexval][topic]):
+                    if (topic in self.topics[indexval]) and (consumer in self.topics[indexval][topic]):
                         self.topics[indexval][topic].remove(consumer)
                         if len(self.topics[indexval][topic]) == 0:
                             del self.topics[indexval][topic]
@@ -108,7 +105,7 @@ class SynchronousEventBus:
             return self.topics[indexval][topic][:] if topic in self.topics[indexval] else []
 
     def _get_topic_index(self, topic):
-        return get_crc32(topic) & (MAX_TOPIC_INDEX - 1)
+        return compute_crc32(topic) & (MAX_TOPIC_INDEX - 1)
 
     def shutdown(self):
         pass

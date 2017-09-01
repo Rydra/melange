@@ -1,12 +1,12 @@
-from melange.aws.message_consumer import MessageConsumer
+from melange.aws.threaded_message_consumer import ThreadedMessageConsumer
 from melange.aws.message_publisher import MessagePublisher
 
 
-class SQSEventBus(MessageConsumer, MessagePublisher):
+class SQSEventBus(ThreadedMessageConsumer, MessagePublisher):
     _instance = None
 
     def __init__(self, event_serializer, event_queue_name, topic_to_subscribe):
-        MessageConsumer.__init__(self, event_serializer, event_queue_name, topic_to_subscribe)
+        ThreadedMessageConsumer.__init__(self, event_serializer, event_queue_name, topic_to_subscribe)
         MessagePublisher.__init__(self, event_serializer)
 
     @staticmethod

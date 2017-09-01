@@ -1,5 +1,5 @@
-from melange.async_eventbus import AsynchronousEventBus
-from melange.sync_eventbus import SynchronousEventBus
+from melange.eventbus.async_eventbus import AsynchronousEventBus
+from melange.eventbus.sync_eventbus import SynchronousEventBus
 
 
 class EventBusFactory:

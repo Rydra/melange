@@ -1,5 +1,3 @@
-''' Event super class '''
-
 import logging
 from datetime import datetime
 
@@ -31,14 +29,6 @@ class Event:
         return self.topic
 
     def get_ordered(self):
-        '''
-        Returns the event ordering field.
-
-        Event ordering field may be none, specifying the events may get processed out of order
-        
-        :returns: the ordering field of the event object
-        :rtype: str
-        '''
         return self.ordered
 
     def get_event_version(self):

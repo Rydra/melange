@@ -1,34 +1,20 @@
 import json
 import logging
-from atexit import register
 from queue import Empty
-from threading import Thread, Lock
-from time import time
-
-from melange.subscriber import Subscriber
 
 from melange.aws.messaging_manager import MessagingManager
+from melange.subscriber import Subscriber
 
 
-class MessageConsumer(Thread):
+class MessageConsumer:
     def __init__(self, event_serializer, event_queue_name, topic_to_subscribe):
 
         super().__init__()
 
         self.event_serializer = event_serializer
-
-        register(self.shutdown)
         self.consumers = {}
-
         topic = MessagingManager.declare_topic(topic_to_subscribe)
-
         self.event_queue, _ = MessagingManager.declare_queue(event_queue_name, topic)
-
-        self.keep_running = True
-        self.stop_time = 0
-        self.shutdown_lock = Lock()
-
-        self.start()
 
     def subscribe(self, consumer):
 
@@ -37,10 +23,12 @@ class MessageConsumer(Thread):
 
         listened_event_type_name = consumer.listens_to()
 
-        if not listened_event_type_name in self.consumers:
+        if listened_event_type_name not in self.consumers:
             self.consumers[listened_event_type_name] = []
 
         self.consumers[listened_event_type_name].append(consumer)
+
+        return True
 
     def unsubscribe(self, consumer):
 
@@ -52,12 +40,11 @@ class MessageConsumer(Thread):
             if len(self.consumers[listened_event_type_name]) == 0:
                 del self.consumers[listened_event_type_name]
 
-    def run(self):
+    def consume_event(self):
 
-        while not self._thread_should_end():
-            eventobj = self._get_next_event()
-            if eventobj is not None:
-                self._process_event(eventobj)
+        eventobj = self._get_next_event()
+        if eventobj is not None:
+            self._process_event(eventobj)
 
     def _get_subscribers(self, event_type_name):
         return self.consumers[event_type_name] if event_type_name in self.consumers else []
@@ -96,21 +83,3 @@ class MessageConsumer(Thread):
                 subscr.process(eventobj)
             except Exception as e:
                 logging.error(e)
-
-    def _thread_should_end(self):
-        return 0 < self.stop_time < time()
-
-    def shutdown(self):
-        '''
-        Stops the event bus. The event bus will stop all its executor threads.
-        It will try to flush out already queued events by calling the subscribers
-        of the events. This flush wait time is 2 seconds.
-        '''
-
-        with self.shutdown_lock:
-            if not self.keep_running:
-                return
-            self.keep_running = False
-        self.stop_time = time() + 2
-
-        self.join()

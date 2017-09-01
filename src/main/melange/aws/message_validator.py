@@ -50,8 +50,7 @@ def verify_sns_notification(message):
     decoded_signature = b64decode(content["Signature"])
 
     # Depending on the message type, canonical message format varies: http://goo.gl/oSrJl8
-    if message['Type'] == SNS_MESSAGE_TYPE_SUB_NOTIFICATION or \
-                    message['Type'] == SNS_MESSAGE_TYPE_UNSUB_NOTIFICATION:
+    if message['Type'] == SNS_MESSAGE_TYPE_SUB_NOTIFICATION or message['Type'] == SNS_MESSAGE_TYPE_UNSUB_NOTIFICATION:
 
         canonical_message = canonical_message_builder(content, canonical_sub_unsub_format)
 

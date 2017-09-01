@@ -1,5 +1,4 @@
 class EventSerializer:
-
     def __init__(self, event_serializer_map):
 
         self.event_serializer_map = event_serializer_map

@@ -2,7 +2,6 @@ import boto3
 
 
 class MessagingManager:
-    
     @staticmethod
     def declare_topic(topic_name):
         sns = boto3.resource('sns')
@@ -14,8 +13,8 @@ class MessagingManager:
         sqs_res = boto3.resource('sqs')
         sqs_cli = boto3.client('sqs')
         queue = sqs_res.create_queue(QueueName=queue_name)
-        queue_arn = sqs_cli.get_queue_attributes(QueueUrl=queue.url
-                                                 , AttributeNames=['QueueArn'])['Attributes']['QueueArn']
+        queue_arn = sqs_cli.get_queue_attributes(QueueUrl=queue.url,
+                                                 AttributeNames=['QueueArn'])['Attributes']['QueueArn']
 
         if sns_topic_to_bind:
             policy = """

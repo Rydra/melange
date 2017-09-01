@@ -15,18 +15,17 @@ MAX_EXECUTOR_COUNT = 128
 MAXIMUM_QUEUE_LENGTH = 25600
 
 
-def get_crc32(data):
-    '''Returns the crc32 value of the input string. '''
-
+def compute_crc32(data):
     strbytes = bytes(data, encoding='UTF-8')
     return crc32(strbytes)
+
 
 class AsynchronousEventBus:
     def __init__(self,
                  max_queued_event=10000,
                  executor_count=DEFAULT_EXECUTOR_COUNT,
                  subscribers_thread_safe=True):
-        '''
+        """
         Creates an eventbus object
 
         :param max_queued_event:  total number of un-ordered events queued.
@@ -37,7 +36,7 @@ class AsynchronousEventBus:
         :param subscribers_thread_safe:  if the subscribers can be invoked for processing multiple
                                          events simultaneously.
         :type subscribers_thread_safe: bool
-        '''
+        """
 
         register(self.shutdown)
         self.subscribers_thread_safe = subscribers_thread_safe
@@ -161,7 +160,7 @@ class AsynchronousEventBus:
 
         ordered = eventobj.get_ordered()
         if ordered is not None:
-            indx = (abs(get_crc32(ordered)) & (MAX_EXECUTOR_COUNT - 1)) % self.executor_count
+            indx = (abs(compute_crc32(ordered)) & (MAX_EXECUTOR_COUNT - 1)) % self.executor_count
             queue = self.grouped_events[indx]
             return queue
         else:
@@ -173,7 +172,7 @@ class AsynchronousEventBus:
             return self.topics[indexval][topic][:] if topic in self.topics[indexval] else []
 
     def _get_topic_index(self, topic):
-        return get_crc32(topic) & (MAX_TOPIC_INDEX - 1)
+        return compute_crc32(topic) & (MAX_TOPIC_INDEX - 1)
 
     def _get_next_event(self):
 
