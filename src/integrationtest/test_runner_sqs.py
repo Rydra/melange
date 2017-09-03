@@ -7,7 +7,7 @@ from signal import signal, SIGTERM, SIGINT
 from time import sleep
 
 from melange.aws.event_serializer import EventSerializer
-from melange.aws.sqs_eventbus import SQSEventBus
+from melange.aws.eventbus import EventBus
 from melange.event import Event, EventSchema
 from marshmallow import fields, post_load
 
@@ -66,7 +66,7 @@ class TestRunner(unittest.TestCase):
         print('Setting up')
         self.topic = 'dev-test-topic'
         self.events = [EventMine(self.topic, {'status': 'notprocessed'}, i) for i in range(NUM_EVENTS_TO_PUBLISH)]
-        SQSEventBus.init(
+        EventBus.init(
             event_serializer_map=EventSerializer({EventMine.event_type_name: EventMineSchema()}),
             event_queue_name='dev-test-queue',
             topic_to_subscribe=self.topic)
@@ -74,15 +74,15 @@ class TestRunner(unittest.TestCase):
         self.subscriber = SubscriberMine()
 
     def tearDown(self):
-        SQSEventBus.get_instance().shutdown()
+        EventBus.get_instance().shutdown()
         self.events = None
         self.ordered_events = None
         self.subscriber = None
 
     def alltests(self):
-        SQSEventBus.get_instance().subscribe(self.subscriber)
+        EventBus.get_instance().subscribe(self.subscriber)
         for ev in self.events:
-            SQSEventBus.get_instance().publish(ev)
+            EventBus.get_instance().publish(ev)
 
         sleep(3)
 

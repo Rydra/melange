@@ -17,8 +17,6 @@ class ThreadedMessageConsumer(Thread, MessageConsumer):
         self.stop_time = 0
         self.shutdown_lock = Lock()
 
-        self.start()
-
     def run(self):
 
         while not self._thread_should_end():

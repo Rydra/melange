@@ -2,7 +2,7 @@ from melange.aws.threaded_message_consumer import ThreadedMessageConsumer
 from melange.aws.message_publisher import MessagePublisher
 
 
-class SQSEventBus(ThreadedMessageConsumer, MessagePublisher):
+class EventBus(ThreadedMessageConsumer, MessagePublisher):
     _instance = None
 
     def __init__(self, event_serializer, event_queue_name, topic_to_subscribe):
@@ -11,18 +11,18 @@ class SQSEventBus(ThreadedMessageConsumer, MessagePublisher):
 
     @staticmethod
     def init(event_serializer_map, event_queue_name, topic_to_subscribe):
-        SQSEventBus._instance = SQSEventBus(event_serializer_map, event_queue_name, topic_to_subscribe)
+        EventBus._instance = EventBus(event_serializer_map, event_queue_name, topic_to_subscribe)
 
     @staticmethod
     def get_instance():
-        if not SQSEventBus._instance:
+        if not EventBus._instance:
             raise Exception("The event bus has not been initialized. Call init first!")
 
-        return SQSEventBus._instance
+        return EventBus._instance
 
     @staticmethod
     def set_instance(instance):
         """
         Only used for mocking purposes
         """
-        SQSEventBus._instance = instance
+        EventBus._instance = instance

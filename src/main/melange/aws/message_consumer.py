@@ -42,9 +42,9 @@ class MessageConsumer:
 
     def consume_event(self):
 
-        eventobj = self._get_next_event()
-        if eventobj is not None:
-            self._process_event(eventobj)
+        event = self._get_next_event()
+        if event is not None:
+            self._process_event(event)
 
     def _get_subscribers(self, event_type_name):
         return self.consumers[event_type_name] if event_type_name in self.consumers else []

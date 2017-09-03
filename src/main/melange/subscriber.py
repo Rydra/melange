@@ -5,12 +5,12 @@ class Subscriber:
     def __init__(self):
         pass
 
-    def process(self, eventobj):
+    def process(self, event):
         """
         Called by the eventbus.
 
-        :param eventobj: The event object
-        :type eventobj: Event or subclass of event
+        :param event: The event object
+        :type event: Event or subclass of event
 
         This method implements the logic for processing the event. This method should not block for
         long time as that will affect the performance of the eventbus.
