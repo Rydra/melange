@@ -83,7 +83,7 @@ class count_producer:
     def __call__(self):
         while self.keep_running:
             ev = Event(self.counters[randint(0, self.num_counter - 1)], randint(1, 100))
-            ebus.post(ev)
+            ebus.publish(ev)
             sleep(0.02)
         print('producer exited')
 
@@ -93,7 +93,7 @@ if __name__ == '__main__':
     subcr = counter_aggregator(counters)
     producer = count_producer(counters, ebus)
     for counter in counters:
-        ebus.register_consumer(subcr, counter)
+        ebus.subscribe(subcr, counter)
     threads = []
     i = 30
     while i > 0:

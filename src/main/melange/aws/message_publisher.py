@@ -5,7 +5,8 @@ from melange.aws.messaging_manager import MessagingManager
 
 
 class MessagePublisher:
-    def __init__(self, event_serializer):
+    def __init__(self, event_serializer, topic):
+        self.topic = MessagingManager.declare_topic(topic)
         self.event_serializer = event_serializer
 
     def publish(self, event):
@@ -14,9 +15,7 @@ class MessagePublisher:
             logging.error('Invalid data passed. You must pass an event instance')
             return False
 
-        topic = MessagingManager.declare_topic(event.get_topic())
-
-        response = topic.publish(Message=self.event_serializer.serialize(event))
+        response = self.topic.publish(Message=self.event_serializer.serialize(event))
 
         if 'MessageId' not in response:
             raise ConnectionError('Could not send the event to the SNS TOPIC')

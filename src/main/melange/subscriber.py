@@ -1,9 +1,10 @@
 """ Subscriber super-class """
+from melange.event import Event
 
 
 class Subscriber:
-    def __init__(self):
-        pass
+    def __init__(self, topic):
+        self.topic = topic
 
     def process(self, event):
         """
@@ -17,5 +18,12 @@ class Subscriber:
         """
         pass
 
+    def get_topic(self):
+        return self.topic
+
     def listens_to(self):
         return None
+
+    def accepts(self, event):
+        return isinstance(event, Event) \
+               and (self.listens_to() == Event.ALL or self.listens_to() == event.event_type_name)

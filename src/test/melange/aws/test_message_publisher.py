@@ -9,8 +9,9 @@ from melange.event import Event, EventSchema
 class TestMessagePublisher:
     def test_publish_a_message(self):
 
+        a_topic = 'a_topic'
         event_serializer = EventSerializer({Event.event_type_name: EventSchema()})
-        event = Event(topic='a_topic', event_type_name=Event.event_type_name)
+        event = Event(event_type_name=Event.event_type_name)
 
         response = {'MessageId': '12345'}
 
@@ -18,7 +19,7 @@ class TestMessagePublisher:
         topic.publish.return_value = response
         MessagingManager.declare_topic = MagicMock(return_value=topic)
 
-        message_publisher = MessagePublisher(event_serializer)
+        message_publisher = MessagePublisher(event_serializer, a_topic)
         success = message_publisher.publish(event)
 
         assert success
