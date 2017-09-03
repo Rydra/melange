@@ -6,9 +6,9 @@ from melange.aws.message_consumer import MessageConsumer
 
 
 class ThreadedMessageConsumer(Thread, MessageConsumer):
-    def __init__(self, event_serializer, event_queue_name, topic_to_subscribe):
+    def __init__(self, event_queue_name, topic_to_subscribe):
 
-        MessageConsumer.__init__(self, event_serializer, event_queue_name, topic_to_subscribe)
+        MessageConsumer.__init__(self, event_queue_name, topic_to_subscribe)
         Thread.__init__(self)
 
         register(self.shutdown)

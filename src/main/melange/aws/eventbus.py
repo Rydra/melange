@@ -5,13 +5,13 @@ from melange.aws.message_publisher import MessagePublisher
 class EventBus(ThreadedMessageConsumer, MessagePublisher):
     _instance = None
 
-    def __init__(self, event_serializer, event_queue_name, topic_to_subscribe):
-        ThreadedMessageConsumer.__init__(self, event_serializer, event_queue_name, topic_to_subscribe)
-        MessagePublisher.__init__(self, event_serializer)
+    def __init__(self, event_queue_name, topic_to_subscribe):
+        ThreadedMessageConsumer.__init__(self, event_queue_name, topic_to_subscribe)
+        MessagePublisher.__init__(self, topic_to_subscribe)
 
     @staticmethod
-    def init(event_serializer_map, event_queue_name, topic_to_subscribe):
-        EventBus._instance = EventBus(event_serializer_map, event_queue_name, topic_to_subscribe)
+    def init(event_queue_name, topic_to_subscribe):
+        EventBus._instance = EventBus(event_queue_name, topic_to_subscribe)
 
     @staticmethod
     def get_instance():

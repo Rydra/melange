@@ -1,7 +1,9 @@
 import json
 
+from melange.aws.event_serializer import EventSerializer
 
-def parse_event_from_sns(sns_message, event_serializer):
+
+def parse_event_from_sns(sns_message):
     content = sns_message['Records'][0]['Sns']
 
     # TODO: Add message signature validation logic
@@ -14,4 +16,4 @@ def parse_event_from_sns(sns_message, event_serializer):
     except:
         raise Exception('The message content is not a valid json')
 
-    return event_serializer.deserialize(deserialized_dict)
+    return EventSerializer.instance().deserialize(deserialized_dict)

@@ -1,7 +1,7 @@
 import logging
 from atexit import register
 from queue import Queue, Empty
-from threading import Lock, Thread, current_thread
+from threading import Lock, Thread
 from time import time
 from zlib import crc32
 

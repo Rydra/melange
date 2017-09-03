@@ -2,16 +2,13 @@ import json
 import logging
 from queue import Empty
 
+from melange.aws.event_serializer import EventSerializer
 from melange.aws.messaging_manager import MessagingManager
 from melange.subscriber import Subscriber
 
 
 class MessageConsumer:
-    def __init__(self, event_serializer, event_queue_name, topic_to_subscribe):
-
-        super().__init__()
-
-        self.event_serializer = event_serializer
+    def __init__(self, event_queue_name, topic_to_subscribe):
         self.consumers = {}
         topic = MessagingManager.declare_topic(topic_to_subscribe)
         self.event_queue, _ = MessagingManager.declare_queue(event_queue_name, topic)
@@ -66,7 +63,7 @@ class MessageConsumer:
                     content = message_content
 
                 if 'event_type_name' in content:
-                    return self.event_serializer.deserialize(content)
+                    return EventSerializer.instance().deserialize(content)
                 else:
                     raise Exception("No event_type_name")
 

@@ -1,6 +1,7 @@
 import json
 from unittest.mock import MagicMock
 
+from melange.aws.event_serializer import EventSerializer
 from melange.aws.message_consumer import MessageConsumer
 from melange.aws.messaging_manager import MessagingManager
 from melange.event import Event
@@ -64,11 +65,11 @@ class TestMessageConsumer:
 
             self.event = MagicMock(spec=Event)
             self.event.event_type_name = event_of_type
-            event_serializer = self._create_serializer_for(self.event)
+            self._initialize_serializer(self.event)
 
             event_queue_name = 'a_queue_name'
             topic_to_subscribe = 'a_topic_name'
-            self.message_consumer = MessageConsumer(event_serializer, event_queue_name, topic_to_subscribe)
+            self.message_consumer = MessageConsumer(event_queue_name, topic_to_subscribe)
 
             return self
 
@@ -102,7 +103,7 @@ class TestMessageConsumer:
 
             event_queue_name = 'a_queue_name'
             topic_to_subscribe = 'a_topic_name'
-            self.message_consumer = MessageConsumer(None, event_queue_name, topic_to_subscribe)
+            self.message_consumer = MessageConsumer(event_queue_name, topic_to_subscribe)
 
             return self
 
@@ -124,10 +125,10 @@ class TestMessageConsumer:
             })
             return message
 
-        def _create_serializer_for(self, event):
+        def _initialize_serializer(self, event):
             event_serializer = MagicMock()
             event_serializer.deserialize.return_value = event
-            return event_serializer
+            EventSerializer.set_instance(event_serializer)
 
         def when_unsubscribing_the_subscriber(self):
             self.message_consumer.unsubscribe(self.subscriber)

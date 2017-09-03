@@ -1,6 +1,12 @@
-class EventSerializer:
-    def __init__(self, event_serializer_map):
+from melange.infrastructure.singleton import Singleton
 
+
+@Singleton
+class EventSerializer:
+    def __init__(self):
+        self.event_serializer_map = {}
+
+    def initialize(self, event_serializer_map):
         self.event_serializer_map = event_serializer_map
 
     def deserialize(self, event_dict):
@@ -13,6 +19,7 @@ class EventSerializer:
         return schema.load(event_dict).data
 
     def serialize(self, event):
+
         event_type_name = event.event_type_name
 
         if event_type_name not in self.event_serializer_map:

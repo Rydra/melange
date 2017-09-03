@@ -23,14 +23,14 @@ class EventMineSchema(EventSchema):
 
     @post_load
     def create_event_mine(self, data):
-        return EventMine(data['topic'], data['data'], data['id'])
+        return EventMine(data['data'], data['id'])
 
 
 class EventMine(Event):
     event_type_name = 'event_mine'
 
-    def __init__(self, topic, data, id):
-        Event.__init__(self, topic, self.event_type_name)
+    def __init__(self, data, id):
+        Event.__init__(self, self.event_type_name)
         self.data = data
         self.id = id
 
@@ -46,7 +46,7 @@ class EventMine(Event):
 
 class SubscriberMine(Subscriber):
     def __init__(self):
-        super().__init__()
+        super().__init__('dev-test-topic')
         print('Test subscriber initialized')
         self.processed_events = []
 
@@ -65,11 +65,13 @@ class TestRunner(unittest.TestCase):
     def setUp(self):
         print('Setting up')
         self.topic = 'dev-test-topic'
-        self.events = [EventMine(self.topic, {'status': 'notprocessed'}, i) for i in range(NUM_EVENTS_TO_PUBLISH)]
+        self.events = [EventMine({'status': 'notprocessed'}, i) for i in range(NUM_EVENTS_TO_PUBLISH)]
+        EventSerializer.instance().initialize({EventMine.event_type_name: EventMineSchema()})
         EventBus.init(
-            event_serializer_map=EventSerializer({EventMine.event_type_name: EventMineSchema()}),
             event_queue_name='dev-test-queue',
             topic_to_subscribe=self.topic)
+
+        EventBus.get_instance().start()
 
         self.subscriber = SubscriberMine()
 
