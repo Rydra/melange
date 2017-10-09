@@ -4,13 +4,14 @@ import logging
 import sys
 import unittest
 from signal import signal, SIGTERM, SIGINT
-from threading import Lock
+from threading import Lock, Thread
 from time import sleep
 
 from melange.event import Event
+from melange.eventbus.sync_eventbus import DomainEventBus
 from melange.eventbus_factory import EventBusFactory
 
-from melange.subscriber import Subscriber
+from melange.subscriber import Subscriber, DomainEventSubscriber
 
 ebus = None
 
@@ -34,10 +35,8 @@ class event_mine(Event):
         return self.id
 
 
-class subuscriber_mine(Subscriber):
-    def __init__(self, topic):
-        super().__init__(topic)
-        print('Test subscriber initialized')
+class subscriber_mine(DomainEventSubscriber):
+    def __init__(self):
         self.processed_events = []
         self.lock = Lock()
 
@@ -46,19 +45,44 @@ class subuscriber_mine(Subscriber):
         with self.lock:
             self.processed_events.append(event)
 
-    def listens_to(self):
-        return Event.ALL
-
     def get_processed_events(self):
         with self.lock:
             ret = self.processed_events[:]
             return ret
 
 
+class ThreadedDomainEventBus(Thread):
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        print('hey yo')
+        DomainEventBus.instance().reset()
+        self.subscriber = subscriber_mine()
+        self.events = []
+
+        i = 0
+        while i < 100:
+            self.events.append(event_mine({'status': 'notprocessed'}, i))
+            i += 1
+
+        DomainEventBus.instance().subscribe(self.subscriber)
+        for ev in self.events:
+            DomainEventBus.instance().publish(ev)
+
+        processed_events = self.subscriber.get_processed_events()
+
+        assert len(processed_events) == 100
+
+        for ev in processed_events:
+            assert ev.get_status() == 'processed'
+
+        print('Cool! Done!')
+
+
 class test_runner(unittest.TestCase):
     def setUp(self):
         print('Setting up')
-        self.topic = 'topic'
         self.events = []
         self.ebus = None
 
@@ -67,57 +91,67 @@ class test_runner(unittest.TestCase):
             self.events.append(event_mine({'status': 'notprocessed'}, i))
             i += 1
 
-        self.subscriber = subuscriber_mine(self.topic)
+        self.subscriber = subscriber_mine()
 
     def tearDown(self):
-        self.ebus.shutdown()
         self.ebus = None
         self.events = None
         self.subscriber = None
 
-    def test_asynchronus_eventbus(self):
-        self.ebus = EventBusFactory.create(subscribers_thread_safe=False)
+        # def test_asynchronus_eventbus(self):
+        #    self.ebus = EventBusFactory.create(subscribers_thread_safe=False)
 
-        self.ebus.subscribe(self.subscriber)
-        for ev in self.events:
-            self.ebus.publish(ev, self.topic)
+    #
+    #    self.ebus.subscribe(self.subscriber)
+    #    for ev in self.events:
+    #        self.ebus.publish(ev, self.topic)
+    #
+    #    sleep(2)
+    #    processed_events = self.subscriber.get_processed_events()
+    #
+    #    assert len(processed_events) == 100
+    #
+    #    for ev in processed_events:
+    #        assert ev.get_status() == 'processed'
 
-        sleep(2)
-        processed_events = self.subscriber.get_processed_events()
+    # def test_synchronus_eventbus(self):
+    #
+    #    self.ebus = EventBusFactory.create(synchronous=True)
+    #
+    #    self.ebus.subscribe(self.subscriber)
+    #    for ev in self.events:
+    #        self.ebus.publish(ev)
+    #
+    #    processed_events = self.subscriber.get_processed_events()
+    #
+    #    assert len(processed_events) == 100
+    #
+    #    for ev in processed_events:
+    #        assert ev.get_status() == 'processed'
 
-        assert len(processed_events) == 100
+    def test_synchronus_eventbus_with_threads(self):
+        DomainEventBus.instance().subscribe(self.subscriber)
+        thread1 = ThreadedDomainEventBus()
+        thread2 = ThreadedDomainEventBus()
+        thread1.start()
+        thread2.start()
 
-        for ev in processed_events:
-            assert ev.get_status() == 'processed'
-
-    def test_synchronus_eventbus(self):
-
-        self.ebus = EventBusFactory.create(synchronous=True)
-
-        self.ebus.subscribe(self.subscriber)
-        for ev in self.events:
-            self.ebus.publish(ev, self.topic)
-
-        processed_events = self.subscriber.get_processed_events()
-
-        assert len(processed_events) == 100
-
-        for ev in processed_events:
-            assert ev.get_status() == 'processed'
+        sleep(10)
+        a = 1
 
 
-def interuppt_handler(signo, statck):
-    if ebus is not None:
-        try:
-            ebus.shutdown()
-        except Exception as e:
-            logging.error(e)
-            pass
-        sys.exit(1)
+# def interuppt_handler(signo, statck):
+#    if ebus is not None:
+#        try:
+#            ebus.shutdown()
+#        except Exception as e:
+#            logging.error(e)
+#            pass
+#        sys.exit(1)
 
 
 if __name__ == '__main__':
-    signal(SIGTERM, interuppt_handler)
-    signal(SIGINT, interuppt_handler)
+    # signal(SIGTERM, interuppt_handler)
+    # signal(SIGINT, interuppt_handler)
     unittest.main()
     sleep(2)
