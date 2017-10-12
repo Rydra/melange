@@ -5,7 +5,7 @@ from marshmallow import Schema, fields
 
 class EventSchema(Schema):
     event_type_name = fields.Str()
-    occurred_on = fields.Date()
+    occurred_on = fields.DateTime()
 
 
 class Event:

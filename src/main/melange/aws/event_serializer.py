@@ -16,7 +16,8 @@ class EventSerializer:
             raise ValueError("The event type {} doesn't have a registered serializer")
 
         schema = self.event_serializer_map[event_type_name]
-        return schema.load(event_dict).data
+        data, errors = schema.load(event_dict)
+        return data
 
     def serialize(self, event):
 
@@ -26,4 +27,5 @@ class EventSerializer:
             raise ValueError("The event type {} doesn't have a registered serializer")
 
         schema = self.event_serializer_map[event_type_name]
-        return schema.dumps(event).data
+        data, errors = schema.dumps(event)
+        return data
