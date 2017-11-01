@@ -16,9 +16,9 @@ class Event:
 
     event_type_name = 'Default'
 
-    def __init__(self, event_type_name='Default', occurred_on=datetime.now()):
+    def __init__(self, occurred_on=datetime.now()):
         self.occurred_on = occurred_on
-        self.event_type_name = event_type_name
+        self.event_type_name = self.event_type_name
 
     def get_occurred_on(self):
         return self.occurred_on

@@ -27,7 +27,7 @@ class EventMineSchema(EventSchema):
 
 
 class EventMine(Event):
-    event_type_name = 'event_mine'
+    event_type_name = 'EventMine'
 
     def __init__(self, data, id):
         Event.__init__(self, self.event_type_name)
@@ -66,7 +66,7 @@ class TestRunner(unittest.TestCase):
         print('Setting up')
         self.topic = 'dev-test-topic'
         self.events = [EventMine({'status': 'notprocessed'}, i) for i in range(NUM_EVENTS_TO_PUBLISH)]
-        EventSerializer.instance().initialize({EventMine.event_type_name: EventMineSchema()})
+        EventSerializer.instance().register(EventMineSchema, EventMineSchema)
         EventBus.init(
             event_queue_name='dev-test-queue',
             topic_to_subscribe=self.topic)

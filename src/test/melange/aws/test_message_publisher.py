@@ -10,7 +10,7 @@ class TestMessagePublisher:
     def test_publish_a_message(self):
 
         a_topic = 'a_topic'
-        EventSerializer.instance().initialize({Event.event_type_name: EventSchema()})
+        EventSerializer.instance().register({Event.event_type_name: EventSchema()})
         event = Event(event_type_name=Event.event_type_name)
 
         response = {'MessageId': '12345'}

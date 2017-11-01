@@ -17,6 +17,8 @@ ebus = None
 
 
 class event_mine(Event):
+    event_type_name = 'event_mine'
+
     def __init__(self, data, ident):
         Event.__init__(self)
         self.data = data
