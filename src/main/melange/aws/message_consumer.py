@@ -2,6 +2,8 @@ import json
 import logging
 from queue import Empty
 
+from melange.event import Event
+
 from melange.aws.event_serializer import EventSerializer
 from melange.aws.messaging_manager import MessagingManager
 from melange.subscriber import Subscriber
@@ -38,23 +40,19 @@ class MessageConsumer:
                 del self.consumers[listened_event_type_name]
 
     def consume_event(self):
-
-        event = self._get_next_event()
-        if event is not None:
-            self._process_event(event)
+        self._poll_next_event()
 
     def _get_subscribers(self, event_type_name):
         return self.consumers[event_type_name] if event_type_name in self.consumers else []
 
-    def _get_next_event(self):
+    def _poll_next_event(self):
 
         messages = self.event_queue.receive_messages(MaxNumberOfMessages=1, VisibilityTimeout=100,
                                                      WaitTimeSeconds=10)
 
-        try:
-            for message in messages:
+        for message in messages:
+            try:
                 body = message.body
-                message.delete()
                 message_content = json.loads(body)
 
                 if 'Message' in message_content:
@@ -63,18 +61,22 @@ class MessageConsumer:
                     content = message_content
 
                 if 'event_type_name' in content:
-                    return EventSerializer.instance().deserialize(content)
-                else:
-                    raise Exception("No event_type_name")
+                    try:
+                        event = EventSerializer.instance().deserialize(content)
+                    except ValueError:
+                        event = json.loads(content)
 
-        except Empty:
-            return None
-        except Exception as e:
-            logging.error(e)
-            return None
+                    self._process_event(event)
+
+                message.delete()
+
+            except Exception as e:
+                logging.error(e)
 
     def _process_event(self, eventobj):
-        for subscr in self._get_subscribers(eventobj.event_type_name):
+
+        event_type_name = eventobj.event_type_name if isinstance(eventobj, Event) else eventobj['event_type_name']
+        for subscr in self._get_subscribers(event_type_name):
 
             try:
                 subscr.process(eventobj)
