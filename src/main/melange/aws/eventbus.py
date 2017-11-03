@@ -1,13 +1,13 @@
-from melange.aws.threaded_message_consumer import ThreadedMessageConsumer
-from melange.aws.message_publisher import MessagePublisher
+from melange.aws.threaded_message_consumer import ThreadedExchangeMessageConsumer
+from melange.aws.exchange_message_publisher import ExchangeMessagePublisher
 
 
-class EventBus(ThreadedMessageConsumer, MessagePublisher):
+class EventBus(ThreadedExchangeMessageConsumer, ExchangeMessagePublisher):
     _instance = None
 
     def __init__(self, event_queue_name, topic_to_subscribe):
-        ThreadedMessageConsumer.__init__(self, event_queue_name, topic_to_subscribe)
-        MessagePublisher.__init__(self, topic_to_subscribe)
+        ThreadedExchangeMessageConsumer.__init__(self, event_queue_name, topic_to_subscribe)
+        ExchangeMessagePublisher.__init__(self, topic_to_subscribe)
 
     @staticmethod
     def init(event_queue_name, topic_to_subscribe):

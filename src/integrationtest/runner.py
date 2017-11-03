@@ -11,7 +11,7 @@ from melange.event import Event
 from melange.eventbus.sync_eventbus import DomainEventBus
 from melange.eventbus_factory import EventBusFactory
 
-from melange.subscriber import Subscriber, DomainEventSubscriber
+from melange.exchangelistener import ExchangeListener, DomainEventSubscriber
 
 ebus = None
 

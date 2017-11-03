@@ -2,13 +2,13 @@ from atexit import register
 from threading import Thread, Lock
 from time import time
 
-from melange.aws.message_consumer import MessageConsumer
+from melange.aws.message_consumer import ExchangeMessageConsumer
 
 
-class ThreadedMessageConsumer(Thread, MessageConsumer):
+class ThreadedExchangeMessageConsumer(Thread, ExchangeMessageConsumer):
     def __init__(self, event_queue_name, topic_to_subscribe):
 
-        MessageConsumer.__init__(self, event_queue_name, topic_to_subscribe)
+        ExchangeMessageConsumer.__init__(self, event_queue_name, topic_to_subscribe)
         Thread.__init__(self)
 
         register(self.shutdown)

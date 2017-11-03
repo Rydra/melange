@@ -6,16 +6,19 @@ import unittest
 from signal import signal, SIGTERM, SIGINT
 from time import sleep
 
+from melange.aws.message_consumer import ExchangeMessageConsumer
+
 from melange.aws.event_serializer import EventSerializer
 from melange.aws.eventbus import EventBus
+from melange.aws.threaded_message_consumer import ThreadedExchangeMessageConsumer
 from melange.event import Event, EventSchema
 from marshmallow import fields, post_load
 
-from melange.subscriber import Subscriber
+from melange.exchangelistener import ExchangeListener
 
 ebus = None
 
-NUM_EVENTS_TO_PUBLISH = 10
+NUM_EVENTS_TO_PUBLISH = 1
 
 class EventMineSchema(EventSchema):
     data = fields.Dict()
@@ -44,13 +47,13 @@ class EventMine(Event):
         return self.id
 
 
-class SubscriberMine(Subscriber):
+class SubscriberMine(ExchangeListener):
     def __init__(self):
         super().__init__('dev-test-topic')
         print('Test subscriber initialized')
         self.processed_events = []
 
-    def process(self, event):
+    def process(self, event, **kwargs):
         event.set_status('processed')
         self.processed_events.append(event)
 
@@ -67,22 +70,22 @@ class TestRunner(unittest.TestCase):
         self.topic = 'dev-test-topic'
         self.events = [EventMine({'status': 'notprocessed'}, i) for i in range(NUM_EVENTS_TO_PUBLISH)]
         EventSerializer.instance().register(EventMineSchema, EventMineSchema)
-        EventBus.init(
+        self.message_consumer = ThreadedExchangeMessageConsumer(
             event_queue_name='dev-test-queue',
             topic_to_subscribe=self.topic)
 
-        EventBus.get_instance().start()
+        self.message_consumer.start()
 
         self.subscriber = SubscriberMine()
 
     def tearDown(self):
-        EventBus.get_instance().shutdown()
+        self.message_consumer.shutdown()
         self.events = None
         self.ordered_events = None
         self.subscriber = None
 
     def alltests(self):
-        EventBus.get_instance().subscribe(self.subscriber)
+        self.message_consumer.subscribe(self.subscriber)
         for ev in self.events:
             EventBus.get_instance().publish(ev)
 

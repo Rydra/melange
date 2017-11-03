@@ -24,11 +24,11 @@ class DomainEventSubscriber:
                and self.listens_to() == [] or type(event) in self.listens_to()
 
 
-class Subscriber:
+class ExchangeListener:
     def __init__(self, topic):
         self.topic = topic
 
-    def process(self, event):
+    def process(self, event, **kwargs):
         """
         Called by the eventbus.
 

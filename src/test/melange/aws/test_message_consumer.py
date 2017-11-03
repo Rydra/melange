@@ -2,10 +2,10 @@ import json
 from unittest.mock import MagicMock
 
 from melange.aws.event_serializer import EventSerializer
-from melange.aws.message_consumer import MessageConsumer
+from melange.aws.message_consumer import ExchangeMessageConsumer
 from melange.aws.messaging_manager import MessagingManager
 from melange.event import Event
-from melange.subscriber import Subscriber
+from melange.exchangelistener import ExchangeListener
 
 
 class TestMessageConsumer:
@@ -69,12 +69,12 @@ class TestMessageConsumer:
 
             event_queue_name = 'a_queue_name'
             topic_to_subscribe = 'a_topic_name'
-            self.message_consumer = MessageConsumer(event_queue_name, topic_to_subscribe)
+            self.message_consumer = ExchangeMessageConsumer(event_queue_name, topic_to_subscribe)
 
             return self
 
         def given_a_subscriber(self, listens_to=None):
-            self.subscriber = MagicMock(spec=Subscriber)
+            self.subscriber = MagicMock(spec=ExchangeListener)
             self.subscriber.listens_to.return_value = listens_to
 
             self.message_consumer.subscribe(self.subscriber)
@@ -103,7 +103,7 @@ class TestMessageConsumer:
 
             event_queue_name = 'a_queue_name'
             topic_to_subscribe = 'a_topic_name'
-            self.message_consumer = MessageConsumer(event_queue_name, topic_to_subscribe)
+            self.message_consumer = ExchangeMessageConsumer(event_queue_name, topic_to_subscribe)
 
             return self
 

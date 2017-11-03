@@ -6,10 +6,10 @@ from melange.event import Event
 
 from melange.aws.event_serializer import EventSerializer
 from melange.aws.messaging_manager import MessagingManager
-from melange.subscriber import Subscriber
+from melange.exchangelistener import ExchangeListener
 
 
-class MessageConsumer:
+class ExchangeMessageConsumer:
     def __init__(self, event_queue_name, topic_to_subscribe):
         self.consumers = {}
         topic = MessagingManager.declare_topic(topic_to_subscribe)
@@ -17,7 +17,7 @@ class MessageConsumer:
 
     def subscribe(self, consumer):
 
-        if not isinstance(consumer, Subscriber):
+        if not isinstance(consumer, ExchangeListener):
             return False
 
         listened_event_type_name = consumer.listens_to()
@@ -47,14 +47,13 @@ class MessageConsumer:
 
     def _poll_next_event(self):
 
-        messages = self.event_queue.receive_messages(MaxNumberOfMessages=1, VisibilityTimeout=100,
-                                                     WaitTimeSeconds=10)
+        messages = self.event_queue.receive_messages(VisibilityTimeout=100,
+                                                     WaitTimeSeconds=10, AttributeNames=['All'])
 
         for message in messages:
             try:
                 body = message.body
                 message_content = json.loads(body)
-
                 if 'Message' in message_content:
                     content = json.loads(message_content['Message'])
                 else:
@@ -66,19 +65,19 @@ class MessageConsumer:
                     except ValueError:
                         event = json.loads(content)
 
-                    self._process_event(event)
+                    self._process_event(event, message_id=message.message_id)
 
                 message.delete()
 
             except Exception as e:
                 logging.error(e)
 
-    def _process_event(self, eventobj):
+    def _process_event(self, eventobj, **kwargs):
 
         event_type_name = eventobj.event_type_name if isinstance(eventobj, Event) else eventobj['event_type_name']
         for subscr in self._get_subscribers(event_type_name):
 
             try:
-                subscr.process(eventobj)
+                subscr.process(eventobj, **kwargs)
             except Exception as e:
                 logging.error(e)

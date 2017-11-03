@@ -5,7 +5,7 @@ from threading import Lock, Thread
 from time import time
 from zlib import crc32
 
-from melange.subscriber import Subscriber
+from melange.exchangelistener import ExchangeListener
 from melange.event import Event
 
 MAX_TOPIC_INDEX = 16  # Must be power of 2
@@ -69,7 +69,7 @@ class AsynchronousEventBus(Thread):
 
     def subscribe(self, subscriber):
 
-        if not isinstance(subscriber, Subscriber):
+        if not isinstance(subscriber, ExchangeListener):
             return False
 
         topic = subscriber.get_topic()
@@ -114,7 +114,7 @@ class AsynchronousEventBus(Thread):
                             del self.topics[indexval][topic]
 
     def is_subscribed(self, subscriber, topic):
-        if not isinstance(subscriber, Subscriber):
+        if not isinstance(subscriber, ExchangeListener):
             logging.error('Invalid object passed')
             return False
 
