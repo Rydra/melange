@@ -6,6 +6,7 @@ import unittest
 from signal import signal, SIGTERM, SIGINT
 from time import sleep
 
+from melange.aws.exchange_message_publisher import ExchangeMessagePublisher
 from melange.aws.message_consumer import ExchangeMessageConsumer
 
 from melange.aws.event_serializer import EventSerializer
@@ -18,7 +19,7 @@ from melange.exchangelistener import ExchangeListener
 
 ebus = None
 
-NUM_EVENTS_TO_PUBLISH = 1
+NUM_EVENTS_TO_PUBLISH = 10
 
 class EventMineSchema(EventSchema):
     data = fields.Dict()
@@ -86,8 +87,9 @@ class TestRunner(unittest.TestCase):
 
     def alltests(self):
         self.message_consumer.subscribe(self.subscriber)
+        message_publisher = ExchangeMessagePublisher(topic=self.topic)
         for ev in self.events:
-            EventBus.get_instance().publish(ev)
+            message_publisher.publish(ev)
 
         sleep(3)
 

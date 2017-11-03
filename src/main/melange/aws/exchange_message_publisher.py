@@ -12,7 +12,7 @@ class ExchangeMessagePublisher:
 
     def publish(self, event):
 
-        if not isinstance(event, Event) or not isinstance(event, dict):
+        if not isinstance(event, Event) and not isinstance(event, dict):
             logging.error('Invalid data passed. You must pass an event instance or a dict')
             raise Exception('Invalid data passed. You must pass an event instance or a dict')
 

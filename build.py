@@ -26,5 +26,6 @@ def set_properties(project):
     project.depends_on("boto3")
     project.depends_on("marshmallow")
     project.depends_on("pyopenssl")
+    project.depends_on("redis-simple-cache", url="git+https://github.com/Rydra/redis-simple-cache")
 
     project.version = version
