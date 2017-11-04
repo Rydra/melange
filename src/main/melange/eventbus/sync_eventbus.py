@@ -3,7 +3,7 @@ import threading
 
 from melange.event import Event
 from melange.infrastructure.singleton import Singleton
-from melange.exchangelistener import DomainEventSubscriber
+from melange.exchange_listener import DomainEventSubscriber
 
 
 @Singleton

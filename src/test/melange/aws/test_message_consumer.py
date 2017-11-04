@@ -5,7 +5,7 @@ from melange.aws.event_serializer import EventSerializer
 from melange.aws.message_consumer import ExchangeMessageConsumer
 from melange.aws.messaging_manager import MessagingManager
 from melange.event import Event
-from melange.exchangelistener import ExchangeListener
+from melange.exchange_listener import ExchangeListener
 
 
 class TestMessageConsumer:

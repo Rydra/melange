@@ -1,33 +1,18 @@
 import json
 import logging
 
-from redis_cache import SimpleCache
-
-from melange import settings
 from melange.event import Event
 
 from melange.aws.event_serializer import EventSerializer
 from melange.aws.messaging_manager import MessagingManager
-from melange.exchangelistener import ExchangeListener
+from melange.exchange_listener import ExchangeListener
 
 
 class ExchangeMessageConsumer:
-    def __init__(self, event_queue_name, topic_to_subscribe, host=None, port=None, db=None, password=None):
+    def __init__(self, event_queue_name, topic_to_subscribe):
         self.consumers = {}
         topic = MessagingManager.declare_topic(topic_to_subscribe)
         self.event_queue, _ = MessagingManager.declare_queue(event_queue_name, topic)
-
-        # The redis cache is used to provide message deduplication
-        self.cache = SimpleCache(expire=3600,
-                                 host=host or settings.REDIS_HOST,
-                                 port=port or settings.REDIS_PORT,
-                                 db=db or settings.REDIS_DB,
-                                 password=password or settings.REDIS_PASSWORD)
-
-        self._message_processor = self._process_message_with_deduplication
-        if not self.cache.connection:
-            logging.warning("Could not establish a connection with redis. Message deduplication won't work")
-            self._message_processor = self._process_message
 
     def subscribe(self, consumer):
 
@@ -66,23 +51,11 @@ class ExchangeMessageConsumer:
 
         for message in messages:
             try:
-                self._message_processor(message)
+                self._process_message(message)
             except Exception as e:
                 logging.error(e)
 
-    def _process_message_with_deduplication(self, message, **kwargs):
-        if message.message_id in self.cache:
-            print('detected a duplicated message, ignoring')
-            message.delete()
-            return
-
-        self._process_message(message)
-
-        self.cache.store(message.message_id, message.message_id)
-        message.delete()
-
-    def _process_message(self, message, **kwargs):
-
+    def _process_message(self, message):
         body = message.body
         message_content = json.loads(body)
         if 'Message' in message_content:
@@ -91,7 +64,7 @@ class ExchangeMessageConsumer:
             content = message_content
 
         if 'event_type_name' not in content:
-            return
+            return True
 
         try:
             event = EventSerializer.instance().deserialize(content)
@@ -99,10 +72,16 @@ class ExchangeMessageConsumer:
             event = json.loads(content)
 
         event_type_name = event.event_type_name if isinstance(event, Event) else event['event_type_name']
-        for subscr in self._get_subscribers(event_type_name):
+
+        subscribers = self._get_subscribers(event_type_name)
+
+        successful = 0
+        for subscr in subscribers:
             try:
-                subscr.process(event, **kwargs)
+                subscr.process_event(event, message_id=message.message_id)
+                successful += 1
             except Exception as e:
                 logging.error(e)
 
-        message.delete()
+        if successful == len(subscribers):
+            message.delete()

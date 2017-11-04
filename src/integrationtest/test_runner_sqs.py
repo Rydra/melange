@@ -15,7 +15,7 @@ from melange.aws.threaded_message_consumer import ThreadedExchangeMessageConsume
 from melange.event import Event, EventSchema
 from marshmallow import fields, post_load
 
-from melange.exchangelistener import ExchangeListener
+from melange.exchange_listener import ExchangeListener
 
 ebus = None
 

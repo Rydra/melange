@@ -1,4 +1,6 @@
 """ Subscriber super-class """
+from melange.aws.cache import Cache
+from melange.aws.utils import get_fully_qualified_name
 from melange.event import Event
 
 
@@ -27,6 +29,15 @@ class DomainEventSubscriber:
 class ExchangeListener:
     def __init__(self, topic):
         self.topic = topic
+
+    def process_event(self, event, **kwargs):
+        if get_fully_qualified_name(self) + '.' + kwargs['message_id'] in Cache.instance():
+            print('detected a duplicated message, ignoring')
+            return
+
+        self.process(event, **kwargs)
+
+        Cache.instance().store(get_fully_qualified_name(self) + '.' + kwargs['message_id'], get_fully_qualified_name(self) + '.' + kwargs['message_id'])
 
     def process(self, event, **kwargs):
         """
