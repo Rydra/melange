@@ -2,10 +2,10 @@ import json
 from unittest.mock import MagicMock
 
 from melange.aws.event_serializer import EventSerializer
-from melange.aws.message_consumer import ExchangeMessageConsumer
+from melange.aws.exchange_message_consumer import ExchangeMessageConsumer
 from melange.aws.messaging_manager import MessagingManager
 from melange.event import Event
-from melange.exchange_listener import ExchangeListener
+from melange.aws.exchange_listener import ExchangeListener
 
 
 class TestMessageConsumer:

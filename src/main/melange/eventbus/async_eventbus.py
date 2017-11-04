@@ -5,7 +5,7 @@ from threading import Lock, Thread
 from time import time
 from zlib import crc32
 
-from melange.exchange_listener import ExchangeListener
+from melange.aws.exchange_listener import ExchangeListener
 from melange.event import Event
 
 MAX_TOPIC_INDEX = 16  # Must be power of 2

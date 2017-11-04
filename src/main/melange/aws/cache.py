@@ -8,10 +8,10 @@ from melange.infrastructure.singleton import Singleton
 class Cache:
     def __init__(self):
         self.cache = SimpleCache(expire=3600,
-                                 host=settings.REDIS_HOST,
-                                 port=settings.REDIS_PORT,
-                                 db=settings.REDIS_DB,
-                                 password=settings.REDIS_PASSWORD,
+                                 host=settings.CACHE_REDIS_HOST,
+                                 port=settings.CACHE_REDIS_PORT,
+                                 db=settings.CACHE_REDIS_DB,
+                                 password=settings.CACHE_REDIS_PASSWORD,
                                  namespace=settings.CACHE_NAMESPACE)
 
         if not self.cache.connection:

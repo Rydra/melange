@@ -1,4 +1,4 @@
-from melange.aws.threaded_message_consumer import ThreadedExchangeMessageConsumer
+from melange.aws.exchange_message_consumer import ThreadedExchangeMessageConsumer
 from melange.aws.exchange_message_publisher import ExchangeMessagePublisher
 
 

@@ -1,17 +1,12 @@
 '''Tests for eventbus operations '''
 
-import logging
-import sys
 import unittest
-from signal import signal, SIGTERM, SIGINT
 from threading import Lock, Thread
 from time import sleep
 
 from melange.event import Event
+from melange.eventbus.domain_subscriber import DomainSubscriber
 from melange.eventbus.sync_eventbus import DomainEventBus
-from melange.eventbus_factory import EventBusFactory
-
-from melange.exchange_listener import ExchangeListener, DomainEventSubscriber
 
 ebus = None
 
@@ -37,7 +32,7 @@ class event_mine(Event):
         return self.id
 
 
-class subscriber_mine(DomainEventSubscriber):
+class subscriber_mine(DomainSubscriber):
     def __init__(self):
         self.processed_events = []
         self.lock = Lock()
