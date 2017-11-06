@@ -9,7 +9,7 @@ use_plugin("python.distutils")
 #use_plugin('pypi:pybuilder_pytest')
 
 name = "melange"
-version = "1.0-arrakis"
+version = "2.0"
 default_task = "publish"
 
 

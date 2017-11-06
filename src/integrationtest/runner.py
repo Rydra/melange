@@ -4,18 +4,18 @@ import unittest
 from threading import Lock, Thread
 from time import sleep
 
-from melange.event import Event
-from melange.eventbus.domain_subscriber import DomainSubscriber
-from melange.eventbus.sync_eventbus import DomainEventBus
+from melange.aws.eventmessage import EventMessage
+from melange.domain_event_bus.domain_event_bus import DomainEventBus
+from melange.domain_event_bus.domain_subscriber import DomainSubscriber
 
 ebus = None
 
 
-class event_mine(Event):
+class event_mine(EventMessage):
     event_type_name = 'event_mine'
 
     def __init__(self, data, ident):
-        Event.__init__(self)
+        EventMessage.__init__(self)
         self.data = data
         self.id = ident
 

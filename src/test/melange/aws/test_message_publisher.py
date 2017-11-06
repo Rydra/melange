@@ -1,17 +1,17 @@
 from unittest.mock import MagicMock
 
 from melange.aws.event_serializer import EventSerializer
+from melange.aws.eventmessage import EventMessage, EventSchema
 from melange.aws.exchange_message_publisher import ExchangeMessagePublisher
 from melange.aws.messaging_manager import MessagingManager
-from melange.event import Event, EventSchema
 
 
 class TestMessagePublisher:
     def test_publish_a_message(self):
 
         a_topic = 'a_topic'
-        EventSerializer.instance().register({Event.event_type_name: EventSchema()})
-        event = Event(event_type_name=Event.event_type_name)
+        EventSerializer.instance().register({EventMessage.event_type_name: EventSchema()})
+        event = EventMessage(event_type_name=EventMessage.event_type_name)
 
         response = {'MessageId': '12345'}
 

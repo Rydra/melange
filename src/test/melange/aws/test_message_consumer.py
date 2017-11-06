@@ -2,10 +2,10 @@ import json
 from unittest.mock import MagicMock
 
 from melange.aws.event_serializer import EventSerializer
+from melange.aws.eventmessage import EventMessage
+from melange.aws.exchange_listener import ExchangeListener
 from melange.aws.exchange_message_consumer import ExchangeMessageConsumer
 from melange.aws.messaging_manager import MessagingManager
-from melange.event import Event
-from melange.aws.exchange_listener import ExchangeListener
 
 
 class TestMessageConsumer:
@@ -63,7 +63,7 @@ class TestMessageConsumer:
             MessagingManager.declare_queue = MagicMock(return_value=(queue, ''))
             MessagingManager.declare_topic = MagicMock()
 
-            self.event = MagicMock(spec=Event)
+            self.event = MagicMock(spec=EventMessage)
             self.event.event_type_name = event_of_type
             self._initialize_serializer(self.event)
 

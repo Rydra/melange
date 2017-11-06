@@ -1,12 +1,9 @@
 from melange.aws.cache import Cache
+from melange.aws.eventmessage import EventMessage
 from melange.aws.utils import get_fully_qualified_name
-from melange.event import Event
 
 
 class ExchangeListener:
-    def __init__(self, topic):
-        self.topic = topic
-
     def process_event(self, event, **kwargs):
         if get_fully_qualified_name(self) + '.' + kwargs['message_id'] in Cache.instance():
             print('detected a duplicated message, ignoring')
@@ -18,18 +15,15 @@ class ExchangeListener:
 
     def process(self, event, **kwargs):
         """
-        Called by the eventbus.
+        Called by the domain_event_bus.
 
         :param event: The event object
-        :type event: Event or subclass of event
+        :type event: EventMessage or subclass of event
 
         This method implements the logic for processing the event. This method should not block for
-        long time as that will affect the performance of the eventbus.
+        long time as that will affect the performance of the domain_event_bus.
         """
         pass
-
-    def get_topic(self):
-        return self.topic
 
     def listens_to(self):
         # None = listens to every event
