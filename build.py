@@ -9,7 +9,7 @@ use_plugin("python.distutils")
 #use_plugin('pypi:pybuilder_pytest')
 
 name = "melange"
-version = "1.0-arrakis"
+version = "2.0.9"
 default_task = "publish"
 
 
@@ -26,6 +26,7 @@ def set_properties(project):
     project.depends_on("boto3")
     project.depends_on("marshmallow")
     project.depends_on("pyopenssl")
-    project.depends_on("redis-simple-cache", url="git+https://github.com/Rydra/redis-simple-cache")
+    project.depends_on("redis-simple-cache",
+                       url="git+https://github.com/Rydra/redis-simple-cache.git/@master#egg=redis-simple-cache-0")
 
     project.version = version

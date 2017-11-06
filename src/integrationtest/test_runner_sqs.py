@@ -6,15 +6,13 @@ import unittest
 from signal import signal, SIGTERM, SIGINT
 from time import sleep
 
-from melange.aws.exchange_message_publisher import ExchangeMessagePublisher
-from melange.aws.exchange_message_consumer import ExchangeMessageConsumer, ThreadedExchangeMessageConsumer
-
-from melange.aws.event_serializer import EventSerializer
-from melange.aws.eventbus import EventBus
-from melange.event import Event, EventSchema
 from marshmallow import fields, post_load
 
+from melange.aws.event_serializer import EventSerializer
+from melange.aws.eventmessage import EventMessage, EventSchema
 from melange.aws.exchange_listener import ExchangeListener
+from melange.aws.exchange_message_consumer import ThreadedExchangeMessageConsumer
+from melange.aws.exchange_message_publisher import ExchangeMessagePublisher
 
 ebus = None
 
@@ -29,11 +27,11 @@ class EventMineSchema(EventSchema):
         return EventMine(data['data'], data['id'])
 
 
-class EventMine(Event):
+class EventMine(EventMessage):
     event_type_name = 'EventMine'
 
     def __init__(self, data, id):
-        Event.__init__(self, self.event_type_name)
+        EventMessage.__init__(self, self.event_type_name)
         self.data = data
         self.id = id
 
@@ -49,7 +47,6 @@ class EventMine(Event):
 
 class SubscriberMine(ExchangeListener):
     def __init__(self):
-        super().__init__('dev-test-topic')
         print('Test subscriber initialized')
         self.processed_events = []
 

@@ -4,11 +4,10 @@ from atexit import register
 from threading import Thread, Lock
 from time import time
 
-from melange.event import Event
-
 from melange.aws.event_serializer import EventSerializer
-from melange.aws.messaging_manager import MessagingManager
+from melange.aws.eventmessage import EventMessage
 from melange.aws.exchange_listener import ExchangeListener
+from melange.aws.messaging_manager import MessagingManager
 
 
 class ExchangeMessageConsumer:
@@ -59,9 +58,9 @@ class ExchangeMessageConsumer:
         try:
             event = EventSerializer.instance().deserialize(content)
         except ValueError:
-            event = json.loads(content)
+            event = content
 
-        event_type_name = event.event_type_name if isinstance(event, Event) else event['event_type_name']
+        event_type_name = event.event_type_name if isinstance(event, EventMessage) else event['event_type_name']
 
         subscribers = self._get_subscribers(event_type_name)
 

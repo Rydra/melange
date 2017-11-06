@@ -5,8 +5,8 @@ from threading import Lock, Thread
 from time import time
 from zlib import crc32
 
+from melange.aws.eventmessage import EventMessage
 from melange.aws.exchange_listener import ExchangeListener
-from melange.event import Event
 
 MAX_TOPIC_INDEX = 16  # Must be power of 2
 DEFAULT_NUM_THREADS = 8
@@ -23,7 +23,7 @@ def compute_crc32(data):
 class AsynchronousEventBus(Thread):
     def __init__(self, max_queued_event=10000, subscribers_thread_safe=True):
         """
-        Creates an eventbus object
+        Creates an domain_event_bus object
 
         :param max_queued_event:  total number of un-ordered events queued.
         :type max_queued_event: int
@@ -56,7 +56,7 @@ class AsynchronousEventBus(Thread):
 
     def publish(self, event, topic):
 
-        if not isinstance(event, Event):
+        if not isinstance(event, EventMessage):
             logging.error('Invalid data passed. You must pass an event instance')
             return False
         if not self.keep_running:

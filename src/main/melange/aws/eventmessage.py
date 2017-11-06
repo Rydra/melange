@@ -8,7 +8,7 @@ class EventSchema(Schema):
     occurred_on = fields.DateTime()
 
 
-class Event:
+class EventMessage:
 
     # A constant that subscriber can use in their "listens_to" events to
     # tell they are interested in all the events that happen on their topic

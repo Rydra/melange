@@ -4,13 +4,13 @@ from random import randint
 from threading import Lock, Thread
 from time import sleep, time
 
-from melange.event import Event
 from melange.eventbus_factory import EventBusFactory
+from melange.subscriber import Subscriber
 
-from src.geeteventbus.subscriber import Subscriber
+from melange.aws.eventmessage import EventMessage
 
 
-class SampleDomainEvent(Event):
+class SampleDomainEvent(EventMessage):
     def __init__(self, topic, data1):
         super(SampleDomainEvent, self).__init__(topic)
 
@@ -82,7 +82,7 @@ class count_producer:
 
     def __call__(self):
         while self.keep_running:
-            ev = Event(self.counters[randint(0, self.num_counter - 1)], randint(1, 100))
+            ev = EventMessage(self.counters[randint(0, self.num_counter - 1)], randint(1, 100))
             ebus.publish(ev)
             sleep(0.02)
         print('producer exited')

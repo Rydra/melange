@@ -1,8 +1,8 @@
 import logging
 import threading
 
-from melange.event import Event
-from melange.eventbus.domain_subscriber import DomainSubscriber
+from melange.domain_event_bus.domain_event import DomainEvent
+from melange.domain_event_bus.domain_subscriber import DomainSubscriber
 from melange.infrastructure.singleton import Singleton
 
 
@@ -18,7 +18,7 @@ class DomainEventBus:
         if self.thread_local.publishing:
             return
 
-        if not isinstance(event, Event):
+        if not isinstance(event, DomainEvent):
             logging.error('Invalid data passed. You must pass an event instance')
             return
 
