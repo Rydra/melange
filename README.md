@@ -1,19 +1,24 @@
 # Melange
 
-## An eventbus and AWS SNS+SQS message exchange library for concurrent programming 
+## An eventbus and AWS SNS+SQS messaging library for concurrent programming 
 
 The spice must flow! (or in this case, the event)
 
-Melange is a fork of geeteventbus and built upon its foundation to offer a flexible library 
-to create distributed event-driven architectures using Amazon Web Services SNS (Simple Notification Service) 
-and SQS (Simple Queue Service) as message broker. Its main selling point is the capability to greatly decouple 
+Melange is offers a flexible library to create distributed event-driven architectures using 
+Amazon Web Services SNS (Simple Notification Service) and SQS (Simple Queue Service) as message broker. 
+Its main selling point is the capability to greatly decouple 
 and integrate REST apis, AWS Lambda functions and console applications... as long as they can subscribe to SNS 
-topics. 
+topics. (You can subscribe to SNS at the time of writing HTTP Post endpoints, 
+AWS Lambdas, SQS Queues, emails and phones)
 
-Not only that, Melange supports single-process, memory-based applications as well without depending on 
-AWS services if you require it, just as geeteventbus does (Console applications, background workers). That's the class
-`DomainEventBus` and its idea has been grabbed from Vaughn Vernon and his must-read book 
-Implementing Domain-Driven Design (look at [part 3 of these series](http://dddcommunity.org/library/vernon_2011/) if you want a quick look)
+In addition, Melange supports event driven architectures in single-process, non-distributed, memory-based applications (Console applications, background workers)
+with the aid of the `DomainEventBus` (see `Domain-Driven Design` section). The `DomainEventBus` is great if you really 
+want to have a clean event-driven architecture with Domain Events, and its idea has been grabbed from Vaughn Vernon and his must-read book 
+Implementing Domain-Driven Design (look at [part 3 of these series](http://dddcommunity.org/library/vernon_2011/) if you want a quick look,
+ or read this excellent article from [Udi Dahan, founder of NServiceBus](http://udidahan.com/2009/06/14/domain-events-salvation/)).
+
+Right now Melange only supports Amazon SNS+SQS as the backend messaging infrastructure, but in the 
+future we want to expand this library to be flexible enough to be used with RabbitMQ as well.
 
 ## Installing ##
 
@@ -25,12 +30,13 @@ pip install git+https://github.com/Rydra/redis-simple-cache.git/@master#egg=redi
 pip install melange
 ```
 
-## How to get started ##
+## Preliminaries ##
 
-NOTE: Bear in mind that you'll require an AWS account configured in your system 
-(environment variables, .aws/credentials file...) and the user you supply must have SNS + SQS
+For Melange to properly work you'll require an AWS account configured in your system 
+(environment variables, .aws/credentials file...) and you must have SNS + SQS
 permissions to create queues and topics, publish messages and perform subcriptions. 
-I prefer to use environment variables. These are the AWS environment variables you would need:
+I prefer to use environment variables. These are the AWS environment variables you would need if
+you want to go with the environment variables route:
 
 ```
 # Extracted from http://docs.aws.amazon.com/cli/latest/userguide/cli-environment.html
@@ -39,6 +45,8 @@ AWS_ACCESS_KEY_ID – AWS access key.
 AWS_SECRET_ACCESS_KEY – AWS secret key. Access and secret key variables override credentials stored in credential and config files.
 AWS_SESSION_TOKEN – Specify a session token if you are using temporary security credentials.
 ```
+
+## How to get started ##
 
 Event-driven architectures work with the Publish/Subscribe pattern to achieve decoupling.
 So that publishers and subscribers do not know about each other. However in order to
@@ -63,6 +71,7 @@ data = {
 	'name': 'Coolers'
 }
 message_publisher.publish(data)
+# NOTE: You can as well call publish with `message_publisher.publish(data, event_type_name='ProductAdded')`
 ```
 
 This piece of code will serialize the dictionary as JSON and send it to SNS to the topic `some-topic-name`.
@@ -89,20 +98,20 @@ the initialization of your application:
 
 class SampleListener(ExchangeListener):
 
-	def process(self, event):
+	def process(self, event, **kwargs):
 		print(f"I've received information about the product {event['name']}")
 	
 	def listens_to(self):
 		return [ 'ProductAdded' ]
 
-message_consumer = ExchangeMessageConsumer(queue='my-queue', topic='some-topic-name')
+message_consumer = ExchangeMessageConsumer(event_queue_name='my-queue', topic_to_subscribe='some-topic-name')
 message_consumer.subscribe(SampleListener())
 
 while True:
 	message_consumer.consume_event()
 ```
 
-What's going on here? We've created a **Listener** that is interested in events of type
+So, what's going on here? We've created a **Listener** that is interested in events of type
 `ProductAdded` and will react to those events when received from the Message Broker. Override
 `process` to provide behavior, and override `listens_to` to provide an array of event names you are
 interested in.
@@ -182,7 +191,7 @@ class ProductAdded(EventMessage):
 		
 class SampleListener(ExchangeListener):
 
-	def process(self, event):
+	def process(self, event, **kwargs):
 		# Note that I'm not accessing event properties by key, but as a regular object.
 		# In fact event is of type ProductAdded, and this is possible thanks to marshmallow
 		# post_load hook. If you don't add this hook, event would be again a dictionary
@@ -194,7 +203,7 @@ class SampleListener(ExchangeListener):
 # In you initialization code you would call the following line:
 EventSerializer.instance().register(ProductAddedSchema)
 
-message_consumer = ExchangeMessageConsumer(queue='my-queue', topic='some-topic-name')
+message_consumer = ExchangeMessageConsumer(event_queue_name='my-queue', topic_to_subscribe='some-topic-name')
 message_consumer.subscribe(SampleListener())
 # You can subscribe as many listeners as you want
 
@@ -229,7 +238,7 @@ The consumer example above would be rewritten like this:
 
 class SampleListener(ExchangeListener):
 
-	def process(self, event):
+	def process(self, event, **kwargs):
 		print(f"I've received information about the product {event['name']}")
 	
 	def listens_to(self):
