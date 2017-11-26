@@ -8,11 +8,11 @@ from time import sleep
 
 from marshmallow import fields, post_load
 
-from melange.aws.event_serializer import EventSerializer
-from melange.aws.eventmessage import EventMessage, EventSchema
-from melange.aws.exchange_listener import ExchangeListener
 from melange.aws.exchange_message_consumer import ThreadedExchangeMessageConsumer
 from melange.aws.exchange_message_publisher import ExchangeMessagePublisher
+from melange.messaging.event_serializer import EventSerializer
+from melange.messaging.eventmessage import EventMessage, EventSchema
+from melange.messaging.exchange_listener import ExchangeListener
 
 ebus = None
 

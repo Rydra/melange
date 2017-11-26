@@ -4,9 +4,9 @@ import unittest
 from threading import Lock, Thread
 from time import sleep
 
-from melange.aws.eventmessage import EventMessage
 from melange.domain_event_bus.domain_event_bus import DomainEventBus
 from melange.domain_event_bus.domain_subscriber import DomainSubscriber
+from melange.messaging.eventmessage import EventMessage
 
 ebus = None
 

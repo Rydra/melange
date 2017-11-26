@@ -1,11 +1,11 @@
 import json
 from unittest.mock import MagicMock
 
-from melange.aws.event_serializer import EventSerializer
-from melange.aws.eventmessage import EventMessage
-from melange.aws.exchange_listener import ExchangeListener
 from melange.aws.exchange_message_consumer import ExchangeMessageConsumer
-from melange.aws.messaging_manager import MessagingManager
+from melange.aws.aws_manager import AWSManager
+from melange.messaging.event_serializer import EventSerializer
+from melange.messaging.eventmessage import EventMessage
+from melange.messaging.exchange_listener import ExchangeListener
 
 
 class TestMessageConsumer:
@@ -60,8 +60,8 @@ class TestMessageConsumer:
         def given_a_queue_to_listen_with_an_event(self, event_of_type=None):
             self.messages = [self._create_message(i) for i in range(1)]
             queue = self._create_queue(self.messages)
-            MessagingManager.declare_queue = MagicMock(return_value=(queue, ''))
-            MessagingManager.declare_topic = MagicMock()
+            AWSManager.declare_queue = MagicMock(return_value=(queue, ''))
+            AWSManager.declare_topic = MagicMock()
 
             self.event = MagicMock(spec=EventMessage)
             self.event.event_type_name = event_of_type
@@ -98,8 +98,8 @@ class TestMessageConsumer:
 
         def given_an_empty_queue_to_listen(self):
             queue = self._create_queue()
-            MessagingManager.declare_queue = MagicMock(return_value=(queue, ''))
-            MessagingManager.declare_topic = MagicMock()
+            AWSManager.declare_queue = MagicMock(return_value=(queue, ''))
+            AWSManager.declare_topic = MagicMock()
 
             event_queue_name = 'a_queue_name'
             topic_to_subscribe = 'a_topic_name'

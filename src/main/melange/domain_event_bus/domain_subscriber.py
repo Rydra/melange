@@ -1,5 +1,5 @@
 """ Subscriber super-class """
-from melange.aws.eventmessage import EventMessage
+from melange.messaging.eventmessage import EventMessage
 
 
 class DomainSubscriber:

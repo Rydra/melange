@@ -4,17 +4,17 @@ from atexit import register
 from threading import Thread, Lock
 from time import time
 
-from melange.aws.event_serializer import EventSerializer
-from melange.aws.eventmessage import EventMessage
-from melange.aws.exchange_listener import ExchangeListener
-from melange.aws.messaging_manager import MessagingManager
+from melange.aws.aws_manager import AWSManager
+from melange.messaging.event_serializer import EventSerializer
+from melange.messaging.eventmessage import EventMessage
+from melange.messaging.exchange_listener import ExchangeListener
 
 
 class ExchangeMessageConsumer:
-    def __init__(self, event_queue_name, topic_to_subscribe):
+    def __init__(self, event_queue_name, topic_to_subscribe=None, dead_letter_queue_name=None):
         self._exchange_listeners = []
-        topic = MessagingManager.declare_topic(topic_to_subscribe)
-        self._event_queue, _ = MessagingManager.declare_queue(event_queue_name, topic)
+        self._topic = AWSManager.declare_topic(topic_to_subscribe) if topic_to_subscribe else None
+        self._event_queue, self._dead_letter_queue = AWSManager.declare_queue(event_queue_name, self._topic, dead_letter_queue_name)
 
     def subscribe(self, exchange_listener):
         if not isinstance(exchange_listener, ExchangeListener):
@@ -34,7 +34,6 @@ class ExchangeMessageConsumer:
         return [listener for listener in self._exchange_listeners if listener.accepts(event_type_name)]
 
     def _poll_next_event(self):
-
         messages = self._event_queue.receive_messages(MaxNumberOfMessages=1, VisibilityTimeout=100,
                                                       WaitTimeSeconds=10, AttributeNames=['All'])
 
@@ -45,23 +44,14 @@ class ExchangeMessageConsumer:
                 logging.error(e)
 
     def _process_message(self, message):
-        body = message.body
-        message_content = json.loads(body)
-        if 'Message' in message_content:
-            content = json.loads(message_content['Message'])
-        else:
-            content = message_content
-
+        content = self._extract_message_content(message)
         if 'event_type_name' not in content:
+            # The message will be ignored but not deleted from the
+            # queue. Let the dead letter queue handle it
             return True
 
-        try:
-            event = EventSerializer.instance().deserialize(content)
-        except ValueError:
-            event = content
-
+        event = EventSerializer.instance().deserialize(content)
         event_type_name = event.event_type_name if isinstance(event, EventMessage) else event['event_type_name']
-
         subscribers = self._get_subscribers(event_type_name)
 
         successful = 0
@@ -74,6 +64,17 @@ class ExchangeMessageConsumer:
 
         if successful == len(subscribers):
             message.delete()
+
+    @staticmethod
+    def _extract_message_content(message):
+        body = message.body
+        message_content = json.loads(body)
+        if 'Message' in message_content:
+            content = json.loads(message_content['Message'])
+        else:
+            content = message_content
+
+        return content
 
 
 class ThreadedExchangeMessageConsumer(Thread, ExchangeMessageConsumer):

@@ -7,7 +7,7 @@ from time import sleep, time
 from melange.eventbus_factory import EventBusFactory
 from melange.subscriber import Subscriber
 
-from melange.aws.eventmessage import EventMessage
+from melange.messaging.eventmessage import EventMessage
 
 
 class SampleDomainEvent(EventMessage):
