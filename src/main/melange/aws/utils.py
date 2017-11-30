@@ -1,6 +1,6 @@
 import json
 
-from melange.messaging.event_serializer import EventSerializer
+from melange.messaging import EventSerializer
 
 
 def parse_event_from_sns(sns_message):

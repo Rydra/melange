@@ -1,8 +1,8 @@
 import logging
 
-from melange.aws.aws_manager import AWSManager
-from melange.messaging.event_serializer import EventSerializer
-from melange.messaging.eventmessage import EventMessage
+from .aws_manager import AWSManager
+from melange.messaging import EventSerializer
+from melange.messaging import EventMessage
 
 
 class ExchangeMessagePublisher:

@@ -1,7 +1,7 @@
 from redis_cache import SimpleCache, logging
 
 from melange import settings
-from melange.infrastructure.singleton import Singleton
+from melange.infrastructure import Singleton
 
 
 @Singleton

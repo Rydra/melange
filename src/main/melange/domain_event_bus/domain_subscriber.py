@@ -1,5 +1,5 @@
 """ Subscriber super-class """
-from melange.messaging.eventmessage import EventMessage
+from melange.messaging import EventMessage
 
 
 class DomainSubscriber:
