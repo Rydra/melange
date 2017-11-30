@@ -36,7 +36,6 @@ class DomainEventBus:
             self.thread_local.subscribers = []
 
     def subscribe(self, subscriber):
-
         if not isinstance(subscriber, DomainSubscriber):
             return False
 

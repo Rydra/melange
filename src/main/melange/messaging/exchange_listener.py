@@ -1,6 +1,6 @@
-from melange.aws.utils import get_fully_qualified_name
-from melange.messaging import Cache
-from melange.messaging import EventMessage
+from .utils import get_fully_qualified_name
+from .cache import Cache
+from .eventmessage import EventMessage
 
 
 class ExchangeListener:

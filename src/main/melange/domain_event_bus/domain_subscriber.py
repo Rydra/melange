@@ -1,9 +1,8 @@
 """ Subscriber super-class """
-from melange.messaging import EventMessage
+from .domain_event_bus import DomainEvent
 
 
 class DomainSubscriber:
-
     def process(self, event):
         """
         Called by the domain_event_bus.
@@ -20,5 +19,5 @@ class DomainSubscriber:
         return []
 
     def accepts(self, event):
-        return isinstance(event, EventMessage) \
-               and self.listens_to() == [] or type(event) in self.listens_to()
+        return isinstance(event, DomainEvent) \
+               and (self.listens_to() == [] or any(isinstance(event, e) for e in self.listens_to()))

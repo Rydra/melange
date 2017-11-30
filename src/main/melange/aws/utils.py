@@ -17,7 +17,3 @@ def parse_event_from_sns(sns_message):
         raise Exception('The message content is not a valid json')
 
     return EventSerializer.instance().deserialize(deserialized_dict)
-
-
-def get_fully_qualified_name(obj):
-    return obj.__module__ + "." + obj.__class__.__name__
