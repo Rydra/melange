@@ -1,31 +1,26 @@
-import json
 import logging
 
-from melange.aws.event_serializer import EventSerializer
-from melange.aws.eventmessage import EventMessage
-from melange.aws.messaging_manager import MessagingManager
+from .aws_manager import AWSManager
+from melange.messaging import EventSerializer
+from melange.messaging import EventMessage
 
 
 class ExchangeMessagePublisher:
     def __init__(self, topic):
-        self.topic = MessagingManager.declare_topic(topic)
+        self.topic = AWSManager.declare_topic(topic)
 
     def publish(self, event, event_type_name=None):
-
         if not isinstance(event, EventMessage) and not isinstance(event, dict):
             logging.error('Invalid data passed. You must pass an event instance or a dict')
             raise Exception('Invalid data passed. You must pass an event instance or a dict')
 
-        if isinstance(event, dict) and 'event_type_name' not in event:
+        if not event_type_name and (isinstance(event, dict) and 'event_type_name' not in event):
             raise Exception('When passing an event as a dict it has to include at least the event_type_name property')
 
-        if isinstance(event, EventMessage):
-            content = EventSerializer.instance().serialize(event)
-        else:
-            content = json.dumps(event)
+        if event_type_name and isinstance(event, dict):
+            event['event_type_name'] = event_type_name
 
-        if event_type_name and isinstance(event_type_name, str):
-            content['event_type_name'] = event_type_name
+        content = EventSerializer.instance().serialize(event)
 
         response = self.topic.publish(Message=content)
 

@@ -1,7 +1,9 @@
+import json
+
 import boto3
 
 
-class MessagingManager:
+class AWSManager:
     @staticmethod
     def declare_topic(topic_name):
         sns = boto3.resource('sns')
@@ -9,12 +11,10 @@ class MessagingManager:
         return topic
 
     @staticmethod
-    def declare_queue(queue_name, sns_topic_to_bind=None):
+    def declare_queue(queue_name, sns_topic_to_bind=None, dead_letter_queue_name=None):
         sqs_res = boto3.resource('sqs')
-        sqs_cli = boto3.client('sqs')
+
         queue = sqs_res.create_queue(QueueName=queue_name)
-        queue_arn = sqs_cli.get_queue_attributes(QueueUrl=queue.url,
-                                                 AttributeNames=['QueueArn'])['Attributes']['QueueArn']
 
         if sns_topic_to_bind:
             policy = """
@@ -36,9 +36,19 @@ class MessagingManager:
                 }}
               ]
             }}
-            """.format(queue_arn, sns_topic_to_bind.arn)
+            """.format(queue.attributes['QueueArn'], sns_topic_to_bind.arn)
             queue.set_attributes(Attributes={'Policy': policy})
+            sns_topic_to_bind.subscribe(Protocol='sqs', Endpoint=queue.attributes['QueueArn'])
 
-            sns_topic_to_bind.subscribe(Protocol='sqs', Endpoint=queue_arn)
+        dead_letter_queue = None
+        if dead_letter_queue_name:
+            dead_letter_queue = sqs_res.create_queue(QueueName=dead_letter_queue_name)
 
-        return queue, queue_arn
+            redrive_policy = {
+                'deadLetterTargetArn': dead_letter_queue.attributes['QueueArn'],
+                'maxReceiveCount': '4'
+            }
+
+            queue.set_attributes(Attributes={'RedrivePolicy': json.dumps(redrive_policy)})
+
+        return queue, dead_letter_queue
