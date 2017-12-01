@@ -1,9 +1,8 @@
 from unittest.mock import MagicMock
 
-from melange.aws.exchange_message_publisher import ExchangeMessagePublisher
-from melange.aws.aws_manager import AWSManager
 from melange.messaging.event_serializer import EventSerializer
-from melange.messaging.eventmessage import EventMessage, EventSchema
+from melange.messaging.event_message import EventMessage, EventSchema
+from melange.messaging.exchange_message_publisher import ExchangeMessagePublisher
 
 
 class TestMessagePublisher:
@@ -14,9 +13,10 @@ class TestMessagePublisher:
 
         response = {'MessageId': '12345'}
 
+        driver = MagicMock()
         topic = MagicMock()
         topic.publish.return_value = response
-        AWSManager.declare_topic = MagicMock(return_value=topic)
+        driver.declare_topic = MagicMock(return_value=topic)
 
         message_publisher = ExchangeMessagePublisher(a_topic)
         success = message_publisher.publish(event)

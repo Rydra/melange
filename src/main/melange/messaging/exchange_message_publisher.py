@@ -1,13 +1,13 @@
 import logging
 
-from .aws_manager import AWSManager
-from melange.messaging import EventSerializer
-from melange.messaging import EventMessage
+from .event_serializer import EventMessage
+from .event_serializer import EventSerializer
 
 
 class ExchangeMessagePublisher:
-    def __init__(self, topic):
-        self.topic = AWSManager.declare_topic(topic)
+    def __init__(self, driver, topic):
+        self._driver = driver
+        self._topic = self._driver.declare_topic(topic)
 
     def publish(self, event, event_type_name=None):
         if not isinstance(event, EventMessage) and not isinstance(event, dict):
@@ -22,9 +22,6 @@ class ExchangeMessagePublisher:
 
         content = EventSerializer.instance().serialize(event)
 
-        response = self.topic.publish(Message=content)
-
-        if 'MessageId' not in response:
-            raise ConnectionError('Could not send the event to the SNS TOPIC')
+        self._driver.publish(content, self._topic)
 
         return True

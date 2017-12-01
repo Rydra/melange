@@ -1,6 +1,6 @@
 from .utils import get_fully_qualified_name
 from .cache import Cache
-from .eventmessage import EventMessage
+from .event_message import EventMessage
 
 
 class ExchangeListener:
