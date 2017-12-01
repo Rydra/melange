@@ -2,15 +2,7 @@ import json
 
 import boto3
 
-
-class MessagingDriver:
-    pass
-
-class AWSMessage:
-    def __init__(self, message_id, content, message):
-        self.message_id = message_id
-        self.content = content
-        self.message = message
+from melange.messaging import MessagingDriver, Message
 
 
 class AWSDriver(MessagingDriver):
@@ -63,9 +55,9 @@ class AWSDriver(MessagingDriver):
 
     def retrieve_messages(self, queue):
         messages = queue.receive_messages(MaxNumberOfMessages=1, VisibilityTimeout=100,
-                                      WaitTimeSeconds=10, AttributeNames=['All'])
+                                          WaitTimeSeconds=10, AttributeNames=['All'])
 
-        return [AWSMessage(message.message_id, self._extract_message_content(message), message)
+        return [Message(message.message_id, self._extract_message_content(message), message)
                 for message in messages]
 
     def publish(self, content, topic):
@@ -73,6 +65,9 @@ class AWSDriver(MessagingDriver):
 
         if 'MessageId' not in response:
             raise ConnectionError('Could not send the event to the SNS TOPIC')
+
+    def acknowledge(self, message):
+        message.metadata.delete()
 
     def _extract_message_content(self, message):
         body = message.body
@@ -83,6 +78,3 @@ class AWSDriver(MessagingDriver):
             content = message_content
 
         return content
-
-    def acknowledge(self, message):
-        message.message.delete()

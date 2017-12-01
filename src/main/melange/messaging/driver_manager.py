@@ -1,17 +1,19 @@
-from melange.drivers.aws import MessagingDriver, AWSDriver
 from melange.infrastructure import Singleton
+from .messaging_driver import MessagingDriver
 
 
 @Singleton
 class DriverManager:
-
     def __init__(self):
         self._driver = None
-        self._drivers = {
-            'aws': AWSDriver()
-        }
+        self._drivers = {}
 
-    def use_driver(self, driver_name=None, driver=None):
+    def add_available_drivers(self, **kwargs):
+        self._drivers.update(kwargs)
+
+    def use_driver(self, **kwargs):
+        driver = kwargs.get('driver')
+        driver_name = kwargs.get('driver_name')
         if driver:
             if not isinstance(driver, MessagingDriver):
                 raise Exception('Invalid driver supplied')
@@ -24,6 +26,9 @@ class DriverManager:
                 raise Exception('Invalid driver supplied')
 
             self._driver = driver
+
+        else:
+            raise Exception('You need to either supply a driver or a driver_name!')
 
     def get_driver(self):
         if not self._driver:

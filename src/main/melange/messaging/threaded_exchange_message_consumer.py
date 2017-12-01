@@ -6,9 +6,9 @@ from .exchange_message_consumer import ExchangeMessageConsumer
 
 
 class ThreadedExchangeMessageConsumer(Thread, ExchangeMessageConsumer):
-    def __init__(self, driver, event_queue_name, topic_to_subscribe):
+    def __init__(self, event_queue_name, topic_to_subscribe=None, driver=None):
 
-        ExchangeMessageConsumer.__init__(self, driver, event_queue_name, topic_to_subscribe)
+        ExchangeMessageConsumer.__init__(self, event_queue_name, topic_to_subscribe, driver=driver)
         Thread.__init__(self)
 
         register(self.shutdown)

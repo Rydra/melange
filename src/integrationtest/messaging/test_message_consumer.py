@@ -1,6 +1,6 @@
 import uuid
 
-from melange.drivers.aws import AWSDriver
+from melange import DriverManager
 from melange.messaging.exchange_listener import ExchangeListener
 from melange.messaging.exchange_message_consumer import ExchangeMessageConsumer
 from melange.messaging.exchange_message_publisher import ExchangeMessagePublisher
@@ -9,6 +9,7 @@ from melange.messaging.exchange_message_publisher import ExchangeMessagePublishe
 class TestMessageConsumer:
     def setup_method(self, m):
         self.exchange_consumer = None
+        DriverManager.instance().use_driver(driver_name='aws')
 
     def teardown_method(self):
         if self.exchange_consumer:
@@ -21,9 +22,9 @@ class TestMessageConsumer:
 
     def test_consume_event_from_sqs(self):
         topic_name = self._get_topic_name()
-        self.exchange_consumer = ExchangeMessageConsumer(AWSDriver(), event_queue_name=self._get_queue_name(),
+        self.exchange_consumer = ExchangeMessageConsumer(event_queue_name=self._get_queue_name(),
                                                          topic_to_subscribe=topic_name)
-        exchange_publisher = ExchangeMessagePublisher(AWSDriver(), topic=topic_name)
+        exchange_publisher = ExchangeMessagePublisher(topic=topic_name)
 
         self.listened_event = None
 
@@ -43,9 +44,9 @@ class TestMessageConsumer:
 
     def test_consume_event_with_listeners_that_listen_multiple_events(self):
         topic_name = self._get_topic_name()
-        self.exchange_consumer = ExchangeMessageConsumer(AWSDriver(), event_queue_name=self._get_queue_name(),
+        self.exchange_consumer = ExchangeMessageConsumer(event_queue_name=self._get_queue_name(),
                                                          topic_to_subscribe=topic_name)
-        exchange_publisher = ExchangeMessagePublisher(AWSDriver(), topic=topic_name)
+        exchange_publisher = ExchangeMessagePublisher(topic=topic_name)
 
         self.listened_events = set()
 

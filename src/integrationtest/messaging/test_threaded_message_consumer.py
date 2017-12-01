@@ -3,7 +3,6 @@
 import uuid
 from time import sleep
 
-from melange.drivers.aws import AWSDriver
 from melange.messaging import ExchangeListener, ThreadedExchangeMessageConsumer
 from melange.messaging.exchange_message_publisher import ExchangeMessagePublisher
 
@@ -41,15 +40,14 @@ class TestThreadedMessageConsumer:
     def test_handle_events_in_separate_thread(self):
         topic_name = self._get_topic_name()
 
-        self.exchange_consumer = ThreadedExchangeMessageConsumer(AWSDriver(),
-            event_queue_name=self._get_queue_name(),
-            topic_to_subscribe=topic_name)
+        self.exchange_consumer = ThreadedExchangeMessageConsumer(event_queue_name=self._get_queue_name(),
+                                                                 topic_to_subscribe=topic_name)
 
         subscriber = SubscriberMine()
         self.exchange_consumer.subscribe(subscriber)
         self.exchange_consumer.start()
 
-        message_publisher = ExchangeMessagePublisher(AWSDriver(), topic=topic_name)
+        message_publisher = ExchangeMessagePublisher(topic=topic_name)
 
         for i in range(self.NUM_EVENTS_TO_PUBLISH):
             message_publisher.publish({'status': 'notprocessed'}, event_type_name='EventMine')

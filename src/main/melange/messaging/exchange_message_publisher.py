@@ -2,11 +2,12 @@ import logging
 
 from .event_serializer import EventMessage
 from .event_serializer import EventSerializer
+from .driver_manager import DriverManager
 
 
 class ExchangeMessagePublisher:
-    def __init__(self, driver, topic):
-        self._driver = driver
+    def __init__(self, topic, driver=None):
+        self._driver = driver or DriverManager.instance().get_driver()
         self._topic = self._driver.declare_topic(topic)
 
     def publish(self, event, event_type_name=None):

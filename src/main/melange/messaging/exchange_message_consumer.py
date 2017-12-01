@@ -3,12 +3,13 @@ import logging
 from melange.messaging import EventMessage
 from melange.messaging import EventSerializer
 from melange.messaging import ExchangeListener
+from .driver_manager import DriverManager
 
 
 class ExchangeMessageConsumer:
-    def __init__(self, driver, event_queue_name, topic_to_subscribe=None, dead_letter_queue_name=None):
+    def __init__(self, event_queue_name, topic_to_subscribe=None, dead_letter_queue_name=None, driver=None):
         self._exchange_listeners = []
-        self._driver = driver
+        self._driver = driver or DriverManager.instance().get_driver()
         self._topic = self._driver.declare_topic(topic_to_subscribe) if topic_to_subscribe else None
         self._event_queue, self._dead_letter_queue = self._driver.declare_queue(event_queue_name,
                                                                                 self._topic,
