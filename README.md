@@ -17,8 +17,10 @@ want to have a clean event-driven architecture with Domain Events, and its idea 
 Implementing Domain-Driven Design (look at [part 3 of these series](http://dddcommunity.org/library/vernon_2011/) if you want a quick look,
  or read this excellent article from [Udi Dahan, founder of NServiceBus](http://udidahan.com/2009/06/14/domain-events-salvation/)).
 
-Right now Melange only supports Amazon SNS+SQS as the backend messaging infrastructure, but in the 
-future we want to expand this library to be flexible enough to be used with RabbitMQ as well.
+Right now Melange only supports Amazon SNS+SQS as the backend messaging infrastructure out of the box, but in the 
+future we want to expand this library to be flexible enough to be used with RabbitMQ as well. You can add more
+backend messaging systems as well very easily by implementing and plugging in a driver. This is explained in the section
+`Add support to your own messaging infrastructure`.
 
 ## Installing ##
 
@@ -48,15 +50,24 @@ AWS_SESSION_TOKEN – Specify a session token if you are using temporary securit
 
 ## How to get started ##
 
-Event-driven architectures work with the Publish/Subscribe pattern to achieve decoupling.
-So that publishers and subscribers do not know about each other. However in order to
+Event-driven architectures work with the Publish/Subscribe pattern to achieve decoupling,
+and publishers and subscribers do not know about each other. However in order to
 communicate effectively a **Message Broker** is required to transfer messages from
-publishers to subscribers. In Melange this message broker is **Amazon SNS**, which
-will take messages from publishers and distribute those to all subscribers in a
+publishers to subscribers. In Melange this message broker is **Amazon SNS** (for now, more to be added in the future), 
+which will take messages from publishers and distribute those to all subscribers in a
 fanout manner.
 
 So, you will need two things to make this work: an **Exchange Message Publisher** and
 an **Exchange Message Consumer** to send and receive messages respectively.
+
+First things first, you need to tell Melange which driver you want to use. Place this line in the
+initialization code of your application:
+
+```python
+DriverManager.instance().use_driver(driver_name='aws')
+```
+
+This will configure Melange to use AWS as your messaging broker. Now, you are ready to work!
 
 ### Exchange Message Publisher ###
 

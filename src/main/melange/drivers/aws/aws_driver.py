@@ -17,27 +17,25 @@ class AWSDriver(MessagingDriver):
         queue = sqs_res.create_queue(QueueName=queue_name)
 
         if topic_to_bind:
-            policy = """
-                    {{
-                      "Version": "2012-10-17",
-                      "Id": "sqspolicy",
-                      "Statement": [
-                        {{
-                          "Sid": "First",
-                          "Effect": "Allow",
-                          "Principal": "*",
-                          "Resource":"{}",
-                          "Action": "sqs:SendMessage",
-                          "Condition": {{
-                            "ArnEquals": {{
-                              "aws:SourceArn": "{}"
-                            }}
-                          }}
-                        }}
-                      ]
-                    }}
-                    """.format(queue.attributes['QueueArn'], topic_to_bind.arn)
-            queue.set_attributes(Attributes={'Policy': policy})
+            policy = {
+                'Version': '2012-10-17',
+                'Id': 'sqspolicy',
+                'Statement': [
+                    {
+                        'Sid': 'First',
+                        'Effect': 'Allow',
+                        'Principal': '*',
+                        'Resource': queue.attributes['QueueArn'],
+                        'Action': 'sqs:SendMessage',
+                        'Condition': {
+                            'ArnEquals': {
+                                'aws:SourceArn': topic_to_bind.arn
+                            }
+                        }
+                    }
+                ]
+            }
+            queue.set_attributes(Attributes={'Policy': json.dumps(policy)})
             topic_to_bind.subscribe(Protocol='sqs', Endpoint=queue.attributes['QueueArn'])
 
         dead_letter_queue = None
@@ -68,6 +66,9 @@ class AWSDriver(MessagingDriver):
 
     def acknowledge(self, message):
         message.metadata.delete()
+
+    def close_connection(self):
+        pass
 
     def _extract_message_content(self, message):
         body = message.body

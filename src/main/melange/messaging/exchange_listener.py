@@ -1,6 +1,6 @@
-from .utils import get_fully_qualified_name
-from .cache import Cache
+from melange.infrastructure import Cache
 from .event_message import EventMessage
+from .utils import get_fully_qualified_name
 
 
 class ExchangeListener:
@@ -11,7 +11,8 @@ class ExchangeListener:
 
         self.process(event, **kwargs)
 
-        Cache.instance().store(get_fully_qualified_name(self) + '.' + kwargs['message_id'], get_fully_qualified_name(self) + '.' + kwargs['message_id'])
+        Cache.instance().store(get_fully_qualified_name(self) + '.' + kwargs['message_id'],
+                               get_fully_qualified_name(self) + '.' + kwargs['message_id'])
 
     def process(self, event, **kwargs):
         """
