@@ -1,15 +1,28 @@
 # Melange
 
-## An eventbus and AWS SNS+SQS messaging library for concurrent programming 
+## A messaging library for an easy inter-communication in distributed and microservices architectures 
 
-The spice must flow! (or in this case, the event)
+The spice must flow! (or in this case, the events)
 
-Melange is offers a flexible library to create distributed event-driven architectures using 
-Amazon Web Services SNS (Simple Notification Service) and SQS (Simple Queue Service) as message broker. 
+Melange is offers a flexible, easy-to-use library to create distributed event-driven architectures using
+your preferred messaging infrastructure mechanism as a backend message broker to dispatch messages and achieve
+inter-communication among your microservices and other components. 
+
 Its main selling point is the capability to greatly decouple 
-and integrate REST apis, AWS Lambda functions and console applications... as long as they can subscribe to SNS 
-topics. (You can subscribe to SNS at the time of writing HTTP Post endpoints, 
-AWS Lambdas, SQS Queues, emails and phones)
+and integrate REST apis, AWS Lambda functions and console applications, emails, cellphones... The
+interface this library offers is very clean and tries to tightly follow the best practices from Vaughn Vernon's book
+[Implementing Domain-Driven Design](https://www.amazon.es/Implementing-Domain-Driven-Design-Vaughn-Vernon/dp/0321834577)
+as well as the recommended design patterns when dealing with messaging on distributed architectures.
+
+Out of the box Melange supports the following message brokers as backend infrastructure:
+
+* Amazon's AWS SNS (Simple Notification Service) + SQS (Simple Queue Service).
+* RabbitMQ
+
+As time goes by more brokers will be added, but if you really want to use
+the simple and attractive interface Melange offers and your backend infrastructure is not
+listed (e.g. Kafka, Kinesis) you can implement your own driver. Read the section `Adding your own messaging infrastructure`
+for more information.
 
 In addition, Melange supports event driven architectures in single-process, non-distributed, memory-based applications (Console applications, background workers)
 with the aid of the `DomainEventBus` (see `Domain-Driven Design` section). The `DomainEventBus` is great if you really 
@@ -17,18 +30,13 @@ want to have a clean event-driven architecture with Domain Events, and its idea 
 Implementing Domain-Driven Design (look at [part 3 of these series](http://dddcommunity.org/library/vernon_2011/) if you want a quick look,
  or read this excellent article from [Udi Dahan, founder of NServiceBus](http://udidahan.com/2009/06/14/domain-events-salvation/)).
 
-Right now Melange only supports Amazon SNS+SQS as the backend messaging infrastructure out of the box, but in the 
-future we want to expand this library to be flexible enough to be used with RabbitMQ as well. You can add more
-backend messaging systems as well very easily by implementing and plugging in a driver. This is explained in the section
-`Add support to your own messaging infrastructure`.
-
 ## Installing ##
 
 Execute the following two commands to install melange in your system (working in packaging this to combine both
 commands into a single one):
 
 ```
-pip install git+https://github.com/Rydra/redis-simple-cache.git/@master#egg=redis-simple-cache-0
+pip install git+https://github.com/Rydra/redis-simple-cache.git/@master
 pip install melange
 ```
 
@@ -50,24 +58,46 @@ AWS_SESSION_TOKEN – Specify a session token if you are using temporary securit
 
 ## How to get started ##
 
-Event-driven architectures work with the Publish/Subscribe pattern to achieve decoupling,
-and publishers and subscribers do not know about each other. However in order to
-communicate effectively a **Message Broker** is required to transfer messages from
-publishers to subscribers. In Melange this message broker is **Amazon SNS** (for now, more to be added in the future), 
-which will take messages from publishers and distribute those to all subscribers in a
-fanout manner.
+Event-driven architectures work with the Publish/Subscribe pattern to achieve decoupling.
+With this pattern, publishers and subscribers do not know about each other while they can exchange
+information among them. In order to achieve this and communicate effectively a 
+mediator, or better said, a **Message Broker** is required to transfer messages from
+publishers to subscribers. Clients can subscribe this broker, waiting for events they are interested in,
+or publish messages so that the broker can distribute these messages appropriately.
 
-So, you will need two things to make this work: an **Exchange Message Publisher** and
+So, you will need two things to make this entire scene work: an **Exchange Message Publisher** and
 an **Exchange Message Consumer** to send and receive messages respectively.
 
-First things first, you need to tell Melange which driver you want to use. Place this line in the
-initialization code of your application:
+But before getting your feet wet into this realm, first things first. You need to tell Melange which driver backend
+you want to use. Place this line in the initialization code of your application:
 
 ```python
+# If you want to use AWS
 DriverManager.instance().use_driver(driver_name='aws')
 ```
 
-This will configure Melange to use AWS as your messaging broker. Now, you are ready to work!
+```python
+# If you want to use RabbitMQ. besides the driver_name parameter, the rest of the parameters are connection parameters
+# expressed as keyword arguments used by the pika library. Check pika documentation on the ConnectionParameters:
+# https://pika.readthedocs.io/en/0.10.0/modules/parameters.html
+DriverManager.instance().use_driver(driver_name='rabbitMQ', **connection_parameters)
+```
+
+This will configure Melange to use your message infrastructure as your messaging broker. Now, you are ready to work!
+
+NOTES: For Melange to properly with AWS work you'll require an AWS account configured in your system 
+(environment variables, .aws/credentials file...) and you must have SNS + SQS
+permissions to create queues and topics, publish messages and perform subcriptions. 
+Personally I prefer to use environment variables. These are the AWS environment variables you would need if
+you want to go with the environment variables route:
+
+```
+# Extracted from http://docs.aws.amazon.com/cli/latest/userguide/cli-environment.html
+
+AWS_ACCESS_KEY_ID – AWS access key.
+AWS_SECRET_ACCESS_KEY – AWS secret key. Access and secret key variables override credentials stored in credential and config files.
+AWS_SESSION_TOKEN – Specify a session token if you are using temporary security credentials.
+```
 
 ### Exchange Message Publisher ###
 
@@ -333,6 +363,118 @@ DomainEventBus.instance().publish(ProductAddedDomainEvent(my_product.id, my_prod
 If you wanna learn more about how to do clean architectures and domain well isolated from
 your technology stack I advise, again, to read *Implementing Domain-Driven Design* from Vaughn Vernon
 and *Clean Architecture* from Uncle Bob
+
+### Adding your own messaging infrastructure
+
+You can implement your own driver to use with Melange if you wish so and easily plug it in the library. You just need to
+create a driver class and either add it to the list of available drivers or directly use it.
+
+To create the driver class, you need to inherit from `MessagingDriver` and override all the methods from this
+class. The documentation of this class explains very well what should these methods accepts as
+parameters and return:
+
+```python
+class MessagingDriver:
+    def __init__(self):
+        self._finalizer = weakref.finalize(self, self.close_connection)
+
+    def declare_topic(self, topic_name):
+        """
+        Declares a topic exchange with the name "topic name" and
+        returns an object that represent the topic
+
+        :param topic_name: The name of the topic to create
+        :return: An object that represents a topic. The type of the object
+        is only relevant inside the context of the driver, so what you
+        return as a topic will be passed in next calls to the driver
+        where a topic is required
+        """
+        raise NotImplementedError
+
+    def declare_queue(self, queue_name, topic_to_bind=None, dead_letter_queue_name=None):
+        """
+        Declares a queue with the name "queue_name". Optionally, this
+         queue may be binded to the topic "topic_to_bind" and associated
+         to a dead_letter_queue "dead_letter_queue_name" where messages that
+         were unable to deliver will be placed.
+
+        :param queue_name: The name of the queue to create
+        :param topic_to_bind: The topic object where you will bind your queue
+        :param dead_letter_queue_name: The name of the dead letter queue to
+        create and associate to the queue "queue_name"
+        :return: A tuple, with the first element being the object queue
+        created, and the second element is the dead letter queue object.
+        The type of the queue object is only relevant inside the context of the driver, so what you
+        return as a queue will be passed in next calls to the driver
+        where a queue is required
+        """
+        raise NotImplementedError
+
+    def retrieve_messages(self, queue):
+        """
+        Returns a list of messages (instances of Message type) that have
+        been received from the queue.
+
+        :param queue: queue to poll
+        :return: a list of messages to process
+        """
+        raise NotImplementedError
+
+    def publish(self, content, topic):
+        """
+        Publishes the content to the topic. The content must be a
+        string (which is the json representation of an event)
+        """
+        raise NotImplementedError
+
+    def acknowledge(self, message):
+        """
+        Acknowledges a message so that it won't be redelivered by
+        the messaging infrastructure in the future
+        """
+        raise NotImplementedError
+
+    def close_connection(self):
+        """
+        Override this function if you want to use some finalizer code
+         to shutdown your driver in a clean way
+        """
+        pass
+
+    def delete_queue(self, queue):
+        """
+        Deletes the queue
+        """
+        raise NotImplementedError
+
+    def delete_topic(self, topic):
+        """
+        Deletes the topic
+        """
+        raise NotImplementedError
+```
+
+Inspire yourself with the implementations of the AWSDriver and the RabbitMQDriver.
+
+After you created your own driver, you just need to tell the DriverManager to recognize your driver:
+
+```python
+driver = MyDriver()
+DriverManager.instance().use_driver(driver=driver)
+```
+
+Or if you want to register it into Melange and use it afterwards or create your own Melange plugin:
+
+```python
+driver = MyDriver()
+DriverManager.instance().add_available_drivers(mydriver=MyDriver)
+
+.... At some point later you would call:
+
+DriverManager.instance().use_driver(driver_name="mydriver")
+```
+
+Now Melange will use your driver as the backend message infrastructure.
 
 # Other useful uses
 

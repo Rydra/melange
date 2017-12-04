@@ -6,10 +6,8 @@ use_plugin("python.flake8")
 use_plugin("python.coverage")
 use_plugin("python.distutils")
 
-#use_plugin('pypi:pybuilder_pytest')
-
 name = "melange"
-version = "2.6.0"
+version = "3.0.0"
 default_task = "publish"
 
 
