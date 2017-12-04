@@ -12,13 +12,14 @@ class TestMessageConsumer:
         DriverManager.instance().use_driver(driver_name='aws')
 
     def teardown_method(self):
+        driver = DriverManager.instance().get_driver()
         if self.exchange_consumer:
             if self.exchange_consumer._event_queue:
-                self.exchange_consumer._event_queue.delete()
+                driver.delete_queue(self.exchange_consumer._event_queue)
             if self.exchange_consumer._dead_letter_queue:
-                self.exchange_consumer._dead_letter_queue.delete()
+                driver.delete_queue(self.exchange_consumer._dead_letter_queue)
             if self.exchange_consumer._topic:
-                self.exchange_consumer._topic.delete()
+                driver.delete_topic(self.exchange_consumer._topic)
 
     def test_consume_event_from_sqs(self):
         topic_name = self._get_topic_name()

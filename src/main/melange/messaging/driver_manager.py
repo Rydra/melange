@@ -11,9 +11,7 @@ class DriverManager:
     def add_available_drivers(self, **kwargs):
         self._drivers.update(kwargs)
 
-    def use_driver(self, **kwargs):
-        driver = kwargs.get('driver')
-        driver_name = kwargs.get('driver_name')
+    def use_driver(self, driver=None, driver_name=None, **kwargs):
         if driver:
             if not isinstance(driver, MessagingDriver):
                 raise Exception('Invalid driver supplied')
@@ -25,7 +23,7 @@ class DriverManager:
             if not driver:
                 raise Exception('Invalid driver supplied')
 
-            self._driver = driver
+            self._driver = driver(**kwargs)
 
         else:
             raise Exception('You need to either supply a driver or a driver_name!')

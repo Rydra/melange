@@ -1,4 +1,5 @@
 import json
+
 import pika
 
 from melange.messaging import MessagingDriver, Message

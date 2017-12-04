@@ -70,6 +70,12 @@ class AWSDriver(MessagingDriver):
     def close_connection(self):
         pass
 
+    def delete_queue(self, queue):
+        queue.delete()
+
+    def delete_topic(self, topic):
+        topic.delete()
+
     def _extract_message_content(self, message):
         body = message.body
         message_content = json.loads(body)

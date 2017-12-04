@@ -10,8 +10,9 @@ from melange.messaging.exchange_message_publisher import ExchangeMessagePublishe
 class TestMessageConsumerRabbitMQ:
     def setup_method(self, m):
         self.exchange_consumer = None
-        self.driver = RabbitMQDriver(host='localhost')
-        DriverManager.instance().use_driver(driver=self.driver)
+        DriverManager.instance().use_driver(driver_name='rabbitMQ',
+                                            host='localhost')
+        self.driver = DriverManager.instance().get_driver()
 
     def teardown_method(self):
         if self.exchange_consumer._topic:
@@ -23,7 +24,7 @@ class TestMessageConsumerRabbitMQ:
         if self.exchange_consumer._dead_letter_queue:
             self.driver.delete_queue(self.exchange_consumer._dead_letter_queue)
 
-    def test_consume_event_from_sqs(self):
+    def test_consume_event_from_queue(self):
         topic_name = self._get_topic_name()
         self.exchange_consumer = ExchangeMessageConsumer(event_queue_name=self._get_queue_name(),
                                                          topic_to_subscribe=topic_name)
