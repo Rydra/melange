@@ -31,7 +31,6 @@ class TestRabbitMQDriver:
         queue_name = self._get_queue_name()
         self.queue, _ = self.driver.declare_queue(queue_name)
         assert self.queue == queue_name
-        assert 'Policy' not in self.queue.attributes
 
     def test_create_queue_and_bind_to_topic(self):
         self.topic = self.driver.declare_topic(self._get_topic_name())

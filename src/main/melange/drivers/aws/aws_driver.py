@@ -6,6 +6,9 @@ from melange.messaging import MessagingDriver, Message
 
 
 class AWSDriver(MessagingDriver):
+    def __init__(self):
+        super().__init__()
+
     def declare_topic(self, topic_name):
         sns = boto3.resource('sns')
         topic = sns.create_topic(Name=topic_name)

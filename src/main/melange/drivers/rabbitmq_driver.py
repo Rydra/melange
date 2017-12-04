@@ -1,4 +1,5 @@
 import json
+import weakref
 
 import pika
 
@@ -7,6 +8,7 @@ from melange.messaging import MessagingDriver, Message
 
 class RabbitMQDriver(MessagingDriver):
     def __init__(self, **kwargs):
+        super().__init__()
         connection_parameters = pika.ConnectionParameters(**kwargs)
         self.connection = pika.BlockingConnection(connection_parameters)
         self.channel = self.connection.channel()

@@ -1,3 +1,6 @@
+import weakref
+
+
 class Message:
     def __init__(self, message_id, content, metadata):
         self.message_id = message_id
@@ -6,6 +9,9 @@ class Message:
 
 
 class MessagingDriver:
+    def __init__(self):
+        self._finalizer = weakref.finalize(self, self.close_connection)
+
     def declare_topic(self, topic_name):
         """
         Declares a topic exchange with the name "topic name" and
@@ -63,7 +69,11 @@ class MessagingDriver:
         raise NotImplementedError
 
     def close_connection(self):
-        raise NotImplementedError
+        """
+        Override this function if you want to use some finalizer code
+         to shutdown your driver in a clean way
+        """
+        pass
 
     def delete_queue(self, queue):
         """
