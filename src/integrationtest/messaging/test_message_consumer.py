@@ -1,22 +1,25 @@
 import uuid
 
-from melange.aws.exchange_message_consumer import ExchangeMessageConsumer
-from melange.aws.exchange_message_publisher import ExchangeMessagePublisher
+from melange import DriverManager
 from melange.messaging.exchange_listener import ExchangeListener
+from melange.messaging.exchange_message_consumer import ExchangeMessageConsumer
+from melange.messaging.exchange_message_publisher import ExchangeMessagePublisher
 
 
 class TestMessageConsumer:
     def setup_method(self, m):
         self.exchange_consumer = None
+        DriverManager.instance().use_driver(driver_name='aws')
 
     def teardown_method(self):
+        driver = DriverManager.instance().get_driver()
         if self.exchange_consumer:
             if self.exchange_consumer._event_queue:
-                self.exchange_consumer._event_queue.delete()
+                driver.delete_queue(self.exchange_consumer._event_queue)
             if self.exchange_consumer._dead_letter_queue:
-                self.exchange_consumer._dead_letter_queue.delete()
+                driver.delete_queue(self.exchange_consumer._dead_letter_queue)
             if self.exchange_consumer._topic:
-                self.exchange_consumer._topic.delete()
+                driver.delete_topic(self.exchange_consumer._topic)
 
     def test_consume_event_from_sqs(self):
         topic_name = self._get_topic_name()

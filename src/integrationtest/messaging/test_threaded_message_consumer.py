@@ -3,9 +3,8 @@
 import uuid
 from time import sleep
 
-from melange.aws import ThreadedExchangeMessageConsumer
-from melange.aws import ExchangeMessagePublisher
-from melange.messaging import ExchangeListener
+from melange.messaging import ExchangeListener, ThreadedExchangeMessageConsumer, DriverManager
+from melange.messaging.exchange_message_publisher import ExchangeMessagePublisher
 
 
 class SubscriberMine(ExchangeListener):
@@ -26,6 +25,7 @@ class SubscriberMine(ExchangeListener):
 class TestThreadedMessageConsumer:
     def setup_method(self, m):
         self.NUM_EVENTS_TO_PUBLISH = 10
+        DriverManager.instance().use_driver(driver_name='aws')
 
     def teardown_method(self):
         self.exchange_consumer.shutdown()
@@ -41,9 +41,8 @@ class TestThreadedMessageConsumer:
     def test_handle_events_in_separate_thread(self):
         topic_name = self._get_topic_name()
 
-        self.exchange_consumer = ThreadedExchangeMessageConsumer(
-            event_queue_name=self._get_queue_name(),
-            topic_to_subscribe=topic_name)
+        self.exchange_consumer = ThreadedExchangeMessageConsumer(event_queue_name=self._get_queue_name(),
+                                                                 topic_to_subscribe=topic_name)
 
         subscriber = SubscriberMine()
         self.exchange_consumer.subscribe(subscriber)

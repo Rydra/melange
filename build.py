@@ -6,10 +6,8 @@ use_plugin("python.flake8")
 use_plugin("python.coverage")
 use_plugin("python.distutils")
 
-#use_plugin('pypi:pybuilder_pytest')
-
 name = "melange"
-version = "2.6.0"
+version = "3.0.0.1"
 default_task = "publish"
 
 
@@ -24,9 +22,10 @@ def set_properties(project):
     project.set_property("flake8_break_build", True)
 
     project.depends_on("boto3")
+    project.depends_on("pika")
     project.depends_on("marshmallow")
     project.depends_on("pyopenssl")
     project.depends_on("redis-simple-cache",
-                       url="git+https://github.com/Rydra/redis-simple-cache.git/@master#egg=redis-simple-cache-0")
+                       url="git+https://github.com/Rydra/redis-simple-cache.git/@master")
 
     project.version = version

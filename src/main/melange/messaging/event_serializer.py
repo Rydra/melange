@@ -1,7 +1,7 @@
 import json
 
 from melange.infrastructure import Singleton
-from .eventmessage import EventMessage
+from .event_message import EventMessage
 
 
 @Singleton
