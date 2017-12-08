@@ -4,7 +4,7 @@
 
 The spice must flow! (or in this case, the events)
 
-Melange is offers a flexible, easy-to-use library to create distributed event-driven architectures using
+Melange offers a flexible, easy-to-use library to create distributed event-driven architectures using
 your preferred messaging infrastructure mechanism as a backend message broker to dispatch messages and achieve
 inter-communication among your microservices and other components. 
 
