@@ -1,3 +1,6 @@
+import json
+import uuid
+
 import boto3
 
 
@@ -9,7 +12,7 @@ class MessagingManager:
         return topic
 
     @staticmethod
-    def declare_queue(queue_name, sns_topic_to_bind=None):
+    def declare_queue(queue_name, *sns_topic_to_bind):
         sqs_res = boto3.resource('sqs')
         sqs_cli = boto3.client('sqs')
         queue = sqs_res.create_queue(QueueName=queue_name)
@@ -17,28 +20,30 @@ class MessagingManager:
                                                  AttributeNames=['QueueArn'])['Attributes']['QueueArn']
 
         if sns_topic_to_bind:
-            policy = """
-            {{
-              "Version": "2012-10-17",
-              "Id": "sqspolicy",
-              "Statement": [
-                {{
-                  "Sid": "First",
-                  "Effect": "Allow",
-                  "Principal": "*",
-                  "Resource":"{}",
-                  "Action": "sqs:SendMessage",
-                  "Condition": {{
-                    "ArnEquals": {{
-                      "aws:SourceArn": "{}"
-                    }}
-                  }}
-                }}
-              ]
-            }}
-            """.format(queue_arn, sns_topic_to_bind.arn)
-            queue.set_attributes(Attributes={'Policy': policy})
+            statements = []
+            for topic in sns_topic_to_bind:
+                statement = {
+                            'Sid': 'Sid{}'.format(uuid.uuid4()),
+                            'Effect': 'Allow',
+                            'Principal': '*',
+                            'Resource': queue.attributes['QueueArn'],
+                            'Action': 'sqs:SendMessage',
+                            'Condition': {
+                                'ArnEquals': {
+                                    'aws:SourceArn': topic.arn
+                                }
+                            }
+                        }
 
-            sns_topic_to_bind.subscribe(Protocol='sqs', Endpoint=queue_arn)
+                statements.append(statement)
+                topic.subscribe(Protocol='sqs', Endpoint=queue_arn)
+
+            policy = {
+                'Version': '2012-10-17',
+                'Id': 'sqspolicy',
+                'Statement': statements
+            }
+
+            queue.set_attributes(Attributes={'Policy': json.dumps(policy)})
 
         return queue, queue_arn

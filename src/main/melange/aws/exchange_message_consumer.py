@@ -11,10 +11,10 @@ from melange.aws.messaging_manager import MessagingManager
 
 
 class ExchangeMessageConsumer:
-    def __init__(self, event_queue_name, topic_to_subscribe):
+    def __init__(self, event_queue_name, *topic_to_subscribe):
         self._exchange_listeners = []
-        topic = MessagingManager.declare_topic(topic_to_subscribe)
-        self._event_queue, _ = MessagingManager.declare_queue(event_queue_name, topic)
+        topics = [ MessagingManager.declare_topic(t) for t in topic_to_subscribe ]
+        self._event_queue, _ = MessagingManager.declare_queue(event_queue_name, *topics)
 
     def subscribe(self, exchange_listener):
         if not isinstance(exchange_listener, ExchangeListener):
