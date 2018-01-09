@@ -15,8 +15,9 @@ class TestMessageConsumerRabbitMQ:
         self.driver = DriverManager.instance().get_driver()
 
     def teardown_method(self):
-        if self.exchange_consumer._topic:
-            self.driver.delete_topic(self.exchange_consumer._topic)
+        if self.exchange_consumer._topics:
+            for topic in self.exchange_consumer._topics:
+                self.driver.delete_topic(topic)
 
         if self.exchange_consumer._event_queue:
             self.driver.delete_queue(self.exchange_consumer._event_queue)
@@ -26,8 +27,8 @@ class TestMessageConsumerRabbitMQ:
 
     def test_consume_event_from_queue(self):
         topic_name = self._get_topic_name()
-        self.exchange_consumer = ExchangeMessageConsumer(event_queue_name=self._get_queue_name(),
-                                                         topic_to_subscribe=topic_name)
+        self.exchange_consumer = ExchangeMessageConsumer(self._get_queue_name(),
+                                                         topic_name)
         exchange_publisher = ExchangeMessagePublisher(topic=topic_name)
 
         self.listened_event = None
@@ -48,8 +49,8 @@ class TestMessageConsumerRabbitMQ:
 
     def test_consume_event_with_listeners_that_listen_multiple_events(self):
         topic_name = self._get_topic_name()
-        self.exchange_consumer = ExchangeMessageConsumer(event_queue_name=self._get_queue_name(),
-                                                         topic_to_subscribe=topic_name)
+        self.exchange_consumer = ExchangeMessageConsumer(self._get_queue_name(),
+                                                         topic_name)
         exchange_publisher = ExchangeMessagePublisher(topic=topic_name)
 
         self.listened_events = set()

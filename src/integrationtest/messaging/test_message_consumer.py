@@ -18,13 +18,14 @@ class TestMessageConsumer:
                 driver.delete_queue(self.exchange_consumer._event_queue)
             if self.exchange_consumer._dead_letter_queue:
                 driver.delete_queue(self.exchange_consumer._dead_letter_queue)
-            if self.exchange_consumer._topic:
-                driver.delete_topic(self.exchange_consumer._topic)
+            if self.exchange_consumer._topics:
+                for topic in self.exchange_consumer._topics:
+                    driver.delete_topic(topic)
 
     def test_consume_event_from_sqs(self):
         topic_name = self._get_topic_name()
-        self.exchange_consumer = ExchangeMessageConsumer(event_queue_name=self._get_queue_name(),
-                                                         topic_to_subscribe=topic_name)
+        self.exchange_consumer = ExchangeMessageConsumer(self._get_queue_name(),
+                                                         topic_name)
         exchange_publisher = ExchangeMessagePublisher(topic=topic_name)
 
         self.listened_event = None
@@ -45,8 +46,8 @@ class TestMessageConsumer:
 
     def test_consume_event_with_listeners_that_listen_multiple_events(self):
         topic_name = self._get_topic_name()
-        self.exchange_consumer = ExchangeMessageConsumer(event_queue_name=self._get_queue_name(),
-                                                         topic_to_subscribe=topic_name)
+        self.exchange_consumer = ExchangeMessageConsumer(self._get_queue_name(),
+                                                         topic_name)
         exchange_publisher = ExchangeMessagePublisher(topic=topic_name)
 
         self.listened_events = set()

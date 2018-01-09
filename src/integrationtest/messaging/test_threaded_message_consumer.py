@@ -35,14 +35,15 @@ class TestThreadedMessageConsumer:
                 self.exchange_consumer._event_queue.delete()
             if self.exchange_consumer._dead_letter_queue:
                 self.exchange_consumer._dead_letter_queue.delete()
-            if self.exchange_consumer._topic:
-                self.exchange_consumer._topic.delete()
+            if self.exchange_consumer._topics:
+                for topic in self.exchange_consumer._topics:
+                    topic.delete()
 
     def test_handle_events_in_separate_thread(self):
         topic_name = self._get_topic_name()
 
         self.exchange_consumer = ThreadedExchangeMessageConsumer(event_queue_name=self._get_queue_name(),
-                                                                 topic_to_subscribe=topic_name)
+                                                                 topics_to_subscribe=topic_name)
 
         subscriber = SubscriberMine()
         self.exchange_consumer.subscribe(subscriber)

@@ -45,10 +45,11 @@ class RabbitMQDriver(MessagingDriver):
     def acknowledge(self, message):
         self.channel.basic_ack(delivery_tag=int(message.message_id))
 
-    def declare_queue(self, queue_name, topic_to_bind=None, dead_letter_queue_name=None):
+    def declare_queue(self, queue_name, *topics_to_bind, dead_letter_queue_name=None):
         queue = self.channel.queue_declare(queue=queue_name, durable=True)
-        if topic_to_bind:
-            self.channel.queue_bind(exchange=topic_to_bind, queue=queue_name)
+        if topics_to_bind:
+            for topic in topics_to_bind:
+                self.channel.queue_bind(exchange=topic, queue=queue_name)
 
         return queue.method.queue, dead_letter_queue_name
 

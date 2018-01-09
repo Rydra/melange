@@ -1,4 +1,5 @@
 import json
+import uuid
 
 import boto3
 
@@ -14,32 +15,37 @@ class AWSDriver(MessagingDriver):
         topic = sns.create_topic(Name=topic_name)
         return topic
 
-    def declare_queue(self, queue_name, topic_to_bind=None, dead_letter_queue_name=None):
+    def declare_queue(self, queue_name, *topics_to_bind, dead_letter_queue_name=None):
         sqs_res = boto3.resource('sqs')
 
         queue = sqs_res.create_queue(QueueName=queue_name)
 
-        if topic_to_bind:
+        if topics_to_bind:
+            statements = []
+            for topic in topics_to_bind:
+                statement = {
+                    'Sid': 'Sid{}'.format(uuid.uuid4()),
+                    'Effect': 'Allow',
+                    'Principal': '*',
+                    'Resource': queue.attributes['QueueArn'],
+                    'Action': 'sqs:SendMessage',
+                    'Condition': {
+                        'ArnEquals': {
+                            'aws:SourceArn': topic.arn
+                        }
+                    }
+                }
+
+                statements.append(statement)
+                topic.subscribe(Protocol='sqs', Endpoint=queue.attributes['QueueArn'])
+
             policy = {
                 'Version': '2012-10-17',
                 'Id': 'sqspolicy',
-                'Statement': [
-                    {
-                        'Sid': 'First',
-                        'Effect': 'Allow',
-                        'Principal': '*',
-                        'Resource': queue.attributes['QueueArn'],
-                        'Action': 'sqs:SendMessage',
-                        'Condition': {
-                            'ArnEquals': {
-                                'aws:SourceArn': topic_to_bind.arn
-                            }
-                        }
-                    }
-                ]
+                'Statement': statements
             }
+
             queue.set_attributes(Attributes={'Policy': json.dumps(policy)})
-            topic_to_bind.subscribe(Protocol='sqs', Endpoint=queue.attributes['QueueArn'])
 
         dead_letter_queue = None
         if dead_letter_queue_name:
