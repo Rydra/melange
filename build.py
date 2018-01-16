@@ -24,6 +24,7 @@ def set_properties(project):
     project.depends_on("boto3")
     project.depends_on("pika")
     project.depends_on("marshmallow")
+    project.depends_on("setuptools", version="38.4.0")
     project.depends_on("pyopenssl")
     project.depends_on("redis-simple-cache",
                        url="git+https://github.com/Rydra/redis-simple-cache.git/@master")
