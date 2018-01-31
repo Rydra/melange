@@ -8,7 +8,7 @@ from .driver_manager import DriverManager
 class ExchangeMessagePublisher:
     def __init__(self, topic, driver=None):
         self._driver = driver or DriverManager.instance().get_driver()
-        self._topic = self._driver.declare_topic(topic)
+        self._topic_name = topic
 
     def publish(self, event, event_type_name=None):
         if not isinstance(event, EventMessage) and not isinstance(event, dict):
@@ -23,6 +23,7 @@ class ExchangeMessagePublisher:
 
         content = EventSerializer.instance().serialize(event)
 
+        self._topic = self._driver.declare_topic(self._topic_name)
         self._driver.publish(content, self._topic)
 
         return True

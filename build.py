@@ -7,7 +7,7 @@ use_plugin("python.coverage")
 use_plugin("python.distutils")
 
 name = "melange"
-version = "3.0.0.1"
+version = "3.1.1"
 default_task = "publish"
 
 

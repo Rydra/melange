@@ -10,10 +10,14 @@ class ExchangeMessageConsumer:
     def __init__(self, event_queue_name, *topics_to_subscribe, dead_letter_queue_name=None, driver=None):
         self._exchange_listeners = []
         self._driver = driver or DriverManager.instance().get_driver()
-        self._topics = [self._driver.declare_topic(t) for t in topics_to_subscribe]
-        self._event_queue, self._dead_letter_queue = self._driver.declare_queue(event_queue_name,
+        self._event_queue_name = event_queue_name
+        self._topics_to_subscribe = topics_to_subscribe
+        self._dead_letter_queue_name = dead_letter_queue_name
+
+        self._topics = [self._driver.declare_topic(t) for t in self._topics_to_subscribe]
+        self._event_queue, self._dead_letter_queue = self._driver.declare_queue(self._event_queue_name,
                                                                                 *self._topics,
-                                                                                dead_letter_queue_name=dead_letter_queue_name)
+                                                                                dead_letter_queue_name=self._dead_letter_queue_name)
 
     def subscribe(self, exchange_listener):
         if not isinstance(exchange_listener, ExchangeListener):
@@ -27,7 +31,9 @@ class ExchangeMessageConsumer:
             self._exchange_listeners.remove(exchange_listener)
 
     def consume_event(self):
-        messages = self._driver.retrieve_messages(self._event_queue)
+        event_queue = self._driver.get_queue(self._event_queue_name)
+
+        messages = self._driver.retrieve_messages(event_queue)
 
         for message in messages:
             try:

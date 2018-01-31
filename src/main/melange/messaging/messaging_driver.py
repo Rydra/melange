@@ -25,6 +25,9 @@ class MessagingDriver:
         """
         raise NotImplementedError
 
+    def get_queue(self, queue_name):
+        raise NotImplementedError
+
     def declare_queue(self, queue_name, *topics_to_bind, dead_letter_queue_name=None):
         """
         Declares a queue with the name "queue_name". Optionally, this

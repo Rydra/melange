@@ -15,6 +15,11 @@ class AWSDriver(MessagingDriver):
         topic = sns.create_topic(Name=topic_name)
         return topic
 
+    def get_queue(self, queue_name):
+        sqs_res = boto3.resource('sqs')
+
+        return sqs_res.get_queue_by_name(QueueName=queue_name)
+
     def declare_queue(self, queue_name, *topics_to_bind, dead_letter_queue_name=None):
         sqs_res = boto3.resource('sqs')
 

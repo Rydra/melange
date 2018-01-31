@@ -35,6 +35,10 @@ class RabbitMQDriver(MessagingDriver):
 
         return result
 
+    def get_queue(self, queue_name):
+        queue = self.channel.queue_declare(queue=queue_name, durable=True)
+        return queue.method.queue
+
     def declare_topic(self, topic_name):
         self.channel.exchange_declare(exchange=topic_name,
                                       exchange_type='fanout',
