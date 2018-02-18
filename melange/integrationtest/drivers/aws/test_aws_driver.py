@@ -1,7 +1,7 @@
 import json
 import uuid
 
-from melange.drivers.aws import AWSDriver
+from melange import AWSDriver
 
 
 class TestAWSDriver:

@@ -2,12 +2,8 @@ import json
 import uuid
 from unittest.mock import MagicMock
 
-from melange.messaging import DriverManager, Message
-from melange.messaging import MessagingDriver
-from melange.messaging.event_serializer import EventSerializer
-from melange.messaging.event_message import EventMessage
-from melange.messaging.exchange_listener import ExchangeListener
-from melange.messaging.exchange_message_consumer import ExchangeMessageConsumer
+from melange import DriverManager
+from melange.messaging import MessagingDriver, ExchangeMessageConsumer, Message, ExchangeListener
 
 
 class TestMessageConsumer:

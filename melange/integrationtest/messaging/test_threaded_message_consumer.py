@@ -3,8 +3,7 @@
 import uuid
 from time import sleep
 
-from melange.messaging import ExchangeListener, ThreadedExchangeMessageConsumer, DriverManager
-from melange.messaging.exchange_message_publisher import ExchangeMessagePublisher
+from melange.messaging import ExchangeListener, DriverManager, ThreadedExchangeMessageConsumer, ExchangeMessagePublisher
 
 
 class SubscriberMine(ExchangeListener):

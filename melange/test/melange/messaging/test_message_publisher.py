@@ -1,7 +1,6 @@
 from unittest.mock import MagicMock
 
-from melange.messaging import MessagingDriver, DriverManager
-from melange.messaging.exchange_message_publisher import ExchangeMessagePublisher
+from melange.messaging import MessagingDriver, DriverManager, ExchangeMessagePublisher
 
 
 class TestMessagePublisher:

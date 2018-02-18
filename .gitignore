@@ -1,7 +1,16 @@
-*.pyc
 target/*
 .idea/
 .directory
 target/
 .cache/
 .coverage
+# Compiled python modules.
+*.pyc
+
+# Setuptools distribution folder.
+/dist/
+
+# Python egg metadata, regenerated from source files by setuptools.
+/*.egg-info
+/*.egg
+\.eggs/
