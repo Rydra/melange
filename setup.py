@@ -3,7 +3,7 @@
 from setuptools import setup, find_packages
 
 setup(name='melange',
-      version='3.1.1',
+      version='3.1.2',
       description='A messaging library for an easy inter-communication in distributed and microservices architectures',
       url='https://github.com/Rydra/melange',
       author='David Jiménez (Rydra)',
