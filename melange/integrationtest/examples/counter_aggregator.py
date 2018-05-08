@@ -4,10 +4,9 @@ from random import randint
 from threading import Lock, Thread
 from time import sleep, time
 
-from melange.eventbus_factory import EventBusFactory
-from melange.subscriber import Subscriber
-
-from melange.messaging.event_message import EventMessage
+from melange import EventBusFactory
+from melange import EventMessage
+from melange import Subscriber
 
 
 class SampleDomainEvent(EventMessage):

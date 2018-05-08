@@ -1,28 +1,28 @@
 import uuid
 
 from melange import DriverManager
-from melange.messaging.exchange_listener import ExchangeListener
-from melange.messaging.exchange_message_consumer import ExchangeMessageConsumer
-from melange.messaging.exchange_message_publisher import ExchangeMessagePublisher
+from melange.messaging import ExchangeMessageConsumer, ExchangeMessagePublisher, ExchangeListener
 
 
-class TestMessageConsumer:
+class TestMessageConsumerRabbitMQ:
     def setup_method(self, m):
         self.exchange_consumer = None
-        DriverManager.instance().use_driver(driver_name='aws')
+        DriverManager.instance().use_driver(driver_name='rabbitMQ',
+                                            host='localhost')
+        self.driver = DriverManager.instance().get_driver()
 
     def teardown_method(self):
-        driver = DriverManager.instance().get_driver()
-        if self.exchange_consumer:
-            if self.exchange_consumer._event_queue:
-                driver.delete_queue(self.exchange_consumer._event_queue)
-            if self.exchange_consumer._dead_letter_queue:
-                driver.delete_queue(self.exchange_consumer._dead_letter_queue)
-            if self.exchange_consumer._topics:
-                for topic in self.exchange_consumer._topics:
-                    driver.delete_topic(topic)
+        if self.exchange_consumer._topics:
+            for topic in self.exchange_consumer._topics:
+                self.driver.delete_topic(topic)
 
-    def test_consume_event_from_sqs(self):
+        if self.exchange_consumer._event_queue:
+            self.driver.delete_queue(self.exchange_consumer._event_queue)
+
+        if self.exchange_consumer._dead_letter_queue:
+            self.driver.delete_queue(self.exchange_consumer._dead_letter_queue)
+
+    def test_consume_event_from_queue(self):
         topic_name = self._get_topic_name()
         self.exchange_consumer = ExchangeMessageConsumer(self._get_queue_name(),
                                                          topic_name)
@@ -80,4 +80,4 @@ class TestMessageConsumer:
         return 'test_queue_{}'.format(uuid.uuid4())
 
     def _get_topic_name(self):
-        return 'test_queue_{}'.format(uuid.uuid4())
+        return 'test_topic_{}'.format(uuid.uuid4())

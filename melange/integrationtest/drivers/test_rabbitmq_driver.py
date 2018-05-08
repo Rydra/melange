@@ -1,6 +1,6 @@
 import uuid
 
-from melange.drivers.rabbitmq_driver import RabbitMQDriver
+from melange import RabbitMQDriver
 
 
 class TestRabbitMQDriver:

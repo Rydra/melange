@@ -7,8 +7,11 @@ from melange.messaging import MessagingDriver, Message
 
 
 class AWSDriver(MessagingDriver):
-    def __init__(self):
+    def __init__(self, **kwargs):
         super().__init__()
+        self.max_number_of_messages = kwargs.get('max_number_of_messages', 1)
+        self.visibility_timeout = kwargs.get('visibility_timeout', 100)
+        self.wait_time_seconds = kwargs.get('wait_time_seconds', 10)
 
     def declare_topic(self, topic_name):
         sns = boto3.resource('sns')
@@ -66,8 +69,8 @@ class AWSDriver(MessagingDriver):
         return queue, dead_letter_queue
 
     def retrieve_messages(self, queue):
-        messages = queue.receive_messages(MaxNumberOfMessages=1, VisibilityTimeout=100,
-                                          WaitTimeSeconds=10, AttributeNames=['All'])
+        messages = queue.receive_messages(MaxNumberOfMessages=self.max_number_of_messages, VisibilityTimeout=self.visibility_timeout,
+                                          WaitTimeSeconds=self.wait_time_seconds, AttributeNames=['All'])
 
         return [Message(message.message_id, self._extract_message_content(message), message)
                 for message in messages]
