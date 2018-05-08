@@ -1,5 +1,4 @@
 import json
-import weakref
 
 import pika
 
@@ -25,7 +24,7 @@ class RabbitMQDriver(MessagingDriver):
                           metadata=properties)
         return [message]
 
-    def publish(self, content, topic):
+    def publish(self, content, topic, event_type_name):
         result = self.channel.basic_publish(exchange=topic,
                                             routing_key='',
                                             body=content,

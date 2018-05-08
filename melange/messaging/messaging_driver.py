@@ -28,7 +28,7 @@ class MessagingDriver:
     def get_queue(self, queue_name):
         raise NotImplementedError
 
-    def declare_queue(self, queue_name, *topics_to_bind, dead_letter_queue_name=None):
+    def declare_queue(self, queue_name, *topics_to_bind, dead_letter_queue_name=None, **kwargs):
         """
         Declares a queue with the name "queue_name". Optionally, this
          queue may be binded to the topic "topic_to_bind" and associated
@@ -57,7 +57,7 @@ class MessagingDriver:
         """
         raise NotImplementedError
 
-    def publish(self, content, topic):
+    def publish(self, content, topic, event_type_name):
         """
         Publishes the content to the topic. The content must be a
         string (which is the json representation of an event)

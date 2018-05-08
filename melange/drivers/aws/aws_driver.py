@@ -23,7 +23,7 @@ class AWSDriver(MessagingDriver):
 
         return sqs_res.get_queue_by_name(QueueName=queue_name)
 
-    def declare_queue(self, queue_name, *topics_to_bind, dead_letter_queue_name=None):
+    def declare_queue(self, queue_name, *topics_to_bind, dead_letter_queue_name=None, **kwargs):
         sqs_res = boto3.resource('sqs')
 
         queue = sqs_res.create_queue(QueueName=queue_name)
@@ -45,7 +45,15 @@ class AWSDriver(MessagingDriver):
                 }
 
                 statements.append(statement)
-                topic.subscribe(Protocol='sqs', Endpoint=queue.attributes['QueueArn'])
+                subscription = topic.subscribe(Protocol='sqs', Endpoint=queue.attributes['QueueArn'])
+
+                if kwargs.get('filter_events'):
+                    filter_policy = {
+                        'event_type': kwargs['filter_events']
+                    }
+
+                    subscription.set_attributes(AttributeName='FilterPolicy',
+                                                AttributeValue=json.dumps(filter_policy))
 
             policy = {
                 'Version': '2012-10-17',
@@ -75,8 +83,13 @@ class AWSDriver(MessagingDriver):
         return [Message(message.message_id, self._extract_message_content(message), message)
                 for message in messages]
 
-    def publish(self, content, topic):
-        response = topic.publish(Message=content)
+    def publish(self, content, topic, event_type_name):
+        response = topic.publish(Message=content, MessageAttributes={
+            'event_type': {
+                'DataType': 'String',
+                'StringValue': event_type_name
+            }
+        })
 
         if 'MessageId' not in response:
             raise ConnectionError('Could not send the event to the SNS TOPIC')
