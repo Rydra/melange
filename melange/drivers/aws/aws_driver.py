@@ -51,9 +51,11 @@ class AWSDriver(MessagingDriver):
                     filter_policy = {
                         'event_type': kwargs['filter_events']
                     }
+                else:
+                    filter_policy = {}
 
-                    subscription.set_attributes(AttributeName='FilterPolicy',
-                                                AttributeValue=json.dumps(filter_policy))
+                subscription.set_attributes(AttributeName='FilterPolicy',
+                                            AttributeValue=json.dumps(filter_policy))
 
             policy = {
                 'Version': '2012-10-17',

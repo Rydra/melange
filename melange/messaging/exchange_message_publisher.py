@@ -23,7 +23,10 @@ class ExchangeMessagePublisher:
 
         content = EventSerializer.instance().serialize(event)
 
+        if not event_type_name:
+            event_type_name = event.event_type_name if isinstance(event, EventMessage) else event['event_type_name']
+
         self._topic = self._driver.declare_topic(self._topic_name)
-        self._driver.publish(content, self._topic, event_type_name=event['event_type_name'])
+        self._driver.publish(content, self._topic, event_type_name=event_type_name)
 
         return True
