@@ -7,3 +7,8 @@ class DomainEvent:
 
     def get_occurred_on(self):
         return self.occurred_on
+
+    def emit(self):
+        from melange.domain_event_bus import DomainEventBus
+        DomainEventBus.instance().publish(self)
+        return self

@@ -1,6 +1,7 @@
 from threading import Thread
 
-from melange.domain_event_bus import DomainEvent, DomainEventBus, DomainSubscriber
+from melange.domain_event_bus import DomainEvent, DomainEventBus, DomainEventHandler
+from melange.domain_event_bus.debugger import Debugger
 
 
 class TestDomainEventBus:
@@ -10,7 +11,7 @@ class TestDomainEventBus:
         class TestDomainEvent(DomainEvent):
             pass
 
-        class TestDomainSubscriber(DomainSubscriber):
+        class TestDomainSubscriber(DomainEventHandler):
             def process(x, event):
                 nonlocal self
                 self.listened_event = event
@@ -20,8 +21,8 @@ class TestDomainEventBus:
 
         test_domain_event = TestDomainEvent()
         DomainEventBus.instance().reset()
-        DomainEventBus.instance().subscribe(TestDomainSubscriber())
-        DomainEventBus.instance().publish(test_domain_event)
+        TestDomainSubscriber().listen()
+        test_domain_event.emit()
 
         assert self.listened_event == test_domain_event
 
@@ -34,22 +35,18 @@ class TestDomainEventBus:
         class TestDomainEvent2(DomainEvent):
             pass
 
-        class TestDomainSubscriber(DomainSubscriber):
+        class TestDomainSubscriber(DomainEventHandler):
             def process(x, event):
                 nonlocal self
                 self.listened_events.append(event)
 
-        test_domain_event_1 = TestDomainEvent()
-        test_domain_event_2 = TestDomainEvent2()
-        test_domain_event_3 = TestDomainEvent()
-        test_domain_event_4 = TestDomainEvent2()
 
         DomainEventBus.instance().reset()
-        DomainEventBus.instance().subscribe(TestDomainSubscriber())
-        DomainEventBus.instance().publish(test_domain_event_1)
-        DomainEventBus.instance().publish(test_domain_event_2)
-        DomainEventBus.instance().publish(test_domain_event_3)
-        DomainEventBus.instance().publish(test_domain_event_4)
+        TestDomainSubscriber().listen()
+        test_domain_event_1 = TestDomainEvent().emit()
+        test_domain_event_2 = TestDomainEvent2().emit()
+        test_domain_event_3 = TestDomainEvent().emit()
+        test_domain_event_4 = TestDomainEvent2().emit()
 
         assert self.listened_events[0] == test_domain_event_1
         assert self.listened_events[1] == test_domain_event_2
@@ -69,7 +66,7 @@ class TestDomainEventBus:
         class TestDomainEvent3(DomainEvent):
             name = 'TestDomainEvent3'
 
-        class TestDomainSubscriber(DomainSubscriber):
+        class TestDomainSubscriber(DomainEventHandler):
             def process(x, event):
                 nonlocal self
                 self.listened_events_1.append(event)
@@ -77,7 +74,7 @@ class TestDomainEventBus:
             def listens_to(self):
                 return [TestDomainEvent]
 
-        class TestDomainSubscriber2(DomainSubscriber):
+        class TestDomainSubscriber2(DomainEventHandler):
             def process(x, event):
                 nonlocal self
                 self.listened_events_2.append(event)
@@ -85,18 +82,15 @@ class TestDomainEventBus:
             def listens_to(self):
                 return [TestDomainEvent2]
 
-        test_domain_event_1 = TestDomainEvent()
-        test_domain_event_2 = TestDomainEvent2()
-        test_domain_event_3 = TestDomainEvent()
-        test_domain_event_4 = TestDomainEvent3()
 
         DomainEventBus.instance().reset()
-        DomainEventBus.instance().subscribe(TestDomainSubscriber())
-        DomainEventBus.instance().subscribe(TestDomainSubscriber2())
-        DomainEventBus.instance().publish(test_domain_event_1)
-        DomainEventBus.instance().publish(test_domain_event_2)
-        DomainEventBus.instance().publish(test_domain_event_3)
-        DomainEventBus.instance().publish(test_domain_event_4)
+        TestDomainSubscriber().listen()
+        TestDomainSubscriber2().listen()
+
+        test_domain_event_1 = TestDomainEvent().emit()
+        test_domain_event_2 = TestDomainEvent2().emit()
+        test_domain_event_3 = TestDomainEvent().emit()
+        TestDomainEvent3().emit()
 
         assert len(self.listened_events_1) == 2
         assert len(self.listened_events_2) == 1
@@ -111,7 +105,7 @@ class TestDomainEventBus:
         class TestDomainEvent(DomainEvent):
             name = 'TestDomainEvent'
 
-        class TestDomainSubscriber(DomainSubscriber):
+        class TestDomainSubscriber(DomainEventHandler):
             def process(x, event):
                 nonlocal self
                 self.listened_events_1.append(event)
@@ -119,7 +113,7 @@ class TestDomainEventBus:
             def listens_to(self):
                 return [TestDomainEvent]
 
-        class TestDomainSubscriber2(DomainSubscriber):
+        class TestDomainSubscriber2(DomainEventHandler):
             def process(x, event):
                 nonlocal self
                 self.listened_events_2.append(event)
@@ -129,16 +123,16 @@ class TestDomainEventBus:
 
         def thread_1_func():
             DomainEventBus.instance().reset()
-            DomainEventBus.instance().subscribe(TestDomainSubscriber())
-            DomainEventBus.instance().publish(TestDomainEvent())
-            DomainEventBus.instance().publish(TestDomainEvent())
+            TestDomainSubscriber().listen()
+            TestDomainEvent().emit()
+            TestDomainEvent().emit()
 
         def thread_2_func():
             DomainEventBus.instance().reset()
-            DomainEventBus.instance().subscribe(TestDomainSubscriber2())
-            DomainEventBus.instance().publish(TestDomainEvent())
-            DomainEventBus.instance().publish(TestDomainEvent())
-            DomainEventBus.instance().publish(TestDomainEvent())
+            TestDomainSubscriber2().listen()
+            TestDomainEvent().emit()
+            TestDomainEvent().emit()
+            TestDomainEvent().emit()
 
         t1 = Thread(target=thread_1_func)
         t2 = Thread(target=thread_2_func)
@@ -161,16 +155,16 @@ class TestDomainEventBus:
         class TestDomainEvent2(DomainEvent):
             name = 'TestDomainEvent2'
 
-        class TestDomainSubscriber(DomainSubscriber):
+        class TestDomainSubscriber(DomainEventHandler):
             def process(x, event):
                 nonlocal self
                 self.listened_events_1.append(event)
-                DomainEventBus.instance().publish(TestDomainEvent2())
+                TestDomainEvent2().emit()
 
             def listens_to(self):
                 return [TestDomainEvent]
 
-        class TestDomainSubscriber2(DomainSubscriber):
+        class TestDomainSubscriber2(DomainEventHandler):
             def process(x, event):
                 nonlocal self
                 self.listened_events_2.append(event)
@@ -179,9 +173,44 @@ class TestDomainEventBus:
                 return [TestDomainEvent2]
 
         DomainEventBus.instance().reset()
-        DomainEventBus.instance().subscribe(TestDomainSubscriber())
-        DomainEventBus.instance().subscribe(TestDomainSubscriber2())
-        DomainEventBus.instance().publish(TestDomainEvent())
+        TestDomainSubscriber().listen()
+        TestDomainSubscriber2().listen()
+        TestDomainEvent().emit()
 
         assert len(self.listened_events_1) == 1
         assert len(self.listened_events_2) == 0
+
+    def test_the_debugger_will_log_any_event(self):
+        self.listened_events_1 = []
+        self.listened_events_2 = []
+
+        class TestDomainEvent(DomainEvent):
+            name = 'TestDomainEvent'
+
+        class TestDomainEvent2(DomainEvent):
+            name = 'TestDomainEvent2'
+
+        class TestDomainSubscriber(DomainEventHandler):
+            def process(x, event):
+                nonlocal self
+                self.listened_events_1.append(event)
+                TestDomainEvent2().emit()
+
+            def listens_to(self):
+                return [TestDomainEvent]
+
+        class TestDomainSubscriber2(DomainEventHandler):
+            def process(x, event):
+                nonlocal self
+                self.listened_events_2.append(event)
+
+            def listens_to(self):
+                return [TestDomainEvent2]
+
+        DomainEventBus.instance().reset()
+        TestDomainSubscriber().listen()
+        TestDomainSubscriber2().listen()
+
+        Debugger().listen()
+
+        TestDomainEvent().emit()

@@ -2,7 +2,7 @@
 from .domain_event_bus import DomainEvent
 
 
-class DomainSubscriber:
+class DomainEventHandler:
     def process(self, event):
         """
         Called by the domain_event_bus.
@@ -17,6 +17,11 @@ class DomainSubscriber:
 
     def listens_to(self):
         return []
+
+    def listen(self):
+        from melange.domain_event_bus import DomainEventBus
+        DomainEventBus.instance().subscribe(self)
+        return self
 
     def accepts(self, event):
         return isinstance(event, DomainEvent) \

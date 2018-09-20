@@ -2,7 +2,7 @@ import logging
 import threading
 
 from .domain_event import DomainEvent
-from .domain_subscriber import DomainSubscriber
+from .domain_subscriber import DomainEventHandler
 from melange.infrastructure import Singleton
 
 
@@ -36,7 +36,7 @@ class DomainEventBus:
             self.thread_local.subscribers = []
 
     def subscribe(self, subscriber):
-        if not isinstance(subscriber, DomainSubscriber):
+        if not isinstance(subscriber, DomainEventHandler):
             return False
 
         if subscriber not in self.thread_local.subscribers:
