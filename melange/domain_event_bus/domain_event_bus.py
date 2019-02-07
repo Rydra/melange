@@ -14,8 +14,11 @@ class DomainEventBus:
         self.thread_local.subscribers = []
         self.thread_local.publishing = False
 
+    def is_publishing(self):
+        return getattr(self.thread_local, 'publishing', False)
+
     def publish(self, event):
-        if self.thread_local.publishing:
+        if self.is_publishing():
             return
 
         if not isinstance(event, DomainEvent):
@@ -32,11 +35,11 @@ class DomainEventBus:
             val = False
             self.thread_local.publishing = False
 
-        if not val:
+        if not self.is_publishing():
             self.thread_local.subscribers = []
 
     def subscribe(self, subscriber):
-        if not isinstance(subscriber, DomainEventHandler):
+        if self.is_publishing() or not isinstance(subscriber, DomainEventHandler):
             return False
 
         if subscriber not in self.thread_local.subscribers:
