@@ -23,7 +23,7 @@ class EventSerializer:
             schema = self.event_serializer_map[event_schema]
             data, errors = schema.load(event_dict)
             return data
-        except ValueError:
+        except (ValueError, KeyError):
             return event_dict
 
     def serialize(self, event):
