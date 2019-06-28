@@ -6,6 +6,9 @@ from melange.messaging import ExchangeListener
 from .driver_manager import DriverManager
 
 
+logger = logging.getLogger(__name__)
+
+
 class ExchangeMessageConsumer:
     def __init__(self, event_queue_name, *topics_to_subscribe, dead_letter_queue_name=None, driver=None, **kwargs):
         self._exchange_listeners = []
@@ -40,7 +43,7 @@ class ExchangeMessageConsumer:
             try:
                 self._process_message(message)
             except Exception as e:
-                logging.error(e)
+                logger.error(e)
 
     def _get_subscribers(self, event_type_name):
         return [listener for listener in self._exchange_listeners if listener.accepts(event_type_name)]
@@ -61,7 +64,7 @@ class ExchangeMessageConsumer:
                 subscr.process_event(event, message_id=message.message_id)
                 successful += 1
             except Exception as e:
-                logging.error(e)
+                logger.error(e)
 
         if successful == len(subscribers):
             self._driver.acknowledge(message)

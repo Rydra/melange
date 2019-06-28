@@ -4,6 +4,9 @@ from melange import settings
 from .singleton import Singleton
 
 
+logger = logging.getLogger(__name__)
+
+
 @Singleton
 class Cache:
     def __init__(self):
@@ -15,7 +18,7 @@ class Cache:
                                  namespace=settings.CACHE_NAMESPACE)
 
         if not self.cache.connection:
-            logging.warning("Could not establish a connection with redis. Message deduplication won't work")
+            logger.warning("Could not establish a connection with redis. Message deduplication won't work")
 
     def store(self, key, value, expire=None):
         if not self.cache.connection:

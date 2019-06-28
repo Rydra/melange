@@ -6,6 +6,9 @@ from .domain_subscriber import DomainEventHandler
 from melange.infrastructure import Singleton
 
 
+logger = logging.getLogger(__name__)
+
+
 @Singleton
 class DomainEventBus:
     thread_local = threading.local()
@@ -22,7 +25,7 @@ class DomainEventBus:
             return
 
         if not isinstance(event, DomainEvent):
-            logging.error('Invalid data passed. You must pass an event instance')
+            logger.error('Invalid data passed. You must pass an event instance')
             return
 
         self.thread_local.publishing = True
@@ -52,7 +55,7 @@ class DomainEventBus:
             try:
                 subscr.process(event)
             except Exception as e:
-                logging.error(e)
+                logger.error(e)
 
     def _get_subscribers(self, event):
         return [subscriber for subscriber in self.thread_local.subscribers if subscriber.accepts(event)]
