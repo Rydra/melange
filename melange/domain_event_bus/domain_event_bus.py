@@ -16,12 +16,19 @@ class DomainEventBus:
     def __init__(self):
         self.thread_local.subscribers = []
         self.thread_local.publishing = False
+        self.thread_local.keep_publishing = False
 
     def is_publishing(self):
         return getattr(self.thread_local, 'publishing', False)
 
+    def keep_publishing(self):
+        self.thread_local.keep_publishing = True
+
+    def should_keep_publishing(self):
+        return getattr(self.thread_local, 'keep_publishing', False)
+
     def publish(self, event):
-        if self.is_publishing():
+        if self.is_publishing() and not self.should_keep_publishing():
             return
 
         if not isinstance(event, DomainEvent):
@@ -37,6 +44,7 @@ class DomainEventBus:
         if val is None:
             val = False
             self.thread_local.publishing = False
+            self.thread_local.keep_publishing = False
 
         if not self.is_publishing():
             self.thread_local.subscribers = []
