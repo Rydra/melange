@@ -9,6 +9,33 @@ from .driver_manager import DriverManager
 logger = logging.getLogger(__name__)
 
 
+class ExchangeMessageYielder:
+    def __init__(self, event_queue_name, *topics_to_subscribe, dead_letter_queue_name=None, driver=None, **kwargs):
+        self._driver = driver or DriverManager.instance().get_driver()
+        self._event_queue_name = event_queue_name
+        self._topics_to_subscribe = topics_to_subscribe
+        self._dead_letter_queue_name = dead_letter_queue_name
+
+        self._topics = [self._driver.declare_topic(t) for t in self._topics_to_subscribe]
+        self._event_queue, self._dead_letter_queue = self._driver.declare_queue(
+            self._event_queue_name, *self._topics,
+            dead_letter_queue_name=self._dead_letter_queue_name,
+            filter_events=kwargs.get('filter_events'))
+
+    def get_messages(self):
+        event_queue = self._driver.get_queue(self._event_queue_name)
+
+        while True:
+            messages = self._driver.retrieve_messages(event_queue)
+
+            for message in messages:
+                if 'event_type_name' in message.content:
+                    yield EventSerializer.instance().deserialize(message.content)
+
+    def acknowledge(self, message):
+        self._driver.acknowledge(message)
+
+
 class ExchangeMessageConsumer:
     def __init__(self, event_queue_name, *topics_to_subscribe, dead_letter_queue_name=None, driver=None, **kwargs):
         self._exchange_listeners = []
@@ -18,10 +45,10 @@ class ExchangeMessageConsumer:
         self._dead_letter_queue_name = dead_letter_queue_name
 
         self._topics = [self._driver.declare_topic(t) for t in self._topics_to_subscribe]
-        self._event_queue, self._dead_letter_queue = self._driver.declare_queue(self._event_queue_name,
-                                                                                *self._topics,
-                                                                                dead_letter_queue_name=self._dead_letter_queue_name,
-                                                                                filter_events=kwargs.get('filter_events'))
+        self._event_queue, self._dead_letter_queue = self._driver.declare_queue(
+            self._event_queue_name, *self._topics,
+            dead_letter_queue_name=self._dead_letter_queue_name,
+            filter_events=kwargs.get('filter_events'))
 
     def subscribe(self, exchange_listener):
         if not isinstance(exchange_listener, ExchangeListener):
