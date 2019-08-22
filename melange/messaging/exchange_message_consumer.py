@@ -70,7 +70,7 @@ class ExchangeMessageConsumer:
             try:
                 self._process_message(message)
             except Exception as e:
-                logger.error(e)
+                logger.exception(e)
 
     def _get_subscribers(self, event_type_name):
         return [listener for listener in self._exchange_listeners if listener.accepts(event_type_name)]
@@ -91,7 +91,7 @@ class ExchangeMessageConsumer:
                 subscr.process_event(event, message_id=message.message_id)
                 successful += 1
             except Exception as e:
-                logger.error(e)
+                logger.exception(e)
 
         if successful == len(subscribers):
             self._driver.acknowledge(message)

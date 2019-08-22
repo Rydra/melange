@@ -63,7 +63,7 @@ class DomainEventBus:
             try:
                 subscr.process(event)
             except Exception as e:
-                logger.error(e)
+                logger.exception(e)
 
     def _get_subscribers(self, event):
         return [subscriber for subscriber in self.thread_local.subscribers if subscriber.accepts(event)]
