@@ -47,7 +47,7 @@ class MessagingDriver:
         """
         raise NotImplementedError
 
-    def retrieve_messages(self, queue):
+    def retrieve_messages(self, queue, attempt_id=None):
         """
         Returns a list of messages (instances of Message type) that have
         been received from the queue.
@@ -62,6 +62,11 @@ class MessagingDriver:
         Publishes the content to the topic. The content must be a
         string (which is the json representation of an event)
         """
+        raise NotImplementedError
+
+    def queue_publish(
+            self, content, queue, event_type_name,
+            message_group_id=None, message_deduplication_id=None):
         raise NotImplementedError
 
     def acknowledge(self, message):

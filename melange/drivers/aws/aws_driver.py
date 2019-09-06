@@ -1,5 +1,6 @@
 import json
 import uuid
+from json import JSONDecodeError
 
 import boto3
 
@@ -9,7 +10,7 @@ from melange.messaging import MessagingDriver, Message
 class AWSDriver(MessagingDriver):
     def __init__(self, **kwargs):
         super().__init__()
-        self.max_number_of_messages = kwargs.get('max_number_of_messages', 1)
+        self.max_number_of_messages = kwargs.get('max_number_of_messages', 10)
         self.visibility_timeout = kwargs.get('visibility_timeout', 100)
         self.wait_time_seconds = kwargs.get('wait_time_seconds', 10)
 
@@ -24,9 +25,7 @@ class AWSDriver(MessagingDriver):
         return sqs_res.get_queue_by_name(QueueName=queue_name)
 
     def declare_queue(self, queue_name, *topics_to_bind, dead_letter_queue_name=None, **kwargs):
-        sqs_res = boto3.resource('sqs')
-
-        queue = sqs_res.create_queue(QueueName=queue_name)
+        queue = self._create_queue(queue_name, content_based_deduplication='true')
 
         if topics_to_bind:
             statements = []
@@ -67,7 +66,7 @@ class AWSDriver(MessagingDriver):
 
         dead_letter_queue = None
         if dead_letter_queue_name:
-            dead_letter_queue = sqs_res.create_queue(QueueName=dead_letter_queue_name)
+            dead_letter_queue = self._create_queue(dead_letter_queue_name)
 
             redrive_policy = {
                 'deadLetterTargetArn': dead_letter_queue.attributes['QueueArn'],
@@ -78,12 +77,52 @@ class AWSDriver(MessagingDriver):
 
         return queue, dead_letter_queue
 
-    def retrieve_messages(self, queue):
-        messages = queue.receive_messages(MaxNumberOfMessages=self.max_number_of_messages, VisibilityTimeout=self.visibility_timeout,
-                                          WaitTimeSeconds=self.wait_time_seconds, AttributeNames=['All'])
+    def _create_queue(self, queue_name, **kwargs):
+        sqs_res = boto3.resource('sqs')
+        fifo = queue_name.endswith('.fifo')
+        attributes = {}
+        if fifo:
+            attributes['FifoQueue'] = 'true'
+            attributes['ContentBasedDeduplication'] = 'true' if kwargs.get('content_based_deduplication') else 'false'
+        queue = sqs_res.create_queue(QueueName=queue_name, Attributes=attributes)
+        return queue
+
+    def retrieve_messages(self, queue, attempt_id=None):
+        kwargs = dict(
+            MaxNumberOfMessages=self.max_number_of_messages,
+            VisibilityTimeout=self.visibility_timeout,
+            WaitTimeSeconds=self.wait_time_seconds,
+            AttributeNames=['All']
+        )
+
+        if attempt_id:
+            kwargs['ReceiveRequestAttemptId'] = attempt_id
+
+        messages = queue.receive_messages(**kwargs)
 
         return [Message(message.message_id, self._extract_message_content(message), message)
                 for message in messages]
+
+    def queue_publish(
+            self, content, queue, event_type_name,
+            message_group_id=None, message_deduplication_id=None):
+        kwargs = dict(
+            MessageBody=content,
+            MessageAttributes={
+                'event_type': {
+                    'DataType': 'String',
+                    'StringValue': event_type_name
+                }
+            }
+        )
+
+        if message_group_id:
+            kwargs['MessageGroupId'] = message_group_id
+
+        if message_deduplication_id:
+            kwargs['MessageDeduplicationId'] = message_deduplication_id
+
+        queue.send_message(**kwargs)
 
     def publish(self, content, topic, event_type_name):
         response = topic.publish(Message=content, MessageAttributes={
@@ -110,10 +149,13 @@ class AWSDriver(MessagingDriver):
 
     def _extract_message_content(self, message):
         body = message.body
-        message_content = json.loads(body)
-        if 'Message' in message_content:
-            content = json.loads(message_content['Message'])
-        else:
-            content = message_content
+        try:
+            message_content = json.loads(body)
+            if 'Message' in message_content:
+                content = json.loads(message_content['Message'])
+            else:
+                content = message_content
+        except JSONDecodeError:
+            content = body
 
         return content
