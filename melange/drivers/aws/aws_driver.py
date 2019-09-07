@@ -3,6 +3,7 @@ import uuid
 from json import JSONDecodeError
 
 import boto3
+import botocore
 
 from melange.messaging import MessagingDriver, Message
 
@@ -25,7 +26,10 @@ class AWSDriver(MessagingDriver):
         return sqs_res.get_queue_by_name(QueueName=queue_name)
 
     def declare_queue(self, queue_name, *topics_to_bind, dead_letter_queue_name=None, **kwargs):
-        queue = self._create_queue(queue_name, content_based_deduplication='true')
+        try:
+            queue = self.get_queue(queue_name)
+        except Exception:
+            queue = self._create_queue(queue_name, content_based_deduplication='true')
 
         if topics_to_bind:
             statements = []
@@ -66,7 +70,11 @@ class AWSDriver(MessagingDriver):
 
         dead_letter_queue = None
         if dead_letter_queue_name:
-            dead_letter_queue = self._create_queue(dead_letter_queue_name)
+            try:
+                dead_letter_queue = self.get_queue(dead_letter_queue_name)
+            except Exception:
+                dead_letter_queue = self._create_queue(
+                    dead_letter_queue_name, content_based_deduplication='true')
 
             redrive_policy = {
                 'deadLetterTargetArn': dead_letter_queue.attributes['QueueArn'],

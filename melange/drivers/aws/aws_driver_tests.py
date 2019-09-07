@@ -19,6 +19,7 @@ def topic(aws_driver):
     yield topic
     aws_driver.delete_topic(topic)
 
+
 def test_create_fifo_queue(aws_driver, request):
     def delete_queue():
         aws_driver.delete_queue(queue)
