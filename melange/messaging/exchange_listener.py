@@ -1,18 +1,23 @@
+import logging
+
 from melange.infrastructure import Cache
 from .event_message import EventMessage
 from .utils import get_fully_qualified_name
 
 
+logger = logging.getLogger(__name__)
+
+
 class ExchangeListener:
     def process_event(self, event, **kwargs):
-        if get_fully_qualified_name(self) + '.' + kwargs['message_id'] in Cache.instance():
-            print('detected a duplicated message, ignoring')
+        message_listener_key = get_fully_qualified_name(self) + '.' + kwargs['message_id']
+        if message_listener_key in Cache.instance():
+            logger.info('detected a duplicated message, ignoring')
             return
 
         self.process(event, **kwargs)
 
-        Cache.instance().store(get_fully_qualified_name(self) + '.' + kwargs['message_id'],
-                               get_fully_qualified_name(self) + '.' + kwargs['message_id'])
+        Cache.instance().store(message_listener_key, message_listener_key)
 
     def process(self, event, **kwargs):
         """
