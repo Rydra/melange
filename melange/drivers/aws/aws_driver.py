@@ -104,17 +104,19 @@ class AWSDriver(MessagingDriver):
                 for message in messages]
 
     def queue_publish(
-            self, content, queue, event_type_name,
+            self, content, queue, event_type_name=None,
             message_group_id=None, message_deduplication_id=None):
         kwargs = dict(
-            MessageBody=content,
-            MessageAttributes={
+            MessageBody=content
+        )
+
+        if event_type_name:
+            kwargs['MessageAttributes'] = {
                 'event_type': {
                     'DataType': 'String',
                     'StringValue': event_type_name
                 }
             }
-        )
 
         if message_group_id:
             kwargs['MessageGroupId'] = message_group_id

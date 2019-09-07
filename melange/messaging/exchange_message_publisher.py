@@ -49,7 +49,14 @@ class SQSPublisher:
         self.is_fifo = self._event_queue.attributes.get('FifoQueue') == 'true'
 
     def publish(self, event, event_type_name=None, **kwargs):
-        if event_type_name and isinstance(event, dict):
+        if isinstance(event, dict) and 'event_type_name' in event:
+            event_type_name = event['event_type_name']
+
+        if not event_type_name:
+            raise Exception('You need to supply the event_type_name either in the body of the event '
+                            'or as parameter')
+
+        if isinstance(event, dict):
             event['event_type_name'] = event_type_name
 
         content = EventSerializer.instance().serialize(event)
