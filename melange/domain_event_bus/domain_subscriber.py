@@ -3,7 +3,7 @@ from .domain_event_bus import DomainEvent
 
 
 class DomainEventHandler:
-    def process(self, event):
+    def process(self, event, **kwargs):
         """
         Called by the domain_event_bus.
 

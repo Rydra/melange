@@ -27,7 +27,7 @@ class DomainEventBus:
     def should_keep_publishing(self):
         return getattr(self.thread_local, 'keep_publishing', False)
 
-    def publish(self, event):
+    def publish(self, event, **kwargs):
         if self.is_publishing() and not self.should_keep_publishing():
             return
 
@@ -36,7 +36,7 @@ class DomainEventBus:
             return
 
         self.thread_local.publishing = True
-        self._publish_synchronous(event)
+        self._publish_synchronous(event, **kwargs)
         self.thread_local.publishing = False
 
     def reset(self):
@@ -56,11 +56,12 @@ class DomainEventBus:
         if subscriber not in self.thread_local.subscribers:
             self.thread_local.subscribers.append(subscriber)
 
-    def _publish_synchronous(self, event):
+    def _publish_synchronous(self, event, **kwargs):
         subscribers = self._get_subscribers(event)
 
         for subscr in subscribers:
             try:
+                event._meta = kwargs
                 subscr.process(event)
             except Exception as e:
                 logger.exception(e)
