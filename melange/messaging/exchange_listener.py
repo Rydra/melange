@@ -9,15 +9,18 @@ logger = logging.getLogger(__name__)
 
 
 class ExchangeListener:
+    def __init__(self, cache: Cache = None):
+        self.cache = cache or Cache.instance()
+
     def process_event(self, event, **kwargs):
         message_listener_key = get_fully_qualified_name(self) + '.' + kwargs['message_id']
-        if message_listener_key in Cache.instance():
+        if message_listener_key in self.cache:
             logger.info('detected a duplicated message, ignoring')
             return
 
         self.process(event, **kwargs)
 
-        Cache.instance().store(message_listener_key, message_listener_key)
+        self.cache.store(message_listener_key, message_listener_key)
 
     def process(self, event, **kwargs):
         """
