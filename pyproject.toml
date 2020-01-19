@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "melange"
+version = "4.3.0"
+description = "A messaging library for an easy inter-communication in distributed and microservices architectures"
+authors = ["David Jiménez (Rydra)"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = ">=3.6"
+boto3 = "^1.11.5"
+pyopenssl = "^19.1.0"
+pika = "^1.1.0"
+marshmallow = "^3.3.0"
+redis-simple-cache-py3 = "^0.0.7"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.3.3"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
