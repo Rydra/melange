@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 class ExchangeMessagePublisher:
     def __init__(self, topic, driver=None):
-        self._driver = driver or DriverManager.instance().get_driver()
+        self._driver = driver or DriverManager().get_driver()
         self._topic_name = topic
 
     def init(self):
@@ -28,7 +28,7 @@ class ExchangeMessagePublisher:
         if event_type_name and isinstance(event, dict):
             event['event_type_name'] = event_type_name
 
-        content = EventSerializer.instance().serialize(event)
+        content = EventSerializer().serialize(event)
 
         if not event_type_name:
             event_type_name = event.event_type_name if isinstance(event, EventMessage) else event['event_type_name']
@@ -41,7 +41,7 @@ class ExchangeMessagePublisher:
 
 class SQSPublisher:
     def __init__(self, queue_name, dlq_name=None, driver=None, **kwargs):
-        self._driver = driver or DriverManager.instance().get_driver()
+        self._driver = driver or DriverManager().get_driver()
         self._event_queue, self._dead_letter_queue = self._driver.declare_queue(
             queue_name,
             dead_letter_queue_name=dlq_name)
@@ -59,7 +59,7 @@ class SQSPublisher:
         if isinstance(event, dict):
             event['event_type_name'] = event_type_name
 
-        content = EventSerializer.instance().serialize(event)
+        content = EventSerializer().serialize(event)
 
         message_group_id = kwargs.get('message_group_id', self.default_message_group_id)
         message_deduplication_id = (

@@ -1,11 +1,11 @@
 import json
 
-from melange.infrastructure import Singleton
+from singleton import Singleton
+
 from .event_message import EventMessage
 
 
-@Singleton
-class EventSerializer:
+class EventSerializer(metaclass=Singleton):
     def __init__(self):
         self.event_serializer_map = {}
 

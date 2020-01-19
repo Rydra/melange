@@ -1,14 +1,13 @@
 from redis_cache import SimpleCache, logging
+from singleton import Singleton
 
 from melange import settings
-from .singleton import Singleton
 
 
 logger = logging.getLogger(__name__)
 
 
-@Singleton
-class Cache:
+class Cache(metaclass=Singleton):
     def __init__(self):
         self.cache = SimpleCache(expire=3600,
                                  host=settings.CACHE_REDIS_HOST,

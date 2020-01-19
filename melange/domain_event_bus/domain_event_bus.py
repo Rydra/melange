@@ -1,16 +1,16 @@
 import logging
 import threading
 
+from singleton import Singleton
+
 from .domain_event import DomainEvent
 from .domain_subscriber import DomainEventHandler
-from melange.infrastructure import Singleton
 
 
 logger = logging.getLogger(__name__)
 
 
-@Singleton
-class DomainEventBus:
+class DomainEventBus(metaclass=Singleton):
     thread_local = threading.local()
 
     def __init__(self):
