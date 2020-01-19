@@ -15,6 +15,8 @@ redis-simple-cache-py3 = "^0.0.7"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.3.3"
+bump2version = "^1.0.0"
+pyhamcrest = "^2.0.0"
 
 [build-system]
 requires = ["poetry>=0.12"]
