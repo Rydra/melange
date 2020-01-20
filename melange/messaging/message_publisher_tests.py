@@ -9,7 +9,7 @@ class TestMessagePublisher:
         event = {'some_content': '12345'}
 
         driver = MagicMock(spec=MessagingDriver)
-        DriverManager.instance().use_driver(driver=driver)
+        DriverManager().use_driver(driver=driver)
 
         message_publisher = ExchangeMessagePublisher(a_topic)
         success = message_publisher.publish(event, event_type_name='some_event')

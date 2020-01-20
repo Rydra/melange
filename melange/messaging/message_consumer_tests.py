@@ -2,9 +2,21 @@ import json
 import uuid
 from unittest.mock import MagicMock
 
+import pytest
+
 from melange import DriverManager
+from melange.cqrs.interfaces import DomainEventSerializer
+from melange.domain_event_bus import DomainEvent
 from melange.messaging import MessagingDriver, ExchangeMessageConsumer, Message, \
     ExchangeListener, ExchangeMessagePublisher
+
+
+class TestEventSerializer(DomainEventSerializer):
+    def serialize(self, event: DomainEvent) -> str:
+        pass
+
+    def deserialize(self, serialized_event: str, manifest) -> DomainEvent:
+        pass
 
 
 class TestMessageConsumer:
@@ -56,7 +68,7 @@ class TestMessageConsumer:
             self.event = None
             self.messages = None
             self.driver = MagicMock(spec=MessagingDriver)
-            DriverManager.instance().use_driver(driver=self.driver)
+            DriverManager().use_driver(driver=self.driver)
 
         def given_a_queue_to_listen_with_an_event(self, event_of_type=None):
             self.messages = [self._create_message(i) for i in range(1)]
@@ -128,13 +140,13 @@ class TestMessageConsumer:
             return self
 
 
-class TestMessageConsumer:
+class TestMessageConsumer2:
     def setup_method(self, m):
         self.exchange_consumer = None
-        DriverManager.instance().use_driver(driver_name='aws')
+        DriverManager().use_driver(driver_name='aws')
 
     def teardown_method(self):
-        driver = DriverManager.instance().get_driver()
+        driver = DriverManager().get_driver()
         if self.exchange_consumer:
             if self.exchange_consumer._event_queue:
                 driver.delete_queue(self.exchange_consumer._event_queue)
@@ -153,10 +165,13 @@ class TestMessageConsumer:
         self.listened_event = None
 
         class TestListener(ExchangeListener):
+            def __init__(self):
+                super().__init__(None)
+
             def process(x, event, **kwargs):
                 self.listened_event = event
 
-            def listens_to(self):
+            def listens_to(x):
                 return ['TestEvent']
 
         self.exchange_consumer.subscribe(TestListener())
@@ -175,6 +190,9 @@ class TestMessageConsumer:
         self.listened_events = set()
 
         class TestListener(ExchangeListener):
+            def __init__(self):
+                super().__init__(None)
+
             def process(x, event, **kwargs):
                 self.listened_events.add(event['value'])
 
@@ -205,12 +223,13 @@ class TestMessageConsumer:
         return 'test_queue_{}'.format(uuid.uuid4())
 
 
+@pytest.mark.skip()
 class TestMessageConsumerRabbitMQ:
     def setup_method(self, m):
         self.exchange_consumer = None
-        DriverManager.instance().use_driver(driver_name='rabbitMQ',
+        DriverManager().use_driver(driver_name='rabbitMQ',
                                             host='localhost')
-        self.driver = DriverManager.instance().get_driver()
+        self.driver = DriverManager().get_driver()
 
     def teardown_method(self):
         if self.exchange_consumer._topics:

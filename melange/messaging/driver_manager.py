@@ -1,9 +1,9 @@
-from melange.infrastructure import Singleton
+from singleton import Singleton
+
 from .messaging_driver import MessagingDriver
 
 
-@Singleton
-class DriverManager:
+class DriverManager(metaclass=Singleton):
     def __init__(self):
         self._driver = None
         self._drivers = {}

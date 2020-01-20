@@ -20,7 +20,7 @@ class TestDomainEventBus:
                 return [DomainEvent]
 
         test_domain_event = TestDomainEvent()
-        DomainEventBus.instance().reset()
+        DomainEventBus().reset()
         TestDomainSubscriber().listen()
         test_domain_event.emit()
 
@@ -41,7 +41,7 @@ class TestDomainEventBus:
                 self.listened_events.append(event)
 
 
-        DomainEventBus.instance().reset()
+        DomainEventBus().reset()
         TestDomainSubscriber().listen()
         test_domain_event_1 = TestDomainEvent().emit()
         test_domain_event_2 = TestDomainEvent2().emit()
@@ -83,7 +83,7 @@ class TestDomainEventBus:
                 return [TestDomainEvent2]
 
 
-        DomainEventBus.instance().reset()
+        DomainEventBus().reset()
         TestDomainSubscriber().listen()
         TestDomainSubscriber2().listen()
 
@@ -122,13 +122,13 @@ class TestDomainEventBus:
                 return [TestDomainEvent]
 
         def thread_1_func():
-            DomainEventBus.instance().reset()
+            DomainEventBus().reset()
             TestDomainSubscriber().listen()
             TestDomainEvent().emit()
             TestDomainEvent().emit()
 
         def thread_2_func():
-            DomainEventBus.instance().reset()
+            DomainEventBus().reset()
             TestDomainSubscriber2().listen()
             TestDomainEvent().emit()
             TestDomainEvent().emit()
@@ -172,7 +172,7 @@ class TestDomainEventBus:
             def listens_to(self):
                 return [TestDomainEvent2]
 
-        DomainEventBus.instance().reset()
+        DomainEventBus().reset()
         TestDomainSubscriber().listen()
         TestDomainSubscriber2().listen()
         TestDomainEvent().emit()
@@ -207,7 +207,7 @@ class TestDomainEventBus:
             def listens_to(self):
                 return [TestDomainEvent2]
 
-        DomainEventBus.instance().reset()
+        DomainEventBus().reset()
         TestDomainSubscriber().listen()
         TestDomainSubscriber2().listen()
 

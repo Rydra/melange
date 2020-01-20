@@ -16,4 +16,4 @@ def parse_event_from_sns(sns_message):
     except:
         raise Exception('The message content is not a valid json')
 
-    return EventSerializer.instance().deserialize(deserialized_dict)
+    return EventSerializer().deserialize(deserialized_dict)

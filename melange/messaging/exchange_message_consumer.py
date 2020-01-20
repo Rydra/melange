@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 class ExchangeMessageYielder:
     def __init__(self, event_queue_name, *topics_to_subscribe, dead_letter_queue_name=None, driver=None, **kwargs):
-        self._driver = driver or DriverManager.instance().get_driver()
+        self._driver = driver or DriverManager().get_driver()
         self._event_queue_name = event_queue_name
         self._topics_to_subscribe = topics_to_subscribe
         self._dead_letter_queue_name = dead_letter_queue_name
@@ -30,7 +30,7 @@ class ExchangeMessageYielder:
 
             for message in messages:
                 if 'event_type_name' in message.content:
-                    yield EventSerializer.instance().deserialize(message.content)
+                    yield EventSerializer().deserialize(message.content)
 
     def acknowledge(self, message):
         self._driver.acknowledge(message)
@@ -39,7 +39,7 @@ class ExchangeMessageYielder:
 class ExchangeMessageConsumer:
     def __init__(self, event_queue_name, *topics_to_subscribe, dead_letter_queue_name=None, driver=None, **kwargs):
         self._exchange_listeners = []
-        self._driver = driver or DriverManager.instance().get_driver()
+        self._driver = driver or DriverManager().get_driver()
         self._event_queue_name = event_queue_name
         self._topics_to_subscribe = topics_to_subscribe
         self._dead_letter_queue_name = dead_letter_queue_name
@@ -81,7 +81,7 @@ class ExchangeMessageConsumer:
             # queue. Let the dead letter queue handle it
             return True
 
-        event = EventSerializer.instance().deserialize(message.content)
+        event = EventSerializer().deserialize(message.content)
         event_type_name = event.event_type_name if isinstance(event, EventMessage) else event['event_type_name']
         subscribers = self._get_subscribers(event_type_name)
 
