@@ -32,8 +32,10 @@ class DomainEventHandler(SingleDispatch):
         return self
 
     def accepts(self, event):
-        return isinstance(event, DomainEvent) \
-               and (self.listens_to() == [] or any(isinstance(event, e) for e in self.listens_to()))
+        return (
+            isinstance(event, DomainEvent)
+            and (self.listens_to() == [] or any(isinstance(event, e) for e in self.listens_to()))
+        )
 
 
 event_handler = DomainEventHandler._process.register

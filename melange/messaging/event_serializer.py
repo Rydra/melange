@@ -38,5 +38,3 @@ class EventSerializer(metaclass=Singleton):
             return data
         else:
             return json.dumps(event)
-
-

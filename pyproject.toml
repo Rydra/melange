@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "melange"
-version = "4.3.0"
+version = "5.0.1"
 description = "A messaging library for an easy inter-communication in distributed and microservices architectures"
 authors = ["David Jiménez (Rydra)"]
 license = "MIT"
@@ -12,14 +12,13 @@ pyopenssl = "^19.1.0"
 pika = "^1.1.0"
 marshmallow = "^3.3.0"
 redis-simple-cache-py3 = "^0.0.7"
-singleton-py3 = "^0.1.0"
 pytz = "^2019.3"
 funcy = "^1.14"
 methoddispatch = "^3.0.2"
+singleton-py3 = "^0.2.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.3.3"
-bump2version = "^1.0.0"
 pyhamcrest = "^2.0.0"
 
 [build-system]

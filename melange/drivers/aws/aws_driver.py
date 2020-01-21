@@ -3,7 +3,6 @@ import uuid
 from json import JSONDecodeError
 
 import boto3
-import botocore
 
 from melange.messaging import MessagingDriver, Message
 

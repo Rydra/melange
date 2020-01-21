@@ -66,7 +66,7 @@ def verify_sns_notification(message):
 
     try:
         verify(cert, decoded_signature, str.encode(canonical_message), 'sha1')
-    except OpenSSL.crypto.Error as e:
+    except OpenSSL.crypto.Error:
         return False
 
     return True

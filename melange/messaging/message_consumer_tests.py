@@ -228,7 +228,7 @@ class TestMessageConsumerRabbitMQ:
     def setup_method(self, m):
         self.exchange_consumer = None
         DriverManager().use_driver(driver_name='rabbitMQ',
-                                            host='localhost')
+                                   host='localhost')
         self.driver = DriverManager().get_driver()
 
     def teardown_method(self):

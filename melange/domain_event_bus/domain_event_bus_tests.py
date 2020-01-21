@@ -40,7 +40,6 @@ class TestDomainEventBus:
                 nonlocal self
                 self.listened_events.append(event)
 
-
         DomainEventBus().reset()
         TestDomainSubscriber().listen()
         test_domain_event_1 = TestDomainEvent().emit()
@@ -81,7 +80,6 @@ class TestDomainEventBus:
 
             def listens_to(self):
                 return [TestDomainEvent2]
-
 
         DomainEventBus().reset()
         TestDomainSubscriber().listen()

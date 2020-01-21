@@ -11,7 +11,7 @@ class DriverManager(metaclass=Singleton):
     def add_available_drivers(self, **kwargs):
         self._drivers.update(kwargs)
 
-    def use_driver(self, driver=None, driver_name=None, **kwargs):
+    def use_driver(self, driver: MessagingDriver = None, driver_name=None, **kwargs):
         if driver:
             if not isinstance(driver, MessagingDriver):
                 raise Exception('Invalid driver supplied')

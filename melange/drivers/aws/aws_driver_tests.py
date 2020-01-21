@@ -106,6 +106,7 @@ def test_send_messages_through_a_fifo_queue_and_make_sure_they_are_always_ordere
     expected_array = [f'my-message-{i}' for i in range(100)]
     assert_that(received_messages, contains(*expected_array))
 
+
 def test_not_acknowledging_any_of_the_messages_on_a_fifo_queue_will_delay_the_delivery_of_the_rest(aws_driver, request):
     def delete_queue():
         aws_driver.delete_queue(queue)
@@ -196,7 +197,8 @@ def _assert_messages(aws_driver, queue, expected_types_contained, expected_num_m
         messages += retrieved_messages
         if len(messages) > expected_num_messages:
             raise Exception('The test has failed')
-        if not retrieved_messages: break
+        if not retrieved_messages:
+            break
 
     assert expected_num_messages == len(messages)
 
@@ -266,9 +268,10 @@ class TestAWSDriver:
 
     def test_create_queue_with_dead_letter_queue(self):
         self.topic = self.driver.declare_topic(self._get_topic_name())
-        self.queue, self.dead_letter_queue = self.driver.declare_queue(self._get_queue_name(),
-                                                         self.topic,
-                                                         dead_letter_queue_name=self._get_queue_name())
+        self.queue, self.dead_letter_queue = self.driver.declare_queue(
+            self._get_queue_name(),
+            self.topic,
+            dead_letter_queue_name=self._get_queue_name())
 
         assert self.queue.url
 
