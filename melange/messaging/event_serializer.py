@@ -1,5 +1,6 @@
 import json
 
+from marshmallow import ValidationError
 from singleton import Singleton
 
 from .event_message import EventMessage
@@ -21,8 +22,12 @@ class EventSerializer(metaclass=Singleton):
                 raise ValueError("The event type {} doesn't have a registered serializer".format(event_dict['event_type_name']))
 
             schema = self.event_serializer_map[event_schema]
-            data, errors = schema.load(event_dict)
-            return data
+
+            try:
+                data = schema.load(event_dict)
+                return data
+            except ValidationError:
+                return event_dict
         except (ValueError, KeyError):
             return event_dict
 
@@ -34,7 +39,7 @@ class EventSerializer(metaclass=Singleton):
                 raise ValueError("The event type {} doesn't have a registered serializer".format(event.event_type_name))
 
             schema = self.event_serializer_map[event_schema]
-            data, errors = schema.dumps(event)
+            data = schema.dumps(event)
             return data
         else:
             return json.dumps(event)
