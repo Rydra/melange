@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "melange"
-version = "5.0.1"
+version = "5.0.2"
 description = "A messaging library for an easy inter-communication in distributed and microservices architectures"
 authors = ["David Jiménez (Rydra)"]
 license = "MIT"

@@ -17,7 +17,7 @@ class ExchangeMessagePublisher:
     def init(self):
         self._topic = self._driver.declare_topic(self._topic_name)
 
-    def publish(self, event, event_type_name=None):
+    def publish(self, event, event_type_name=None, extra_attributes=None):
         if not isinstance(event, EventMessage) and not isinstance(event, dict):
             logger.error('Invalid data passed. You must pass an event instance or a dict')
             raise Exception('Invalid data passed. You must pass an event instance or a dict')
@@ -34,7 +34,10 @@ class ExchangeMessagePublisher:
             event_type_name = event.event_type_name if isinstance(event, EventMessage) else event['event_type_name']
 
         self.init()
-        self._driver.publish(content, self._topic, event_type_name=event_type_name)
+        self._driver.publish(content,
+                             self._topic,
+                             event_type_name=event_type_name,
+                             extra_attributes=extra_attributes)
 
         return True
 

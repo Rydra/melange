@@ -27,10 +27,10 @@ description = "The AWS SDK for Python"
 name = "boto3"
 optional = false
 python-versions = "*"
-version = "1.11.5"
+version = "1.11.6"
 
 [package.dependencies]
-botocore = ">=1.14.5,<1.15.0"
+botocore = ">=1.14.6,<1.15.0"
 jmespath = ">=0.7.1,<1.0.0"
 s3transfer = ">=0.3.0,<0.4.0"
 
@@ -40,7 +40,7 @@ description = "Low-level, data-driven core of boto 3."
 name = "botocore"
 optional = false
 python-versions = "*"
-version = "1.14.5"
+version = "1.14.6"
 
 [package.dependencies]
 docutils = ">=0.10,<0.16"
@@ -96,6 +96,14 @@ python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*"
 version = "0.15.2"
 
 [[package]]
+category = "main"
+description = "A fancy and practical functional tools"
+name = "funcy"
+optional = false
+python-versions = "*"
+version = "1.14"
+
+[[package]]
 category = "dev"
 description = "Read metadata from Python packages"
 marker = "python_version < \"3.8\""
@@ -132,6 +140,14 @@ dev = ["pytest", "pytz", "simplejson", "mypy (0.750)", "flake8 (3.7.9)", "flake8
 docs = ["sphinx (2.2.2)", "sphinx-issues (1.2.0)", "alabaster (0.7.12)", "sphinx-version-warning (1.1.2)"]
 lint = ["mypy (0.750)", "flake8 (3.7.9)", "flake8-bugbear (19.8.0)", "pre-commit (>=1.20,<2.0)"]
 tests = ["pytest", "pytz", "simplejson"]
+
+[[package]]
+category = "main"
+description = "singledispatch decorator for class methods."
+name = "methoddispatch"
+optional = false
+python-versions = "*"
+version = "3.0.2"
 
 [[package]]
 category = "dev"
@@ -206,6 +222,14 @@ python-versions = "*"
 version = "2.6.1"
 
 [[package]]
+category = "dev"
+description = "Hamcrest framework for matcher objects"
+name = "pyhamcrest"
+optional = false
+python-versions = ">=3.5"
+version = "2.0.0"
+
+[[package]]
 category = "main"
 description = "Python wrapper module around the OpenSSL library"
 name = "pyopenssl"
@@ -235,7 +259,7 @@ description = "pytest: simple powerful testing with Python"
 name = "pytest"
 optional = false
 python-versions = ">=3.5"
-version = "5.3.3"
+version = "5.3.4"
 
 [package.dependencies]
 atomicwrites = ">=1.0"
@@ -279,6 +303,14 @@ redis = ">=2.10.0"
 
 [package.extras]
 django = ["django-redis (>=3.8.0)"]
+
+[[package]]
+category = "main"
+description = "World timezone definitions, modern and historical"
+name = "pytz"
+optional = false
+python-versions = "*"
+version = "2019.3"
 
 [[package]]
 category = "main"
@@ -340,6 +372,14 @@ botocore = ">=1.12.36,<2.0.0"
 
 [[package]]
 category = "main"
+description = ""
+name = "singleton-py3"
+optional = false
+python-versions = ">=3.6"
+version = "0.2.1"
+
+[[package]]
+category = "main"
 description = "Python 2 and 3 compatibility utilities"
 name = "six"
 optional = false
@@ -383,8 +423,8 @@ description = "Backport of pathlib-compatible object wrapper for zip files"
 marker = "python_version < \"3.8\""
 name = "zipp"
 optional = false
-python-versions = ">=2.7"
-version = "1.0.0"
+python-versions = ">=3.6"
+version = "2.0.0"
 
 [package.dependencies]
 more-itertools = "*"
@@ -394,7 +434,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["pathlib2", "contextlib2", "unittest2"]
 
 [metadata]
-content-hash = "26237ae7b531edb34a6e6942d16f061ee79738acde412522613387aeceedf211"
+content-hash = "c51cdec17dd2b591ba88e020ad6eeabd8ecdde1707a50c3d5710e7da430d018d"
 python-versions = ">=3.6"
 
 [metadata.files]
@@ -407,12 +447,12 @@ attrs = [
     {file = "attrs-19.3.0.tar.gz", hash = "sha256:f7b7ce16570fe9965acd6d30101a28f62fb4a7f9e926b3bbc9b61f8b04247e72"},
 ]
 boto3 = [
-    {file = "boto3-1.11.5-py2.py3-none-any.whl", hash = "sha256:ca36aabfa5e7fa9ee8f84f82c3faffb4ffe078923f935f572f70dc49154ef6a0"},
-    {file = "boto3-1.11.5.tar.gz", hash = "sha256:7aaccacc199cd633b5ac14f0d544c9d592c53275a79cf4d230a9f66215331665"},
+    {file = "boto3-1.11.6-py2.py3-none-any.whl", hash = "sha256:287ae58a50cc23f4254740c5388abc3c5f25891f062c40597a997f21d1f960db"},
+    {file = "boto3-1.11.6.tar.gz", hash = "sha256:71f2346d089aba5f55eb2effe5e3c6acc1b851a519bcc4f147006e1db8548fe5"},
 ]
 botocore = [
-    {file = "botocore-1.14.5-py2.py3-none-any.whl", hash = "sha256:f0feffde6e1312c6361a96e24385a58889683a3d6a007be4d4804bc209384b3f"},
-    {file = "botocore-1.14.5.tar.gz", hash = "sha256:96a16e64c96d34fa2e535c1d5a0024bf55eee853b939be0331318cd060b3d395"},
+    {file = "botocore-1.14.6-py2.py3-none-any.whl", hash = "sha256:629ce71d425b9bc55553a7b0b0584c162edff04b00eb225ccec8f72cadc1c63c"},
+    {file = "botocore-1.14.6.tar.gz", hash = "sha256:7bd74f1c0f99344571fd322f2d7708deac0546b4ce19f52e971cc6daec4e2167"},
 ]
 cffi = [
     {file = "cffi-1.13.2-cp27-cp27m-macosx_10_6_intel.whl", hash = "sha256:3c9fff570f13480b201e9ab69453108f6d98244a7f495e91b6c654a47486ba43"},
@@ -481,6 +521,9 @@ docutils = [
     {file = "docutils-0.15.2-py3-none-any.whl", hash = "sha256:6c4f696463b79f1fb8ba0c594b63840ebd41f059e92b31957c46b74a4599b6d0"},
     {file = "docutils-0.15.2.tar.gz", hash = "sha256:a2aeea129088da402665e92e0b25b04b073c04b2dce4ab65caaa38b7ce2e1a99"},
 ]
+funcy = [
+    {file = "funcy-1.14.tar.gz", hash = "sha256:75ee84c3b446f92e68a857c2267b15a1b49c631c9d5a87a5f063cd2d6761a5c4"},
+]
 importlib-metadata = [
     {file = "importlib_metadata-1.4.0-py2.py3-none-any.whl", hash = "sha256:bdd9b7c397c273bcc9a11d6629a38487cd07154fa255a467bf704cd2c258e359"},
     {file = "importlib_metadata-1.4.0.tar.gz", hash = "sha256:f17c015735e1a88296994c0697ecea7e11db24290941983b08c9feb30921e6d8"},
@@ -492,6 +535,10 @@ jmespath = [
 marshmallow = [
     {file = "marshmallow-3.3.0-py2.py3-none-any.whl", hash = "sha256:3e53dd9e9358977a3929e45cdbe4a671f9eff53a7d6a23f33ed3eab8c1890d8f"},
     {file = "marshmallow-3.3.0.tar.gz", hash = "sha256:0ba81b6da4ae69eb229b74b3c741ff13fe04fb899824377b1aff5aaa1a9fd46e"},
+]
+methoddispatch = [
+    {file = "methoddispatch-3.0.2-py2.py3-none-any.whl", hash = "sha256:c52523956b425562a4bfa67d34a69ca2b7f7fe4329fdee3881f6520da78d5398"},
+    {file = "methoddispatch-3.0.2.tar.gz", hash = "sha256:dc2c5101c5634fd9e9f86449e30515780d8583d1472e70ad826abb28d9ddd1a7"},
 ]
 more-itertools = [
     {file = "more-itertools-8.1.0.tar.gz", hash = "sha256:c468adec578380b6281a114cb8a5db34eb1116277da92d7c46f904f0b52d3288"},
@@ -519,6 +566,10 @@ pycparser = [
 pycrypto = [
     {file = "pycrypto-2.6.1.tar.gz", hash = "sha256:f2ce1e989b272cfcb677616763e0a2e7ec659effa67a88aa92b3a65528f60a3c"},
 ]
+pyhamcrest = [
+    {file = "PyHamcrest-2.0.0-py3-none-any.whl", hash = "sha256:36cda5e849e3ee9ce54628667471e5e769f596259bb3c13c3596f6059a615ef8"},
+    {file = "PyHamcrest-2.0.0.tar.gz", hash = "sha256:5959cb4ab465b303522d2e0d270a6ee581c3ad9ba419e304bb6ebe50a60ea37a"},
+]
 pyopenssl = [
     {file = "pyOpenSSL-19.1.0-py2.py3-none-any.whl", hash = "sha256:621880965a720b8ece2f1b2f54ea2071966ab00e2970ad2ce11d596102063504"},
     {file = "pyOpenSSL-19.1.0.tar.gz", hash = "sha256:9a24494b2602aaf402be5c9e30a0b82d4a5c67528fe8fb475e3f3bc00dd69507"},
@@ -528,8 +579,8 @@ pyparsing = [
     {file = "pyparsing-2.4.6.tar.gz", hash = "sha256:4c830582a84fb022400b85429791bc551f1f4871c33f23e44f353119e92f969f"},
 ]
 pytest = [
-    {file = "pytest-5.3.3-py3-none-any.whl", hash = "sha256:9f8d44f4722b3d06b41afaeb8d177cfbe0700f8351b1fc755dd27eedaa3eb9e0"},
-    {file = "pytest-5.3.3.tar.gz", hash = "sha256:f5d3d0e07333119fe7d4af4ce122362dc4053cdd34a71d2766290cf5369c64ad"},
+    {file = "pytest-5.3.4-py3-none-any.whl", hash = "sha256:c13d1943c63e599b98cf118fcb9703e4d7bde7caa9a432567bcdcae4bf512d20"},
+    {file = "pytest-5.3.4.tar.gz", hash = "sha256:1d122e8be54d1a709e56f82e2d85dcba3018313d64647f38a91aec88c239b600"},
 ]
 python-dateutil = [
     {file = "python-dateutil-2.8.1.tar.gz", hash = "sha256:73ebfe9dbf22e832286dafa60473e4cd239f8592f699aa5adaf10050e6e1823c"},
@@ -538,6 +589,10 @@ python-dateutil = [
 python-redis-lock = [
     {file = "python-redis-lock-3.5.0.tar.gz", hash = "sha256:06f28f63bf4ea3d739ff5c472e76563e24aa5c887002a85cbdb7a5b13aa05897"},
     {file = "python_redis_lock-3.5.0-py2.py3-none-any.whl", hash = "sha256:910ac3c429c2eee4f9f3d6733bc4c722e024e00b887379aefa52ae9376a759b4"},
+]
+pytz = [
+    {file = "pytz-2019.3-py2.py3-none-any.whl", hash = "sha256:1c557d7d0e871de1f5ccd5833f60fb2550652da6be2693c1e02300743d21500d"},
+    {file = "pytz-2019.3.tar.gz", hash = "sha256:b02c06db6cf09c12dd25137e563b31700d3b80fcc4ad23abb7a315f2789819be"},
 ]
 redis = [
     {file = "redis-3.3.11-py2.py3-none-any.whl", hash = "sha256:3613daad9ce5951e426f460deddd5caf469e08a3af633e9578fc77d362becf62"},
@@ -557,6 +612,10 @@ s3transfer = [
     {file = "s3transfer-0.3.1-py2.py3-none-any.whl", hash = "sha256:80ed96731b3bd77395cd6197246069092015e1124164b2c152c8f741a823dd04"},
     {file = "s3transfer-0.3.1.tar.gz", hash = "sha256:248dffd2de2dfb870c507b412fc22ed37cd3255293e293c395158e7c55fbe5f9"},
 ]
+singleton-py3 = [
+    {file = "singleton-py3-0.2.1.tar.gz", hash = "sha256:b6abede18ab00da4101deaf0b107b00791ee2bf82cfc2b4ff0f1d16fad736d13"},
+    {file = "singleton_py3-0.2.1-py3-none-any.whl", hash = "sha256:c60bf18acfcd29bed749ebcd677cb754f99a4eb1551b9bfc6426e6b27715bb1f"},
+]
 six = [
     {file = "six-1.14.0-py2.py3-none-any.whl", hash = "sha256:8f3cd2e254d8f793e7f3d6d9df77b92252b52637291d0f0da013c76ea2724b6c"},
     {file = "six-1.14.0.tar.gz", hash = "sha256:236bdbdce46e6e6a3d61a337c0f8b763ca1e8717c03b369e87a7ec7ce1319c0a"},
@@ -573,6 +632,6 @@ wcwidth = [
     {file = "wcwidth-0.1.8.tar.gz", hash = "sha256:f28b3e8a6483e5d49e7f8949ac1a78314e740333ae305b4ba5defd3e74fb37a8"},
 ]
 zipp = [
-    {file = "zipp-1.0.0-py2.py3-none-any.whl", hash = "sha256:8dda78f06bd1674bd8720df8a50bb47b6e1233c503a4eed8e7810686bde37656"},
-    {file = "zipp-1.0.0.tar.gz", hash = "sha256:d38fbe01bbf7a3593a32bc35a9c4453c32bc42b98c377f9bff7e9f8da157786c"},
+    {file = "zipp-2.0.0-py3-none-any.whl", hash = "sha256:57147f6b0403b59f33fd357f169f860e031303415aeb7d04ede4839d23905ab8"},
+    {file = "zipp-2.0.0.tar.gz", hash = "sha256:7ae5ccaca427bafa9760ac3cd8f8c244bfc259794b5b6bb9db4dda2241575d09"},
 ]

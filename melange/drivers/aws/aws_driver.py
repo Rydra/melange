@@ -133,13 +133,28 @@ class AWSDriver(MessagingDriver):
 
         queue.send_message(**kwargs)
 
-    def publish(self, content, topic, event_type_name):
-        response = topic.publish(Message=content, MessageAttributes={
-            'event_type': {
-                'DataType': 'String',
-                'StringValue': event_type_name
+    def publish(self, content, topic, event_type_name, extra_attributes=None):
+        args = dict(
+            Message=content,
+            MessageAttributes={
+                'event_type': {
+                    'DataType': 'String',
+                    'StringValue': event_type_name
+                }
             }
-        })
+        )
+
+        if extra_attributes:
+            if 'subject' in extra_attributes:
+                args['Subject'] = extra_attributes['subject']
+
+            if 'message_attributes' in extra_attributes:
+                args['MessageAttributes'].update(extra_attributes['message_attributes'])
+
+            if 'message_structure' in extra_attributes:
+                args['MessageStructure'] = extra_attributes['message_structure']
+
+        response = topic.publish(**args)
 
         if 'MessageId' not in response:
             raise ConnectionError('Could not send the event to the SNS TOPIC')
