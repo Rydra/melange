@@ -5,7 +5,7 @@ from typing import Tuple, Dict, List
 
 import boto3
 
-from melange.drivers import Topic, Queue
+from melange.drivers.interfaces import Queue, Topic
 from melange.messaging_driver import MessagingDriver, Message
 
 
