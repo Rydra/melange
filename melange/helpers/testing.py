@@ -1,4 +1,3 @@
-import json
 from uuid import uuid4
 
 from melange.messaging_driver import MessagingDriver, Message
@@ -38,7 +37,7 @@ class InMemoryMessagingDriver(MessagingDriver):
 
     def publish(self, content, topic, event_type_name, extra_attributes=None):
         if not self._only_queues or topic.name in self._only_queues:
-            message = Message(str(uuid4()), json.loads(content), None)
+            message = Message(str(uuid4()), content, None)
             self._messages.append(message)
 
             if self.callback:
