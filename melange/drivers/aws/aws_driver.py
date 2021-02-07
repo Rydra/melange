@@ -1,5 +1,6 @@
 import json
 import uuid
+from json import JSONDecodeError
 from typing import Tuple, Dict, List
 
 import boto3
@@ -130,7 +131,7 @@ class AWSDriver(MessagingDriver):
         message_group_id: str = None,
         message_deduplication_id: str = None,
     ):
-        kwargs = dict(MessageBody=content)
+        kwargs = dict(MessageBody=json.dumps({"Message": content}))
 
         if event_type_name:
             kwargs["MessageAttributes"] = {
@@ -188,4 +189,13 @@ class AWSDriver(MessagingDriver):
 
     def _extract_message_content(self, message):
         body = message.body
-        return body
+        try:
+            message_content = json.loads(body)
+            if "Message" in message_content:
+                content = message_content["Message"]
+            else:
+                content = message_content
+        except JSONDecodeError:
+            content = body
+
+        return content
