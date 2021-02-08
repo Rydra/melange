@@ -8,19 +8,6 @@ clean-pyc:
 	-find . -name \*~ -delete
 
 # ############
-# Global tasks
-# ############
-
-download-precommit-hook:
-	curl -o config/git/hooks/pre-commit.sh https://raw.githubusercontent.com/21Buttons/backend-pre-commit/master/pre-commit.sh
-
-symlinks-pre-commit-hooks:
-	rm -f .git/hooks/pre-commit
-	mkdir -p config/git/hooks
-	chmod +x config/git/hooks/pre-commit.sh
-	ln -s ../../config/git/hooks/pre-commit.sh .git/hooks/pre-commit
-
-# ############
 # Flake 8
 # ############
 

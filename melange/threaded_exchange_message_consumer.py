@@ -2,13 +2,15 @@ from atexit import register
 from threading import Thread, Lock
 from time import time
 
-from .exchange_message_consumer import ExchangeMessageConsumer
+from melange.exchange_message_consumer import ExchangeMessageConsumer
 
 
 class ThreadedExchangeMessageConsumer(Thread, ExchangeMessageConsumer):
     def __init__(self, event_queue_name, topics_to_subscribe=None, driver=None):
 
-        ExchangeMessageConsumer.__init__(self, event_queue_name, topics_to_subscribe, driver=driver)
+        ExchangeMessageConsumer.__init__(
+            self, event_queue_name, topics_to_subscribe, driver=driver
+        )
         Thread.__init__(self)
 
         register(self.shutdown)

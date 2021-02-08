@@ -1,16 +1,15 @@
 import uuid
 
-from melange import RabbitMQDriver
+from melange.drivers.rabbitmq.rabbitmq_driver import RabbitMQDriver
 
 
 class TestRabbitMQDriver:
-
     def setup_method(self):
         self.topic = None
         self.queue = None
         self.dead_letter_queue = None
 
-        self.driver = RabbitMQDriver(host='localhost')
+        self.driver = RabbitMQDriver(host="localhost")
 
     def teardown_method(self):
         if self.topic:
@@ -60,7 +59,7 @@ class TestRabbitMQDriver:
     #     assert redrive_policy['maxReceiveCount'] == 4
 
     def _get_queue_name(self):
-        return 'test_queue_{}'.format(uuid.uuid4())
+        return "test_queue_{}".format(uuid.uuid4())
 
     def _get_topic_name(self):
-        return 'test_queue_{}'.format(uuid.uuid4())
+        return "test_queue_{}".format(uuid.uuid4())

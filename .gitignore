@@ -14,6 +14,6 @@ target/
 /*.egg-info
 /*.egg
 \.eggs/
-.env
+test.env
 
 \.pytest_cache/

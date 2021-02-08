@@ -1,12 +1,12 @@
 [tool.poetry]
 name = "melange"
-version = "5.0.2"
+version = "6.0.0"
 description = "A messaging library for an easy inter-communication in distributed and microservices architectures"
 authors = ["David Jiménez (Rydra)"]
 license = "MIT"
 
 [tool.poetry.dependencies]
-python = ">=3.6"
+python = "^3.7.0"
 boto3 = "^1.11.5"
 pyopenssl = "^19.1.0"
 pika = "^1.1.0"
@@ -18,5 +18,7 @@ methoddispatch = "^3.0.2"
 singleton-py3 = "^0.2.1"
 
 [tool.poetry.dev-dependencies]
+pytest-tools = {git = "https://github.com/Rydra/pytest-tools"}
 pytest = "^5.3.3"
 pyhamcrest = "^2.0.0"
+bunch = "^1.0.1"
