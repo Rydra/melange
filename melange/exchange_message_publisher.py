@@ -1,7 +1,7 @@
 import logging
 import uuid
 
-from melange.driver_manager import DriverManager
+from melange.drivers.driver_manager import DriverManager
 from melange.event_serializer import MessageSerializer
 
 logger = logging.getLogger(__name__)

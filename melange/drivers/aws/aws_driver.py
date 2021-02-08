@@ -5,8 +5,7 @@ from typing import Tuple, Dict, List
 
 import boto3
 
-from melange.drivers.interfaces import Queue, Topic
-from melange.messaging_driver import MessagingDriver, Message
+from melange.drivers.interfaces import Queue, Topic, MessagingDriver, Message
 
 
 class AWSDriver(MessagingDriver):

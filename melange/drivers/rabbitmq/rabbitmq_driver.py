@@ -2,7 +2,7 @@ import json
 
 import pika
 
-from melange.messaging_driver import MessagingDriver, Message
+from melange.drivers.interfaces import MessagingDriver, Message
 
 
 class RabbitMQDriver(MessagingDriver):

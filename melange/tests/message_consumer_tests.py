@@ -9,11 +9,12 @@ from hamcrest import *
 from pytest_tools import pipe, scenariostep
 
 from melange import DriverManager
+from melange.drivers import configure_exchange
 from melange.event_serializer import MessageSerializer
 from melange.exchange_listener import ExchangeListener, listener
 from melange.exchange_message_consumer import ExchangeMessageConsumer
 from melange.exchange_message_publisher import ExchangeMessagePublisher
-from melange.messaging_driver import MessagingDriver, Message
+from melange.drivers.interfaces import MessagingDriver, Message
 
 
 class TestEventSerializer(MessageSerializer):
@@ -160,7 +161,7 @@ class TestMessageConsumerWithAWS:
     @pytest.fixture(autouse=True)
     def setup(self, request):
         self.exchange_consumer = None
-        DriverManager().use_driver(driver_name="aws")
+        configure_exchange("aws")
 
         def teardown():
             driver = DriverManager().get_driver()

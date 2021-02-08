@@ -1,10 +1,12 @@
 import logging
 from typing import List
 
-from melange.driver_manager import DriverManager
+from melange.drivers.driver_manager import DriverManager
 from melange.event_serializer import MessageSerializer
 from melange.exchange_listener import ExchangeListener
-from melange.messaging_driver import MessagingDriver, Message
+from melange.infrastructure.cache import DedupCache, Cache
+from melange.drivers.interfaces import MessagingDriver, Message
+from melange.utils import get_fully_qualified_name
 
 logger = logging.getLogger(__name__)
 
@@ -56,6 +58,7 @@ class ExchangeMessageConsumer:
         message_serializer: MessageSerializer,
         *topic_names_to_subscribe: str,
         dead_letter_queue_name: str = None,
+        cache: DedupCache = None,
         driver: MessagingDriver = None,
         **kwargs
     ):
@@ -65,6 +68,7 @@ class ExchangeMessageConsumer:
         self._event_queue_name = event_queue_name
         self._topics_to_subscribe = topic_names_to_subscribe
         self._dead_letter_queue_name = dead_letter_queue_name
+        self.cache = cache or Cache()
 
         self._topics = [
             self._driver.declare_topic(t) for t in self._topics_to_subscribe
@@ -112,8 +116,17 @@ class ExchangeMessageConsumer:
         successful = 0
         for subscr in subscribers:
             try:
-                subscr.process_event(message_data, message_id=message.message_id)
-                successful += 1
+                # Store into the cache
+                message_listener_key = (
+                    get_fully_qualified_name(subscr) + "." + message.message_id
+                )
+
+                if message_listener_key in self.cache:
+                    logger.info("detected a duplicated message, ignoring")
+                else:
+                    subscr.process(message_data, message_id=message.message_id)
+                    successful += 1
+                    self.cache.store(message_listener_key, message_listener_key)
             except Exception as e:
                 logger.exception(e)
 

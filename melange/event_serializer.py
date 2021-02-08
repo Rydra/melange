@@ -20,7 +20,7 @@ class MessageSerializer(Generic[T]):
         pass
 
 
-class DefaultEventSerializer(MessageSerializer):
+class JsonSQSSerializer(MessageSerializer):
     def deserialize(self, serialized_data: str) -> Tuple[Dict, str]:
         data = json.loads(serialized_data)
         return data, data.get("manifest")

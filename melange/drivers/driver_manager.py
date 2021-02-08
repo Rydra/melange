@@ -1,6 +1,6 @@
 from singleton import Singleton
 
-from melange.messaging_driver import MessagingDriver
+from melange.drivers.interfaces import MessagingDriver
 
 
 class DriverManager(metaclass=Singleton):
