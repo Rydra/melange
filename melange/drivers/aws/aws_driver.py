@@ -51,7 +51,10 @@ class AWSDriver(MessagingDriver):
 
                 statements.append(statement)
                 subscription = topic.subscribe(
-                    Protocol="sqs", Endpoint=queue.attributes["QueueArn"]
+                    Protocol="sqs",
+                    Endpoint=queue.attributes[
+                        "QueueArn"
+                    ],  # , Attributes={"RawMessageDelivery": "true"}
                 )
 
                 if kwargs.get("filter_events"):
@@ -109,6 +112,7 @@ class AWSDriver(MessagingDriver):
             MaxNumberOfMessages=self.max_number_of_messages,
             VisibilityTimeout=self.visibility_timeout,
             WaitTimeSeconds=self.wait_time_seconds,
+            MessageAttributeNames=["All"],
             AttributeNames=["All"],
         )
 
@@ -117,10 +121,9 @@ class AWSDriver(MessagingDriver):
 
         messages = queue.receive_messages(**kwargs)
 
-        return [
-            Message(message.message_id, self._extract_message_content(message), message)
-            for message in messages
-        ]
+        # We need to differentiate here whether the message came from SNS or SQS
+
+        return [self._construct_message(message) for message in messages]
 
     def queue_publish(
         self,
@@ -186,15 +189,31 @@ class AWSDriver(MessagingDriver):
     def delete_topic(self, topic: Topic) -> None:
         topic.delete()
 
-    def _extract_message_content(self, message):
+    def _construct_message(self, message) -> Message:
         body = message.body
+        manifest = ""
         try:
             message_content = json.loads(body)
             if "Message" in message_content:
                 content = message_content["Message"]
+                # Does the content have more attributes? If so, it is very likely that the message came from a non-raw
+                # SNS redirection
+                if "MessageAttributes" in message_content:
+                    manifest = (
+                        message_content["MessageAttributes"]
+                        .get("event_type", {})
+                        .get("Value")
+                        or ""
+                    )
             else:
                 content = message_content
         except JSONDecodeError:
             content = body
 
-        return content
+        manifest = (
+            manifest
+            or message.message_attributes.get("event_type", {}).get("StringValue")
+            or ""
+        )
+
+        return Message(message.message_id, content, message, manifest)

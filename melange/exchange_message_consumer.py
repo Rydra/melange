@@ -110,7 +110,10 @@ class ExchangeMessageConsumer:
         ]
 
     def _process_message(self, message: Message):
-        message_data, manifest = self.message_serializer.deserialize(message.content)
+        manifest = message.get_message_manifest()
+        message_data = self.message_serializer.deserialize(
+            message.content, manifest=manifest
+        )
         subscribers = self._get_subscribers(manifest)
 
         successful = 0

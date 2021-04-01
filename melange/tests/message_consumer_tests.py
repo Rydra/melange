@@ -1,6 +1,6 @@
 import json
 import uuid
-from typing import Tuple, Any
+from typing import Any, Optional
 from unittest.mock import MagicMock
 
 import pytest
@@ -10,23 +10,26 @@ from pytest_tools import pipe, scenariostep
 
 from melange import DriverManager
 from melange.drivers import configure_exchange
+from melange.drivers.interfaces import MessagingDriver, Message
 from melange.event_serializer import MessageSerializer
 from melange.exchange_listener import ExchangeListener, listener
 from melange.exchange_message_consumer import ExchangeMessageConsumer
-from melange.exchange_message_publisher import ExchangeMessagePublisher
-from melange.drivers.interfaces import MessagingDriver, Message
+from melange.exchange_message_publisher import ExchangeMessagePublisher, SQSPublisher
 
 
 class TestEventSerializer(MessageSerializer):
-    def serialize(self, data: Any, manifest: str = None) -> str:
+    def manifest(self, data: Any) -> str:
+        return "BananaEvent"
+
+    def serialize(self, data: Any) -> str:
         if isinstance(data, BananaEvent):
-            return json.dumps({"value": data.somevalue, "manifest": manifest})
+            return json.dumps({"value": data.somevalue})
         return "apple"
 
-    def deserialize(self, serialized_data: str) -> Tuple[Any, str]:
+    def deserialize(self, serialized_data: str, manifest: Optional[str] = None) -> Any:
         if serialized_data != "apple":
             data = json.loads(serialized_data)
-            return BananaEvent(somevalue=data["value"]), "BananaEvent"
+            return BananaEvent(somevalue=data["value"])
 
 
 class BananaEvent:
@@ -96,7 +99,7 @@ class TestMessageConsumer:
             event_queue_name = "a_queue_name"
             topic_to_subscribe = "a_topic_name"
             self.message_consumer = ExchangeMessageConsumer(
-                event_queue_name, topic_to_subscribe
+                event_queue_name, TestEventSerializer(), topic_to_subscribe
             )
 
             return self
@@ -131,7 +134,7 @@ class TestMessageConsumer:
             event_queue_name = "a_queue_name"
             topic_to_subscribe = "a_topic_name"
             self.message_consumer = ExchangeMessageConsumer(
-                event_queue_name, topic_to_subscribe
+                event_queue_name, TestEventSerializer(), topic_to_subscribe
             )
 
             return self
@@ -189,7 +192,7 @@ class TestMessageConsumerWithAWS:
         class TestListener(ExchangeListener):
             def __init__(self):
                 super().__init__()
-                self.listener_event = None
+                self.listened_event = None
 
             @listener
             def on_event(self, event: BananaEvent):
@@ -197,7 +200,35 @@ class TestMessageConsumerWithAWS:
 
         test_listener = TestListener()
         self.exchange_consumer.subscribe(test_listener)
-        exchange_publisher.publish(BananaEvent("somevalue"), manifest="BananaEvent")
+        exchange_publisher.publish(BananaEvent("somevalue"))
+
+        self.exchange_consumer.consume_event()
+        assert_that(test_listener.listened_event, is_(BananaEvent))
+        assert_that(test_listener.listened_event.somevalue, is_("somevalue"))
+
+    def test_consume_event_coming_from_the_sqs_publisher(self):
+        topic_name = self._get_queue_name()
+        serializer = TestEventSerializer()
+        queue_name = self._get_queue_name()
+        self.exchange_consumer = ExchangeMessageConsumer(
+            queue_name, serializer, topic_name
+        )
+        queue_publisher = SQSPublisher(
+            queue_name=queue_name, message_serializer=serializer
+        )
+
+        class TestListener(ExchangeListener):
+            def __init__(self):
+                super().__init__()
+                self.listened_event = None
+
+            @listener
+            def on_event(self, event: BananaEvent):
+                self.listened_event = event
+
+        test_listener = TestListener()
+        self.exchange_consumer.subscribe(test_listener)
+        queue_publisher.publish(BananaEvent("somevalue"))
 
         self.exchange_consumer.consume_event()
         assert_that(test_listener.listened_event, is_(BananaEvent))
@@ -206,9 +237,11 @@ class TestMessageConsumerWithAWS:
     def test_consume_event_with_listeners_that_listen_multiple_events(self):
         topic_name = self._get_topic_name()
         self.exchange_consumer = ExchangeMessageConsumer(
-            self._get_queue_name(), topic_name
+            self._get_queue_name(), TestEventSerializer(), topic_name
         )
-        exchange_publisher = ExchangeMessagePublisher(topic=topic_name)
+        exchange_publisher = ExchangeMessagePublisher(
+            topic=topic_name, message_serializer=TestEventSerializer()
+        )
 
         self.listened_events = set()
 
@@ -223,12 +256,12 @@ class TestMessageConsumerWithAWS:
                 return ["TestEvent", "TestEvent2", "TestEvent3"]
 
         self.exchange_consumer.subscribe(TestListener())
-        exchange_publisher.publish({"value": "somevalue"}, manifest="TestEvent")
+        exchange_publisher.publish({"value": "somevalue"})
         exchange_publisher.publish(
             {"value": "somevalue2", "event_type_name": "TestEvent2"}
         )
-        exchange_publisher.publish({"value": "somevalue3"}, manifest="TestEvent4")
-        exchange_publisher.publish({"value": "somevalue4"}, manifest="TestEvent3")
+        exchange_publisher.publish({"value": "somevalue3"})
+        exchange_publisher.publish({"value": "somevalue4"})
 
         self.exchange_consumer.consume_event()
         self.exchange_consumer.consume_event()
@@ -268,7 +301,7 @@ def given_a_queue_to_listen_with_an_event(self, event_of_type=None):
     event_queue_name = "a_queue_name"
     topic_to_subscribe = "a_topic_name"
     self.message_consumer = ExchangeMessageConsumer(
-        event_queue_name, topic_to_subscribe
+        event_queue_name, TestEventSerializer(), topic_to_subscribe
     )
 
     return self

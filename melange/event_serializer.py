@@ -1,5 +1,5 @@
 import json
-from typing import Generic, Tuple, Dict
+from typing import Generic, Dict, Optional
 
 from melange.helpers.typing import T
 
@@ -10,21 +10,26 @@ class MessageSerializer(Generic[T]):
     into something meaningful for your domain (e.g. into a Domain Event)
     """
 
-    def deserialize(self, data: any) -> Tuple[T, str]:
+    def manifest(self, data: T) -> str:
+        return ""
+
+    def deserialize(self, data: str, manifest: Optional[str] = None) -> str:
         pass
 
-    def serialize(self, serialized_data: T, manifest=None) -> str:
+    def serialize(self, data: T) -> str:
         """
         Serializes and object to a string representation
         """
         pass
 
 
-class JsonSQSSerializer(MessageSerializer):
-    def deserialize(self, serialized_data: str) -> Tuple[Dict, str]:
-        data = json.loads(serialized_data)
-        return data, data.get("manifest")
+class JsonSQSSerializer(MessageSerializer[Dict]):
+    def manifest(self, data: Dict):
+        return "json"
 
-    def serialize(self, serialized_data: Dict, manifest=None) -> str:
-        serialized_data["manifest"] = manifest
-        return json.dumps(serialized_data)
+    def deserialize(self, serialized_data: str, manifest: Optional[str] = None) -> str:
+        data = json.loads(serialized_data)
+        return data
+
+    def serialize(self, data: Dict) -> str:
+        return json.dumps(data)

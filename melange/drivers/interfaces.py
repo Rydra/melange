@@ -29,10 +29,14 @@ class Queue:
 
 
 class Message:
-    def __init__(self, message_id, content, metadata):
+    def __init__(self, message_id, content, metadata, manifest=None):
         self.message_id = message_id
         self.content = content
         self.metadata = metadata
+        self.manifest = manifest
+
+    def get_message_manifest(self):
+        return self.manifest
 
 
 class MessagingDriver:
