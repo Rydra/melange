@@ -16,8 +16,9 @@ class ExchangeMessagePublisher:
     def init(self):
         self._topic = self._driver.declare_topic(self._topic_name)
 
-    def publish(self, data, manifest=None, extra_attributes=None):
-        content = self.message_serializer.serialize(data, manifest)
+    def publish(self, data, extra_attributes=None):
+        content = self.message_serializer.serialize(data)
+        manifest = self.message_serializer.manifest(data)
 
         self.init()
         self._driver.publish(
@@ -47,8 +48,9 @@ class SQSPublisher:
         self.default_message_group_id = kwargs.get("message_group_id")
         self.is_fifo = self._event_queue.attributes.get("FifoQueue") == "true"
 
-    def publish(self, data, manifest=None, **kwargs):
-        content = self.message_serializer.serialize(data, manifest)
+    def publish(self, data, **kwargs):
+        content = self.message_serializer.serialize(data)
+        manifest = self.message_serializer.manifest(data)
 
         message_group_id = kwargs.get("message_group_id", self.default_message_group_id)
         message_deduplication_id = (
