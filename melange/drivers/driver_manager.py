@@ -1,3 +1,5 @@
+from typing import Dict, Type, Any
+
 from singleton import Singleton
 
 from melange.drivers.interfaces import MessagingDriver
@@ -11,7 +13,7 @@ class DriverManager(metaclass=Singleton):
 
     def __init__(self):
         self._driver = None
-        self._drivers = {}
+        self._drivers: Dict[str, Any] = {}
 
     def add_available_drivers(self, **kwargs):
         self._drivers.update(kwargs)

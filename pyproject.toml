@@ -22,3 +22,12 @@ pytest-tools = {git = "https://github.com/Rydra/pytest-tools"}
 pytest = "^5.3.3"
 pyhamcrest = "^2.0.0"
 bunch = "^1.0.1"
+
+[tool.commitizen]
+name = "cz_conventional_commits"
+version = "6.0.0"
+tag_format = "$version"
+version_files = [
+    "melange/__version__.py",
+    "pyproject.toml:version"
+]

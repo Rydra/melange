@@ -1,3 +1,5 @@
+![melange logo](./docs/melange_logo.png)
+
 # Melange
 
 ## A messaging library for an easy inter-communication in distributed and microservices architectures 
@@ -513,3 +515,6 @@ He who controls the spice, controls the universe.
 The spice must flow.
 
 The analogy can be very well made on Events in a distributed architecture :)
+
+
+_Logo <a href="https://www.vecteezy.com/free-vector/nature">Nature Vectors by Vecteezy</a>_
