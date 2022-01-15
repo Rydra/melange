@@ -7,4 +7,4 @@ class PaymentPublisher:
         self.publisher = publisher
 
     def publish_orderstatus(self, orderStatus: OrderStatus) -> None:
-        self.publisher.publish(orderStatus)
+        self.publisher.publish("order-updates", orderStatus)

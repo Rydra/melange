@@ -16,16 +16,14 @@ if __name__ == "__main__":
     )
 
     exchange_consumer = ExchangeMessageConsumer(
-        "payment-updates",
         PickleSerializer(),
-        dead_letter_queue_name="payment-updates-dlq",
         driver=driver,
     )
 
     payment_consumer = PaymentConsumer(
         PaymentService(
             PaymentRepository(),
-            PaymentPublisher(SQSPublisher("order-updates", serializer, driver=driver)),
+            PaymentPublisher(SQSPublisher(serializer, driver=driver)),
         )
     )
 
@@ -33,4 +31,4 @@ if __name__ == "__main__":
 
     print("Consuming...")
     while True:
-        exchange_consumer.consume_event()
+        exchange_consumer.consume_event("payment-updates")

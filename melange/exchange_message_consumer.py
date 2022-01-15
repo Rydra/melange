@@ -54,31 +54,14 @@ class ExchangeMessageYielder:
 class ExchangeMessageConsumer:
     def __init__(
         self,
-        event_queue_name: str,
         message_serializer: MessageSerializer,
-        *topic_names_to_subscribe: str,
-        dead_letter_queue_name: Optional[str] = None,
         cache: Optional[DedupCache] = None,
         driver: Optional[MessagingDriver] = None,
-        **kwargs: Any
     ) -> None:
         self._exchange_listeners: List[ExchangeListener] = []
         self.message_serializer = message_serializer
         self._driver = driver or DriverManager().get_driver()
-        self._event_queue_name = event_queue_name
-        self._topics_to_subscribe = topic_names_to_subscribe
-        self._dead_letter_queue_name = dead_letter_queue_name
         self.cache: DedupCache = cache or Cache()
-
-        self._topics = [
-            self._driver.declare_topic(t) for t in self._topics_to_subscribe
-        ]
-        self._event_queue, self._dead_letter_queue = self._driver.declare_queue(
-            self._event_queue_name,
-            *self._topics,
-            dead_letter_queue_name=self._dead_letter_queue_name,
-            filter_events=kwargs.get("filter_events")
-        )
 
     def subscribe(self, exchange_listener: ExchangeListener) -> None:
         if not isinstance(exchange_listener, ExchangeListener):
@@ -91,8 +74,8 @@ class ExchangeMessageConsumer:
         if exchange_listener in self._exchange_listeners:
             self._exchange_listeners.remove(exchange_listener)
 
-    def consume_event(self) -> None:
-        event_queue = self._driver.get_queue(self._event_queue_name)
+    def consume_event(self, queue_name: str) -> None:
+        event_queue = self._driver.get_queue(queue_name)
 
         messages = self._driver.retrieve_messages(event_queue)
 

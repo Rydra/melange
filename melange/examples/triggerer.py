@@ -13,6 +13,6 @@ if __name__ == "__main__":
         host=os.environ.get("SQSHOST"), port=os.environ.get("SQSPORT")
     )
 
-    SQSPublisher("payment-updates", serializer, driver=driver).publish(order_reponse)
+    SQSPublisher(serializer, driver=driver).publish("payment-updates", order_reponse)
 
     print("Message sent.")
