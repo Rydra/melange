@@ -16,12 +16,30 @@ pytz = "^2019.3"
 funcy = "^1.14"
 methoddispatch = "^3.0.2"
 singleton-py3 = "^0.2.1"
+kombu = "^5.1.0"
 
 [tool.poetry.dev-dependencies]
 pytest-tools = {git = "https://github.com/Rydra/pytest-tools"}
 pytest = "^5.3.3"
 pyhamcrest = "^2.0.0"
 bunch = "^1.0.1"
+
+[tool.black]
+line-length = 88
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
 
 [tool.commitizen]
 name = "cz_conventional_commits"

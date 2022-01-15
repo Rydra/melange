@@ -1,5 +1,5 @@
 import weakref
-from typing import Dict, Any, List, Tuple
+from typing import Any, Dict, List, Protocol, Tuple
 
 
 class Topic:
@@ -13,19 +13,17 @@ class Topic:
         pass
 
 
-class Queue:
-    @property
-    def attributes(self) -> Dict:
-        pass
+class Queue(Protocol):
+    attributes: Dict
 
     def set_attributes(self, *args, **kwargs) -> None:
-        pass
+        ...
 
     def receive_messages(self, *args, **kwargs) -> List[Any]:
-        pass
+        ...
 
     def delete(self):
-        pass
+        ...
 
 
 class Message:
