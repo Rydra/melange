@@ -1,0 +1,20 @@
+version: '3.9'
+
+services:
+  redis:
+    image: redis:3.2.6-alpine
+
+  app:
+    build: .
+    environment:
+      - SQSHOST=http://elasticmq
+      - SQSPORT=9324
+    volumes:
+      - .:/app
+    links:
+      - elasticmq
+
+  elasticmq:
+    image: softwaremill/elasticmq-native
+    expose:
+      - "9324"

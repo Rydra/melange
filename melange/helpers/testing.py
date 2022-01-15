@@ -1,6 +1,6 @@
 from uuid import uuid4
 
-from melange.drivers.interfaces import MessagingDriver, Message
+from melange.drivers.interfaces import Message, MessagingDriver
 
 
 class DumbQueue:

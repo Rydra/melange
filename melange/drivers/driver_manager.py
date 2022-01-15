@@ -1,4 +1,4 @@
-from typing import Dict, Type, Any
+from typing import Any, Dict, Optional
 
 from singleton import Singleton
 
@@ -11,14 +11,19 @@ class DriverManager(metaclass=Singleton):
     want to use (Rabbit, AWS, etc)
     """
 
-    def __init__(self):
-        self._driver = None
+    def __init__(self) -> None:
+        self._driver: Optional[MessagingDriver] = None
         self._drivers: Dict[str, Any] = {}
 
-    def add_available_drivers(self, **kwargs):
+    def add_available_drivers(self, **kwargs: Any) -> None:
         self._drivers.update(kwargs)
 
-    def use_driver(self, driver: MessagingDriver = None, driver_name=None, **kwargs):
+    def use_driver(
+        self,
+        driver: Optional[MessagingDriver] = None,
+        driver_name: Optional[str] = None,
+        **kwargs: Any
+    ) -> None:
         if driver:
             if not isinstance(driver, MessagingDriver):
                 raise Exception("Invalid driver supplied")
@@ -35,7 +40,7 @@ class DriverManager(metaclass=Singleton):
         else:
             raise Exception("You need to either supply a driver or a driver_name!")
 
-    def get_driver(self):
+    def get_driver(self) -> MessagingDriver:
         if not self._driver:
             raise Exception(
                 "No driver is registered. Please call 'use_driver' prior to getting it"

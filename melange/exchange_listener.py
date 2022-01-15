@@ -1,31 +1,30 @@
 import logging
-from typing import Any
+from typing import Any, List, Optional
 
 from funcy import lmap
-from methoddispatch import singledispatch, SingleDispatch
+from methoddispatch import SingleDispatch, singledispatch
 
 logger = logging.getLogger(__name__)
 
 
 class ExchangeListener(SingleDispatch):
     """
-    The domain event serializer is used to read the event data and then generate a proper
-    object that can be used by the process dispatcher
+    This class can consume events from a queue and pass them to a processor
     """
 
-    def process(self, obj: Any, **kwargs):
+    def process(self, obj: Any, **kwargs: Any) -> None:
         self._process(obj)
 
     @singledispatch
-    def _process(self, event):
+    def _process(self, event: Any) -> None:
         """Event should be an instance of DomainEvent"""
         pass
 
-    def listens_to(self):
+    def listens_to(self) -> List[str]:
         accepted_events = filter(lambda t: t is not object, self._process.registry)
         return lmap(lambda ev_type: ev_type.__name__, accepted_events)
 
-    def accepts(self, manifest: str):
+    def accepts(self, manifest: Optional[str]) -> bool:
         """
         Default implementation. You can override this if you want, for example,
         to accept any manifest and not only the type of classes you listen

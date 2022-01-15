@@ -1,15 +1,16 @@
 from base64 import b64decode
+from typing import Dict, List
 from urllib.request import urlopen
 
 import OpenSSL
-from OpenSSL.crypto import load_certificate, FILETYPE_PEM, verify
+from OpenSSL.crypto import FILETYPE_PEM, load_certificate, verify
 
 SNS_MESSAGE_TYPE_SUB_NOTIFICATION = "SubscriptionConfirmation"
 SNS_MESSAGE_TYPE_NOTIFICATION = "Notification"
 SNS_MESSAGE_TYPE_UNSUB_NOTIFICATION = "UnsubscribeConfirmation"
 
 
-def canonical_message_builder(content, fmt):
+def canonical_message_builder(content: Dict, fmt: List[str]) -> str:
     """Builds the canonical message to be verified.
 
     Sorts the fields as a requirement from AWS
@@ -32,7 +33,7 @@ def canonical_message_builder(content, fmt):
     return str(m)
 
 
-def verify_sns_notification(message):
+def verify_sns_notification(message: Dict) -> bool:
     """Takes a notification request from Amazon push service SNS and verifies the origin of the notification.
     This implementation uses OpenSSL Crypto, inspired by the implementation of
     Artur Rodrigues with M2Crypto: http://goo.gl/KAgPPc

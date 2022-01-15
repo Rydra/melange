@@ -5,7 +5,7 @@ import uuid
 import pytest
 from hamcrest import *
 
-from melange import AWSDriver
+from melange.drivers.aws.aws_driver import AWSDriver
 
 
 @pytest.fixture

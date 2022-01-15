@@ -1,11 +1,11 @@
 import logging
-from typing import List
+from typing import Any, Iterable, List, Optional
 
 from melange.drivers.driver_manager import DriverManager
+from melange.drivers.interfaces import Message, MessagingDriver
 from melange.event_serializer import MessageSerializer
 from melange.exchange_listener import ExchangeListener
-from melange.infrastructure.cache import DedupCache, Cache
-from melange.drivers.interfaces import MessagingDriver, Message
+from melange.infrastructure.cache import Cache, DedupCache
 from melange.utils import get_fully_qualified_name
 
 logger = logging.getLogger(__name__)
@@ -14,12 +14,12 @@ logger = logging.getLogger(__name__)
 class ExchangeMessageYielder:
     def __init__(
         self,
-        event_queue_name,
+        event_queue_name: str,
         message_serializer: MessageSerializer,
-        *topics_to_subscribe,
-        dead_letter_queue_name=None,
-        driver=None,
-        **kwargs
+        *topics_to_subscribe: str,
+        dead_letter_queue_name: Optional[str] = None,
+        driver: Optional[MessagingDriver] = None,
+        **kwargs: Any
     ):
         self._driver = driver or DriverManager().get_driver()
         self.message_serializer = message_serializer
@@ -37,7 +37,7 @@ class ExchangeMessageYielder:
             filter_events=kwargs.get("filter_events")
         )
 
-    def get_messages(self):
+    def get_messages(self) -> Iterable[str]:
         event_queue = self._driver.get_queue(self._event_queue_name)
 
         while True:
@@ -47,7 +47,7 @@ class ExchangeMessageYielder:
                 if "event_type_name" in message.content:
                     yield self.message_serializer.deserialize(message.content)
 
-    def acknowledge(self, message):
+    def acknowledge(self, message: Message) -> None:
         self._driver.acknowledge(message)
 
 
@@ -57,18 +57,18 @@ class ExchangeMessageConsumer:
         event_queue_name: str,
         message_serializer: MessageSerializer,
         *topic_names_to_subscribe: str,
-        dead_letter_queue_name: str = None,
-        cache: DedupCache = None,
-        driver: MessagingDriver = None,
-        **kwargs
-    ):
+        dead_letter_queue_name: Optional[str] = None,
+        cache: Optional[DedupCache] = None,
+        driver: Optional[MessagingDriver] = None,
+        **kwargs: Any
+    ) -> None:
         self._exchange_listeners: List[ExchangeListener] = []
         self.message_serializer = message_serializer
         self._driver = driver or DriverManager().get_driver()
         self._event_queue_name = event_queue_name
         self._topics_to_subscribe = topic_names_to_subscribe
         self._dead_letter_queue_name = dead_letter_queue_name
-        self.cache = cache or Cache()
+        self.cache: DedupCache = cache or Cache()
 
         self._topics = [
             self._driver.declare_topic(t) for t in self._topics_to_subscribe
@@ -91,7 +91,7 @@ class ExchangeMessageConsumer:
         if exchange_listener in self._exchange_listeners:
             self._exchange_listeners.remove(exchange_listener)
 
-    def consume_event(self):
+    def consume_event(self) -> None:
         event_queue = self._driver.get_queue(self._event_queue_name)
 
         messages = self._driver.retrieve_messages(event_queue)
@@ -102,14 +102,14 @@ class ExchangeMessageConsumer:
             except Exception as e:
                 logger.exception(e)
 
-    def _get_subscribers(self, manifest: str):
+    def _get_subscribers(self, manifest: Optional[str]) -> List[ExchangeListener]:
         return [
             listener
             for listener in self._exchange_listeners
             if listener.accepts(manifest)
         ]
 
-    def _process_message(self, message: Message):
+    def _process_message(self, message: Message) -> None:
         manifest = message.get_message_manifest()
         message_data = self.message_serializer.deserialize(
             message.content, manifest=manifest

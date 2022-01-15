@@ -1,8 +1,14 @@
+# type: ignore
+"""
+Looking for maintainers for the RabbitMQDriver!
+"""
+
+
 import json
 
 import pika
 
-from melange.drivers.interfaces import MessagingDriver, Message
+from melange.drivers.interfaces import Message, MessagingDriver
 
 
 class RabbitMQDriver(MessagingDriver):

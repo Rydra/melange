@@ -31,3 +31,31 @@ version_files = [
     "melange/__version__.py",
     "pyproject.toml:version"
 ]
+
+[tool.black]
+line-length = 88
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
+
+[tool.pytest.ini_options]
+python_files = "test_* *_tests.py *_utests.py"
+python_classes = "Test* *Tests"
+
+markers = [
+    "acceptancetest: marks a test as an acceptance test",
+    "documentation",
+    "integrationtest"
+]
+norecursedirs = ".cache dumps *.egg-info .git appdir .tox"

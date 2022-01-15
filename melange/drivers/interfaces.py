@@ -1,46 +1,55 @@
 import weakref
-from typing import Dict, Any, List, Tuple
+from typing import Any, Dict, List, Optional, Protocol, Tuple
 
 
-class Topic:
-    def subscribe(self, *args, **kwargs):
-        pass
+class Topic(Protocol):
+    arn: str
 
-    def publish(self, *args, **kwargs):
-        pass
+    def subscribe(self, *args: Any, **kwargs: Any) -> Any:
+        ...
 
-    def delete(self):
-        pass
+    def publish(self, *args: Any, **kwargs: Any) -> Dict:
+        ...
+
+    def delete(self) -> None:
+        ...
 
 
-class Queue:
-    @property
-    def attributes(self) -> Dict:
-        pass
+class Queue(Protocol):
+    attributes: Dict
 
-    def set_attributes(self, *args, **kwargs) -> None:
-        pass
+    def set_attributes(self, *args: Any, **kwargs: Any) -> None:
+        ...
 
-    def receive_messages(self, *args, **kwargs) -> List[Any]:
-        pass
+    def receive_messages(self, *args: Any, **kwargs: Any) -> List[Any]:
+        ...
 
-    def delete(self):
-        pass
+    def delete(self) -> None:
+        ...
+
+    def send_message(self, **kwargs: Any) -> None:
+        ...
 
 
 class Message:
-    def __init__(self, message_id, content, metadata, manifest=None):
+    def __init__(
+        self,
+        message_id: str,
+        content: Any,
+        metadata: Any,
+        manifest: Optional[str] = None,
+    ) -> None:
         self.message_id = message_id
         self.content = content
         self.metadata = metadata
         self.manifest = manifest
 
-    def get_message_manifest(self):
+    def get_message_manifest(self) -> Optional[str]:
         return self.manifest
 
 
 class MessagingDriver:
-    def __init__(self):
+    def __init__(self) -> None:
         self._finalizer = weakref.finalize(self, self.close_connection)
 
     def declare_topic(self, topic_name: str) -> Topic:
@@ -63,9 +72,9 @@ class MessagingDriver:
         self,
         queue_name: str,
         *topics_to_bind: Topic,
-        dead_letter_queue_name: str = None,
-        **kwargs
-    ) -> Tuple[Queue, Queue]:
+        dead_letter_queue_name: Optional[str] = None,
+        **kwargs: Any
+    ) -> Tuple[Queue, Optional[Queue]]:
         """
         Declares a queue with the name "queue_name". Optionally, this
          queue may be binded to the topic "topic_to_bind" and associated
@@ -84,7 +93,9 @@ class MessagingDriver:
         """
         raise NotImplementedError
 
-    def retrieve_messages(self, queue: Queue, attempt_id=None) -> List[Message]:
+    def retrieve_messages(
+        self, queue: Queue, attempt_id: Optional[str] = None
+    ) -> List[Message]:
         """
         Returns a list of messages (instances of Message type) that have
         been received from the queue.
@@ -99,8 +110,8 @@ class MessagingDriver:
         content: str,
         topic: Topic,
         event_type_name: str,
-        extra_attributes: Dict = None,
-    ):
+        extra_attributes: Optional[Dict] = None,
+    ) -> None:
         """
         Publishes the content to the topic. The content must be a
         string (which is the json representation of an event)
@@ -110,11 +121,11 @@ class MessagingDriver:
     def queue_publish(
         self,
         content: str,
-        queue,
-        event_type_name: str = None,
-        message_group_id: str = None,
-        message_deduplication_id: str = None,
-    ):
+        queue: Queue,
+        event_type_name: Optional[str] = None,
+        message_group_id: Optional[str] = None,
+        message_deduplication_id: Optional[str] = None,
+    ) -> None:
         raise NotImplementedError
 
     def acknowledge(self, message: Message) -> None:

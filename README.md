@@ -1,5 +1,3 @@
-[![Upload Python Package](https://github.com/Rydra/melange/actions/workflows/python-publish.yml/badge.svg)](https://github.com/Rydra/melange/actions/workflows/python-publish.yml)
-
 ![melange logo](./docs/melange_logo.png)
 
 # Melange

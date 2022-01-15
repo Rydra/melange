@@ -10,7 +10,7 @@ from pytest_tools import pipe, scenariostep
 
 from melange import DriverManager
 from melange.drivers import configure_exchange
-from melange.drivers.interfaces import MessagingDriver, Message
+from melange.drivers.interfaces import Message, MessagingDriver
 from melange.event_serializer import MessageSerializer
 from melange.exchange_listener import ExchangeListener, listener
 from melange.exchange_message_consumer import ExchangeMessageConsumer

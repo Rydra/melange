@@ -1,5 +1,5 @@
 import json
-from typing import Generic, Dict, Optional
+from typing import Dict, Generic, Optional
 
 from melange.helpers.typing import T
 
@@ -24,7 +24,7 @@ class MessageSerializer(Generic[T]):
 
 
 class JsonSQSSerializer(MessageSerializer[Dict]):
-    def manifest(self, data: Dict):
+    def manifest(self, data: Dict) -> str:
         return "json"
 
     def deserialize(self, serialized_data: str, manifest: Optional[str] = None) -> str:
