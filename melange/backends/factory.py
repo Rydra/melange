@@ -4,7 +4,7 @@ from melange.backends.backend_manager import BackendManager
 from melange.backends.interfaces import MessagingBackend, Topic
 
 
-class MessagingFactory:
+class MessagingBackendFactory:
     def __init__(self, backend: Optional[MessagingBackend] = None) -> None:
         self._backend = backend or BackendManager().get_backend()
 

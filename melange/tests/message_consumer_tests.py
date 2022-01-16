@@ -11,10 +11,10 @@ from pytest_tools import pipe, scenariostep
 from melange import BackendManager
 from melange.backends import configure_exchange
 from melange.backends.interfaces import Message, MessagingBackend
+from melange.consumer import Consumer, consumer
 from melange.event_serializer import MessageSerializer
-from melange.exchange_listener import ExchangeListener, listener
-from melange.exchange_message_consumer import ExchangeMessageConsumer
-from melange.exchange_message_publisher import ExchangeMessagePublisher, SQSPublisher
+from melange.message_dispatcher import ExchangeMessageDispatcher
+from melange.message_publisher import ExchangeMessagePublisher, SQSPublisher
 
 
 class TestEventSerializer(MessageSerializer):
@@ -98,14 +98,14 @@ class TestMessageConsumer:
 
             event_queue_name = "a_queue_name"
             topic_to_subscribe = "a_topic_name"
-            self.message_consumer = ExchangeMessageConsumer(
+            self.message_consumer = ExchangeMessageDispatcher(
                 event_queue_name, TestEventSerializer(), topic_to_subscribe
             )
 
             return self
 
         def given_a_subscriber(self, listens_to=None):
-            self.subscriber = MagicMock(spec=ExchangeListener)
+            self.subscriber = MagicMock(spec=Consumer)
             self.subscriber.listens_to.return_value = listens_to
 
             self.message_consumer.subscribe(self.subscriber)
@@ -133,7 +133,7 @@ class TestMessageConsumer:
 
             event_queue_name = "a_queue_name"
             topic_to_subscribe = "a_topic_name"
-            self.message_consumer = ExchangeMessageConsumer(
+            self.message_consumer = ExchangeMessageDispatcher(
                 event_queue_name, TestEventSerializer(), topic_to_subscribe
             )
 
@@ -182,19 +182,19 @@ class TestMessageConsumerWithAWS:
     def test_consume_event_from_sqs(self):
         topic_name = self._get_topic_name()
         serializer = TestEventSerializer()
-        self.exchange_consumer = ExchangeMessageConsumer(
+        self.exchange_consumer = ExchangeMessageDispatcher(
             self._get_queue_name(), serializer, topic_name
         )
         exchange_publisher = ExchangeMessagePublisher(
             topic=topic_name, message_serializer=serializer
         )
 
-        class TestListener(ExchangeListener):
+        class TestListener(Consumer):
             def __init__(self):
                 super().__init__()
                 self.listened_event = None
 
-            @listener
+            @consumer
             def on_event(self, event: BananaEvent):
                 self.listened_event = event
 
@@ -210,19 +210,19 @@ class TestMessageConsumerWithAWS:
         topic_name = self._get_queue_name()
         serializer = TestEventSerializer()
         queue_name = self._get_queue_name()
-        self.exchange_consumer = ExchangeMessageConsumer(
+        self.exchange_consumer = ExchangeMessageDispatcher(
             queue_name, serializer, topic_name
         )
         queue_publisher = SQSPublisher(
             queue_name=queue_name, message_serializer=serializer
         )
 
-        class TestListener(ExchangeListener):
+        class TestListener(Consumer):
             def __init__(self):
                 super().__init__()
                 self.listened_event = None
 
-            @listener
+            @consumer
             def on_event(self, event: BananaEvent):
                 self.listened_event = event
 
@@ -236,7 +236,7 @@ class TestMessageConsumerWithAWS:
 
     def test_consume_event_with_listeners_that_listen_multiple_events(self):
         topic_name = self._get_topic_name()
-        self.exchange_consumer = ExchangeMessageConsumer(
+        self.exchange_consumer = ExchangeMessageDispatcher(
             self._get_queue_name(), TestEventSerializer(), topic_name
         )
         exchange_publisher = ExchangeMessagePublisher(
@@ -245,7 +245,7 @@ class TestMessageConsumerWithAWS:
 
         self.listened_events = set()
 
-        class TestListener(ExchangeListener):
+        class TestListener(Consumer):
             def __init__(self):
                 super().__init__(None)
 
@@ -304,7 +304,7 @@ def given_a_queue_to_listen_with_an_event(self, event_of_type=None):
 
     event_queue_name = "a_queue_name"
     topic_to_subscribe = "a_topic_name"
-    self.message_consumer = ExchangeMessageConsumer(
+    self.message_consumer = ExchangeMessageDispatcher(
         event_queue_name, TestEventSerializer(), topic_to_subscribe
     )
 
@@ -313,7 +313,7 @@ def given_a_queue_to_listen_with_an_event(self, event_of_type=None):
 
 @scenariostep
 def given_a_subscriber(ctx, listens_to=None):
-    ctx.subscriber = MagicMock(spec=ExchangeListener)
+    ctx.subscriber = MagicMock(spec=Consumer)
     ctx.subscriber.listens_to.return_value = listens_to
 
     ctx.message_consumer.subscribe(ctx.subscriber)
@@ -348,7 +348,9 @@ def given_an_empty_queue_to_listen(ctx):
 
     event_queue_name = "a_queue_name"
     topic_to_subscribe = "a_topic_name"
-    ctx.message_consumer = ExchangeMessageConsumer(event_queue_name, topic_to_subscribe)
+    ctx.message_consumer = ExchangeMessageDispatcher(
+        event_queue_name, topic_to_subscribe
+    )
 
     return ctx
 
@@ -397,14 +399,14 @@ class TestMessageConsumerRabbitMQ:
 
     def test_consume_event_from_queue(self):
         topic_name = self._get_topic_name()
-        self.exchange_consumer = ExchangeMessageConsumer(
+        self.exchange_consumer = ExchangeMessageDispatcher(
             self._get_queue_name(), topic_name
         )
         exchange_publisher = ExchangeMessagePublisher(topic=topic_name)
 
         self.listened_event = None
 
-        class TestListener(ExchangeListener):
+        class TestListener(Consumer):
             def process(x, event, **kwargs):
                 self.listened_event = event
 
@@ -420,14 +422,14 @@ class TestMessageConsumerRabbitMQ:
 
     def test_consume_event_with_listeners_that_listen_multiple_events(self):
         topic_name = self._get_topic_name()
-        self.exchange_consumer = ExchangeMessageConsumer(
+        self.exchange_consumer = ExchangeMessageDispatcher(
             self._get_queue_name(), topic_name
         )
         exchange_publisher = ExchangeMessagePublisher(topic=topic_name)
 
         self.listened_events = set()
 
-        class TestListener(ExchangeListener):
+        class TestListener(Consumer):
             def process(x, event, **kwargs):
                 self.listened_events.add(event["value"])
 

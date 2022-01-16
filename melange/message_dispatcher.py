@@ -1,10 +1,10 @@
 import logging
-from typing import Any, Iterable, List, Optional
+from typing import Any, Callable, Iterable, List, Optional
 
 from melange.backends.backend_manager import BackendManager
 from melange.backends.interfaces import Message, MessagingBackend
+from melange.consumer import Consumer
 from melange.event_serializer import MessageSerializer
-from melange.exchange_listener import ExchangeListener
 from melange.infrastructure.cache import Cache, DedupCache
 from melange.utils import get_fully_qualified_name
 
@@ -51,28 +51,50 @@ class ExchangeMessageYielder:
         self._backend.acknowledge(message)
 
 
-class ExchangeMessageConsumer:
+class ExchangeMessageDispatcher:
+    """
+    Dispatches messages read by the consume event to the
+    consumers that accept the message of that type
+    """
+
     def __init__(
         self,
         message_serializer: MessageSerializer,
         cache: Optional[DedupCache] = None,
         backend: Optional[MessagingBackend] = None,
     ) -> None:
-        self._exchange_listeners: List[ExchangeListener] = []
+        self._exchange_listeners: List[Consumer] = []
         self.message_serializer = message_serializer
         self._backend = backend or BackendManager().get_backend()
         self.cache: DedupCache = cache or Cache()
 
-    def subscribe(self, exchange_listener: ExchangeListener) -> None:
-        if not isinstance(exchange_listener, ExchangeListener):
+    def subscribe(self, consumer: Consumer) -> None:
+        if not isinstance(consumer, Consumer):
             return None
 
-        if exchange_listener not in self._exchange_listeners:
-            self._exchange_listeners.append(exchange_listener)
+        if consumer not in self._exchange_listeners:
+            self._exchange_listeners.append(consumer)
 
-    def unsubscribe(self, exchange_listener: ExchangeListener) -> None:
-        if exchange_listener in self._exchange_listeners:
-            self._exchange_listeners.remove(exchange_listener)
+    def unsubscribe(self, consumer: Consumer) -> None:
+        if consumer in self._exchange_listeners:
+            self._exchange_listeners.remove(consumer)
+
+    def consume_loop(
+        self,
+        queue_name: str,
+        on_exception: Optional[Callable[[Exception], None]] = None,
+        after_consume: Optional[Callable[[], None]] = None,
+    ) -> None:
+        while True:
+            try:
+                self.consume_event(queue_name)
+            except Exception as e:
+                logger.exception(e)
+                if on_exception:
+                    on_exception(e)
+            finally:
+                if after_consume:
+                    after_consume()
 
     def consume_event(self, queue_name: str) -> None:
         event_queue = self._backend.get_queue(queue_name)
@@ -81,38 +103,38 @@ class ExchangeMessageConsumer:
 
         for message in messages:
             try:
-                self._process_message(message)
+                self._dispatch_message(message)
             except Exception as e:
                 logger.exception(e)
 
-    def _get_subscribers(self, manifest: Optional[str]) -> List[ExchangeListener]:
+    def _get_consumers(self, manifest: Optional[str]) -> List[Consumer]:
         return [
             listener
             for listener in self._exchange_listeners
             if listener.accepts(manifest)
         ]
 
-    def _process_message(self, message: Message) -> None:
+    def _dispatch_message(self, message: Message) -> None:
         manifest = message.get_message_manifest()
         message_data = self.message_serializer.deserialize(
             message.content, manifest=manifest
         )
-        subscribers = self._get_subscribers(manifest)
+        subscribers = self._get_consumers(manifest)
 
         successful = 0
         for subscr in subscribers:
             try:
                 # Store into the cache
-                message_listener_key = (
+                message_key = (
                     get_fully_qualified_name(subscr) + "." + message.message_id
                 )
 
-                if message_listener_key in self.cache:
+                if message_key in self.cache:
                     logger.info("detected a duplicated message, ignoring")
                 else:
                     subscr.process(message_data, message_id=message.message_id)
                     successful += 1
-                    self.cache.store(message_listener_key, message_listener_key)
+                    self.cache.store(message_key, message_key)
             except Exception as e:
                 logger.exception(e)
 

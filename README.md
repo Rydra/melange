@@ -123,7 +123,7 @@ the initialization of your application:
 
 ```python
 
-class SampleListener(ExchangeListener):
+class SampleListener(Consumer):
 
 	def process(self, event, **kwargs):
 		print(f"I've received information about the product {event['name']}")
@@ -131,7 +131,7 @@ class SampleListener(ExchangeListener):
 	def listens_to(self):
 		return [ 'ProductAdded' ]
 
-message_consumer = ExchangeMessageConsumer(event_queue_name='my-queue', topic_to_subscribe='some-topic-name')
+message_consumer = ExchangeMessageDispatcher(event_queue_name='my-queue', topic_to_subscribe='some-topic-name')
 message_consumer.subscribe(SampleListener())
 
 while True:
@@ -145,11 +145,11 @@ interested in.
 
 We will attach this listener to a **queue**. A queue is a place where the messages received from
 SNS will be stored and available for the consumer application at his own time. To do so, we first create
-an `ExchangeMessageConsumer` with a queue name and a topic. If the queue does not exist, it will create
+an `ExchangeMessageDispatcher` with a queue name and a topic. If the queue does not exist, it will create
 an **SQS queue** and subscribe it to the topic. 
 
 Afterwards, you can subscribe an instance of your listener to the message consumer. Finally, you
-create a loop that will poll for new events and invoke the `process` method of your ExchangeListener
+create a loop that will poll for new events and invoke the `process` method of your Consumer
 for each event of the expected type it receives.
 
 ## Advanced usage
@@ -216,7 +216,7 @@ class ProductAdded(EventMessage):
 		self.product_id = product_id
 		self.name = name
 		
-class SampleListener(ExchangeListener):
+class SampleListener(Consumer):
 
 	def process(self, event, **kwargs):
 		# Note that I'm not accessing event properties by key, but as a regular object.
@@ -230,7 +230,7 @@ class SampleListener(ExchangeListener):
 # In you initialization code you would call the following line:
 EventSerializer.instance().register(ProductAddedSchema)
 
-message_consumer = ExchangeMessageConsumer(event_queue_name='my-queue', topic_to_subscribe='some-topic-name')
+message_consumer = ExchangeMessageDispatcher(event_queue_name='my-queue', topic_to_subscribe='some-topic-name')
 message_consumer.subscribe(SampleListener())
 # You can subscribe as many listeners as you want
 
@@ -263,7 +263,7 @@ The consumer example above would be rewritten like this:
 
 ```python
 
-class SampleListener(ExchangeListener):
+class SampleListener(Consumer):
 
 	def process(self, event, **kwargs):
 		print(f"I've received information about the product {event['name']}")

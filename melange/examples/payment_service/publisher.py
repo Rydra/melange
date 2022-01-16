@@ -1,5 +1,5 @@
 from melange.examples.payment_service.events import OrderStatus
-from melange.exchange_message_publisher import SQSPublisher
+from melange.message_publisher import SQSPublisher
 
 
 class PaymentPublisher:
