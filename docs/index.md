@@ -1,17 +1,18 @@
-# Welcome to Melange documentation
+# Melange
+
+
+TODO: Update the documentation to match the latest version 7.0.0
 
 
 ![melange logo](img/melange_logo.png)
 
-# Melange
+Motto: The spice must flow! (or in this case, the events)
 
-## A messaging library for an easy inter-communication in distributed and microservices architectures 
-
-The spice must flow! (or in this case, the events)
-
-Melange offers a flexible, easy-to-use library to create distributed event-driven architectures using
-your preferred messaging infrastructure mechanism as a backend message broker to dispatch messages and achieve
-inter-communication among your microservices and other components. 
+**melange** is a python messaging library for an easy inter-communication in distributed and 
+microservices architectures. It offers a flexible, easy-to-use library to create distributed 
+event-driven architectures using your preferred messaging infrastructure mechanism as a backend message 
+broker to dispatch messages and achieve
+inter-communication among your microservices and other components.
 
 Its main selling point is the capability to greatly decouple 
 and integrate REST apis, AWS Lambda functions and console applications, emails, cellphones... The
@@ -37,15 +38,11 @@ Implementing Domain-Driven Design (look at [part 3 of these series](http://dddco
 
 ## Installing ##
 
-Execute the following two commands to install melange in your system (working in packaging this to combine both
-commands into a single one):
-
 ```
-pip install git+https://github.com/Rydra/redis-simple-cache.git/@master
 pip install melange
 ```
 
-## How to get started ##
+## Getting started ##
 
 Event-driven architectures work with the Publish/Subscribe pattern to achieve decoupling.
 With this pattern, publishers and subscribers do not know about each other while they can exchange
