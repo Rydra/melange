@@ -57,12 +57,12 @@ an **Exchange Message Consumer** to send and receive messages respectively.
 But before getting your feet wet into this realm, first things first. You need to tell Melange which driver backend
 you want to use. Place this line in the initialization code of your application:
 
-```python
+``` py
 # If you want to use AWS
 BackendManager.instance().use_backend(driver_name='aws')
 ```
 
-```python
+``` py
 # If you want to use RabbitMQ. besides the driver_name parameter, the rest of the parameters are connection parameters
 # expressed as keyword arguments used by the pika library. Check pika documentation on the ConnectionParameters:
 # https://pika.readthedocs.io/en/0.10.0/modules/parameters.html
@@ -89,7 +89,7 @@ AWS_SESSION_TOKEN – Specify a session token if you are using temporary securit
 
 The simplest application that can work with Melange is creating a Publisher which will send messages:
 
-```python
+``` py
 message_publisher = ExchangeMessagePublisher(topic='some-topic-name')
 
 data = {
@@ -121,7 +121,7 @@ The simplest implementation for that would be the following one, and you could p
 the initialization of your application:
 
 
-```python
+``` py
 
 class SampleListener(Consumer):
 
@@ -168,7 +168,7 @@ In that case you could declare your own `EventMessage` classes and use them with
 methods. The example above would be rewritten like this with this approach:
 
 Publisher:
-```python
+``` py
 # In some file you would implement these classes
 class ProductAddedSchema(EventSchema):
 	""" This is a marshmallow schema! """
@@ -194,7 +194,7 @@ message_publisher.publish(ProductAdded(product_id=12345, name='Coolers'))
 ```
 
 Consumer:
-```python
+``` py
 # In some file you would implement these classes
 # Bear in mind that these definition are placed in
 # another project, and you could define a different
@@ -261,7 +261,7 @@ you can use them for your threading purposes.
 The consumer example above would be rewritten like this:
 
 
-```python
+``` py
 
 class SampleListener(Consumer):
 
@@ -327,7 +327,7 @@ thread as the entity or domain service that implements your Domain Model.
 
 An example of use:
 
-```python
+``` py
 class MySubscriber(DomainSubscriber):
 	def process(self, event):
 		print (f"{event.product_id}{event.name}")
@@ -359,7 +359,7 @@ To create the driver class, you need to inherit from `MessagingDriver` and overr
 class. The documentation of this class explains very well what should these methods accepts as
 parameters and return:
 
-```python
+``` py
 class MessagingDriver:
     def __init__(self):
         self._finalizer = weakref.finalize(self, self.close_connection)
@@ -444,14 +444,14 @@ Inspire yourself with the implementations of the AWSDriver and the RabbitMQDrive
 
 After you created your own driver, you just need to tell the BackendManager to recognize your driver:
 
-```python
+``` py
 driver = MyDriver()
 BackendManager.instance().use_backend(driver=driver)
 ```
 
 Or if you want to register it into Melange and use it afterwards or create your own Melange plugin:
 
-```python
+``` py
 driver = MyDriver()
 BackendManager.instance().add_available_backends(mydriver=MyDriver)
 
@@ -483,7 +483,7 @@ message by using the `parse_event_from_sns` function.
 
 Example of a Lambda function code:
 
-```python
+``` py
 def handle_event(message, context):
 
 	EventSerializer.instance().register(MyEventSchema, MyFooCreatedSchema)
