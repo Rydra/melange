@@ -12,3 +12,15 @@ markdown_extensions:
   - pymdownx.inlinehilite
   - pymdownx.snippets
   - pymdownx.superfences
+
+
+plugins:
+  - search
+  - mkdocstrings
+
+
+nav:
+    - Home: index.md
+    - Examples: examples.md
+    - Code Reference:
+        - API reference: api-reference.md
