@@ -10,6 +10,10 @@ logger = logging.getLogger(__name__)
 
 
 class ExchangeMessagePublisher:
+    """
+    Some documentation here is in order
+    """
+
     def __init__(
         self,
         message_serializer: MessageSerializer,

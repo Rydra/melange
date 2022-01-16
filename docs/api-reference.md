@@ -1,3 +1,3 @@
 # API reference
 
-# melange.message_publisher
+::: melange.message_publisher

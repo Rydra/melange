@@ -16,7 +16,12 @@ markdown_extensions:
 
 plugins:
   - search
-  - mkdocstrings
+  - mkdocstrings:
+      default_handler: python
+      handlers:
+        python:
+          rendering:
+            show_source: true
 
 
 nav:

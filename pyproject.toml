@@ -6,7 +6,7 @@ authors = ["David Jiménez (Rydra)"]
 license = "MIT"
 
 [tool.poetry.dependencies]
-python = "^3.7.0"
+python = "^3.8.0"
 boto3 = "^1.11.5"
 pyopenssl = "^19.1.0"
 pika = "^1.1.0"
@@ -23,6 +23,9 @@ pytest = "^5.3.3"
 pyhamcrest = "^2.0.0"
 bunch = "^1.0.1"
 simple-cqrs = "^1.0.0"
+mkdocs = "^1.2.3"
+mkdocstrings = "^0.17.0"
+mkdocs-material = "^8.1.7"
 
 [tool.commitizen]
 name = "cz_conventional_commits"
@@ -60,3 +63,7 @@ markers = [
     "integrationtest"
 ]
 norecursedirs = ".cache dumps *.egg-info .git appdir .tox"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"

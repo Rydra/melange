@@ -23,7 +23,7 @@ Implementing Domain-Driven Design (look at [part 3 of these series](http://dddco
 
 ## Documentation
 
-Full documentation is available at [https://dune-melange.readthedocs.io](https://dune-melange.readthedocs.io)
+Full documentation is available at [https://rydra.github.io/melange/](https://rydra.github.io/melange/)
 
 
 ## Examples
