@@ -1,6 +1,6 @@
 # type: ignore
 """
-Looking for maintainers for the RabbitMQDriver!
+Looking for maintainers for the RabbitMQBackend!
 """
 
 
@@ -8,10 +8,10 @@ import json
 
 import pika
 
-from melange.drivers.interfaces import Message, MessagingDriver
+from melange.backends.interfaces import Message, MessagingBackend
 
 
-class RabbitMQDriver(MessagingDriver):
+class RabbitMQBackend(MessagingBackend):
     def __init__(self, **kwargs):
         super().__init__()
         connection_parameters = pika.ConnectionParameters(**kwargs)

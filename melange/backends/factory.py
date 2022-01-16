@@ -1,12 +1,12 @@
 from typing import Any, Optional
 
-from melange.drivers.driver_manager import DriverManager
-from melange.drivers.interfaces import MessagingDriver, Topic
+from melange.backends.backend_manager import BackendManager
+from melange.backends.interfaces import MessagingBackend, Topic
 
 
 class MessagingFactory:
-    def __init__(self, driver: Optional[MessagingDriver] = None) -> None:
-        self._driver = driver or DriverManager().get_driver()
+    def __init__(self, backend: Optional[MessagingBackend] = None) -> None:
+        self._backend = backend or BackendManager().get_backend()
 
     def init_queue(
         self,
@@ -17,7 +17,7 @@ class MessagingFactory:
     ) -> None:
         topics = [self.init_topic(t) for t in topic_names_to_subscribe]
 
-        self._driver.declare_queue(
+        self._backend.declare_queue(
             queue_name,
             *topics,
             dead_letter_queue_name=dlq_name,
@@ -25,4 +25,4 @@ class MessagingFactory:
         )
 
     def init_topic(self, topic_name: str) -> Topic:
-        return self._driver.declare_topic(topic_name)
+        return self._backend.declare_topic(topic_name)

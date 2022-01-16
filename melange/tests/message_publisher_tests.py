@@ -1,6 +1,6 @@
 from unittest.mock import MagicMock
 
-from melange.messaging import DriverManager, ExchangeMessagePublisher, MessagingDriver
+from melange.messaging import BackendManager, ExchangeMessagePublisher, MessagingBackend
 
 
 class TestMessagePublisher:
@@ -8,11 +8,11 @@ class TestMessagePublisher:
         a_topic = "a_topic"
         event = {"some_content": "12345"}
 
-        driver = MagicMock(spec=MessagingDriver)
-        DriverManager().use_driver(driver=driver)
+        backend = MagicMock(spec=MessagingBackend)
+        BackendManager().use_backend(backend=backend)
 
         message_publisher = ExchangeMessagePublisher(a_topic)
         success = message_publisher.publish(event, manifest="some_event")
 
         assert success
-        driver.publish.assert_called()
+        backend.publish.assert_called()

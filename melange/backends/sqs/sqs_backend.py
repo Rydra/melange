@@ -1,47 +1,44 @@
+# type: ignore
+
 import json
-import logging
 import uuid
 from json import JSONDecodeError
-from typing import Any, Dict, Iterable, List, Optional, Tuple
+from typing import Dict, List, Tuple
 
 import boto3
 
-from melange.drivers.interfaces import Message, MessagingDriver, Queue, Topic
-
-logger = logging.getLogger(__name__)
+from melange.backends.interfaces import Message, MessagingBackend, Queue, Topic
 
 
-class ElasticMQDriver(MessagingDriver):
-    """
-    Local driver to use with elasticMQ
-    """
-
-    def __init__(self, **kwargs: Any) -> None:
+class SQSBackend(MessagingBackend):
+    def __init__(self, **kwargs):
         super().__init__()
         self.max_number_of_messages = kwargs.get("max_number_of_messages", 10)
         self.visibility_timeout = kwargs.get("visibility_timeout", 100)
         self.wait_time_seconds = kwargs.get("wait_time_seconds", 10)
 
-        self.extra_settings = dict(
-            endpoint_url=f"{kwargs.get('host', 'localhost')}:{kwargs.get('port', 9324)}",
-            region_name="elasticmq",
-            aws_secret_access_key="x",
-            aws_access_key_id="x",
-            use_ssl=False,
-        )
-
-    def declare_topic(self, topic_name: str) -> Topic:
+    def declare_topic(self, topic_name) -> Topic:
         sns = boto3.resource("sns")
         topic = sns.create_topic(Name=topic_name)
         return topic
 
-    def get_queue(self, queue_name: str) -> Queue:
-        sqs_res = boto3.resource("sqs", **self.extra_settings)
+    def get_queue(self, queue_name) -> Queue:
+        sqs_res = boto3.resource("sqs")
+
         return sqs_res.get_queue_by_name(QueueName=queue_name)
 
-    def _subscribe_to_topics(
-        self, queue: Queue, topics_to_bind: Iterable[Topic], **kwargs: Any
-    ) -> None:
+    def declare_queue(
+        self,
+        queue_name: str,
+        *topics_to_bind: Topic,
+        dead_letter_queue_name: str = None,
+        **kwargs
+    ) -> Tuple[Queue, Queue]:
+        try:
+            queue = self.get_queue(queue_name)
+        except Exception:
+            queue = self._create_queue(queue_name, content_based_deduplication="true")
+
         if topics_to_bind:
             statements = []
             for topic in topics_to_bind:
@@ -80,22 +77,7 @@ class ElasticMQDriver(MessagingDriver):
 
             queue.set_attributes(Attributes={"Policy": json.dumps(policy)})
 
-    def declare_queue(
-        self,
-        queue_name: str,
-        *topics_to_bind: Topic,
-        dead_letter_queue_name: Optional[str] = None,
-        **kwargs: Any,
-    ) -> Tuple[Queue, Optional[Queue]]:
-        try:
-            queue = self.get_queue(queue_name)
-        except Exception as e:
-            logger.exception(e)
-            queue = self._create_queue(queue_name, content_based_deduplication="true")
-
-        self._subscribe_to_topics(queue, topics_to_bind, **kwargs)
-
-        dead_letter_queue: Optional[Queue] = None
+        dead_letter_queue = None
         if dead_letter_queue_name:
             try:
                 dead_letter_queue = self.get_queue(dead_letter_queue_name)
@@ -115,8 +97,8 @@ class ElasticMQDriver(MessagingDriver):
 
         return queue, dead_letter_queue
 
-    def _create_queue(self, queue_name: str, **kwargs: Any) -> Queue:
-        sqs_res = boto3.resource("sqs", **self.extra_settings)
+    def _create_queue(self, queue_name: str, **kwargs) -> Queue:
+        sqs_res = boto3.resource("sqs")
         fifo = queue_name.endswith(".fifo")
         attributes = {}
         if fifo:
@@ -127,9 +109,7 @@ class ElasticMQDriver(MessagingDriver):
         queue = sqs_res.create_queue(QueueName=queue_name, Attributes=attributes)
         return queue
 
-    def retrieve_messages(
-        self, queue: Queue, attempt_id: Optional[str] = None
-    ) -> List[Message]:
+    def retrieve_messages(self, queue: Queue, attempt_id=None) -> List[Message]:
         kwargs = dict(
             MaxNumberOfMessages=self.max_number_of_messages,
             VisibilityTimeout=self.visibility_timeout,
@@ -150,12 +130,12 @@ class ElasticMQDriver(MessagingDriver):
     def queue_publish(
         self,
         content: str,
-        queue: Queue,
-        event_type_name: Optional[str] = None,
-        message_group_id: Optional[str] = None,
-        message_deduplication_id: Optional[str] = None,
-    ) -> None:
-        kwargs: Dict = dict(MessageBody=json.dumps({"Message": content}))
+        queue,
+        event_type_name: str = None,
+        message_group_id: str = None,
+        message_deduplication_id: str = None,
+    ):
+        kwargs = dict(MessageBody=json.dumps({"Message": content}))
 
         if event_type_name:
             kwargs["MessageAttributes"] = {
@@ -175,9 +155,9 @@ class ElasticMQDriver(MessagingDriver):
         content: str,
         topic: Topic,
         event_type_name: str,
-        extra_attributes: Optional[Dict] = None,
-    ) -> None:
-        args: Dict = dict(
+        extra_attributes: Dict = None,
+    ):
+        args = dict(
             Message=content,
             MessageAttributes={
                 "event_type": {"DataType": "String", "StringValue": event_type_name}
@@ -211,7 +191,7 @@ class ElasticMQDriver(MessagingDriver):
     def delete_topic(self, topic: Topic) -> None:
         topic.delete()
 
-    def _construct_message(self, message: Any) -> Message:
+    def _construct_message(self, message) -> Message:
         body = message.body
         manifest = ""
         try:

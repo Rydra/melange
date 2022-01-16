@@ -59,14 +59,14 @@ you want to use. Place this line in the initialization code of your application:
 
 ```python
 # If you want to use AWS
-DriverManager.instance().use_driver(driver_name='aws')
+BackendManager.instance().use_backend(driver_name='aws')
 ```
 
 ```python
 # If you want to use RabbitMQ. besides the driver_name parameter, the rest of the parameters are connection parameters
 # expressed as keyword arguments used by the pika library. Check pika documentation on the ConnectionParameters:
 # https://pika.readthedocs.io/en/0.10.0/modules/parameters.html
-DriverManager.instance().use_driver(driver_name='rabbitMQ', **connection_parameters)
+BackendManager.instance().use_backend(driver_name='rabbitMQ', **connection_parameters)
 ```
 
 This will configure Melange to use your message infrastructure as your messaging broker. Now, you are ready to work!
@@ -442,22 +442,28 @@ class MessagingDriver:
 
 Inspire yourself with the implementations of the AWSDriver and the RabbitMQDriver.
 
-After you created your own driver, you just need to tell the DriverManager to recognize your driver:
+After you created your own driver, you just need to tell the BackendManager to recognize your driver:
 
 ```python
 driver = MyDriver()
-DriverManager.instance().use_driver(driver=driver)
+BackendManager.instance().use_backend(driver=driver)
 ```
 
 Or if you want to register it into Melange and use it afterwards or create your own Melange plugin:
 
 ```python
 driver = MyDriver()
-DriverManager.instance().add_available_drivers(mydriver=MyDriver)
+BackendManager.instance().add_available_backends(mydriver=MyDriver)
 
-.... At some point later you would call:
+....At
+some
+point
+later
+you
+would
+call:
 
-DriverManager.instance().use_driver(driver_name="mydriver")
+BackendManager.instance().use_backend(driver_name="mydriver")
 ```
 
 Now Melange will use your driver as the backend message infrastructure.

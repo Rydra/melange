@@ -1,8 +1,8 @@
 import logging
 from typing import Any, Iterable, List, Optional
 
-from melange.drivers.driver_manager import DriverManager
-from melange.drivers.interfaces import Message, MessagingDriver
+from melange.backends.backend_manager import BackendManager
+from melange.backends.interfaces import Message, MessagingBackend
 from melange.event_serializer import MessageSerializer
 from melange.exchange_listener import ExchangeListener
 from melange.infrastructure.cache import Cache, DedupCache
@@ -18,19 +18,19 @@ class ExchangeMessageYielder:
         message_serializer: MessageSerializer,
         *topics_to_subscribe: str,
         dead_letter_queue_name: Optional[str] = None,
-        driver: Optional[MessagingDriver] = None,
+        backend: Optional[MessagingBackend] = None,
         **kwargs: Any
     ):
-        self._driver = driver or DriverManager().get_driver()
+        self._backend = backend or BackendManager().get_backend()
         self.message_serializer = message_serializer
         self._event_queue_name = event_queue_name
         self._topics_to_subscribe = topics_to_subscribe
         self._dead_letter_queue_name = dead_letter_queue_name
 
         self._topics = [
-            self._driver.declare_topic(t) for t in self._topics_to_subscribe
+            self._backend.declare_topic(t) for t in self._topics_to_subscribe
         ]
-        self._event_queue, self._dead_letter_queue = self._driver.declare_queue(
+        self._event_queue, self._dead_letter_queue = self._backend.declare_queue(
             self._event_queue_name,
             *self._topics,
             dead_letter_queue_name=self._dead_letter_queue_name,
@@ -38,17 +38,17 @@ class ExchangeMessageYielder:
         )
 
     def get_messages(self) -> Iterable[str]:
-        event_queue = self._driver.get_queue(self._event_queue_name)
+        event_queue = self._backend.get_queue(self._event_queue_name)
 
         while True:
-            messages = self._driver.retrieve_messages(event_queue)
+            messages = self._backend.retrieve_messages(event_queue)
 
             for message in messages:
                 if "event_type_name" in message.content:
                     yield self.message_serializer.deserialize(message.content)
 
     def acknowledge(self, message: Message) -> None:
-        self._driver.acknowledge(message)
+        self._backend.acknowledge(message)
 
 
 class ExchangeMessageConsumer:
@@ -56,11 +56,11 @@ class ExchangeMessageConsumer:
         self,
         message_serializer: MessageSerializer,
         cache: Optional[DedupCache] = None,
-        driver: Optional[MessagingDriver] = None,
+        backend: Optional[MessagingBackend] = None,
     ) -> None:
         self._exchange_listeners: List[ExchangeListener] = []
         self.message_serializer = message_serializer
-        self._driver = driver or DriverManager().get_driver()
+        self._backend = backend or BackendManager().get_backend()
         self.cache: DedupCache = cache or Cache()
 
     def subscribe(self, exchange_listener: ExchangeListener) -> None:
@@ -75,9 +75,9 @@ class ExchangeMessageConsumer:
             self._exchange_listeners.remove(exchange_listener)
 
     def consume_event(self, queue_name: str) -> None:
-        event_queue = self._driver.get_queue(queue_name)
+        event_queue = self._backend.get_queue(queue_name)
 
-        messages = self._driver.retrieve_messages(event_queue)
+        messages = self._backend.retrieve_messages(event_queue)
 
         for message in messages:
             try:
@@ -117,4 +117,4 @@ class ExchangeMessageConsumer:
                 logger.exception(e)
 
         if successful == len(subscribers):
-            self._driver.acknowledge(message)
+            self._backend.acknowledge(message)

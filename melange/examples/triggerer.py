@@ -1,7 +1,7 @@
 import os
 import uuid
 
-from melange.drivers.aws.elasticmq import ElasticMQDriver
+from melange.backends.sqs.elasticmq import ElasticMQBackend
 from melange.examples.common.serializer import PickleSerializer
 from melange.examples.payment_service.events import OrderResponse
 from melange.exchange_message_publisher import SQSPublisher
@@ -9,10 +9,10 @@ from melange.exchange_message_publisher import SQSPublisher
 if __name__ == "__main__":
     order_reponse = OrderResponse(id=str(uuid.uuid4()), reference="MYREF888888")
     serializer = PickleSerializer()
-    driver = ElasticMQDriver(
+    backend = ElasticMQBackend(
         host=os.environ.get("SQSHOST"), port=os.environ.get("SQSPORT")
     )
 
-    SQSPublisher(serializer, driver=driver).publish("payment-updates", order_reponse)
+    SQSPublisher(serializer, backend=backend).publish("payment-updates", order_reponse)
 
     print("Message sent.")

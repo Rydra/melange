@@ -1,7 +1,7 @@
 # type: ignore
 
-from melange.drivers.aws.aws_driver import AWSDriver
-from melange.drivers.driver_manager import DriverManager
-from melange.drivers.rabbitmq.rabbitmq_driver import RabbitMQDriver
+from melange.backends.backend_manager import BackendManager
+from melange.backends.rabbitmq.rabbitmq_backend import RabbitMQBackend
+from melange.backends.sqs.sqs_backend import SQSBackend
 
-DriverManager().add_available_drivers(aws=AWSDriver, rabbitMQ=RabbitMQDriver)
+BackendManager().add_available_backends(aws=SQSBackend, rabbitMQ=RabbitMQBackend)

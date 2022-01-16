@@ -8,9 +8,9 @@ from bunch import Bunch
 from hamcrest import *
 from pytest_tools import pipe, scenariostep
 
-from melange import DriverManager
-from melange.drivers import configure_exchange
-from melange.drivers.interfaces import Message, MessagingDriver
+from melange import BackendManager
+from melange.backends import configure_exchange
+from melange.backends.interfaces import Message, MessagingBackend
 from melange.event_serializer import MessageSerializer
 from melange.exchange_listener import ExchangeListener, listener
 from melange.exchange_message_consumer import ExchangeMessageConsumer
@@ -85,16 +85,16 @@ class TestMessageConsumer:
             self.subscriber = None
             self.event = None
             self.messages = None
-            self.driver = MagicMock(spec=MessagingDriver)
-            DriverManager().use_driver(driver=self.driver)
+            self.backend = MagicMock(spec=MessagingBackend)
+            BackendManager().use_backend(backend=self.backend)
 
         def given_a_queue_to_listen_with_an_event(self, event_of_type=None):
             self.messages = [self._create_message(i) for i in range(1)]
             queue = self._create_queue(self.messages)
-            self.driver.declare_queue.return_value = (queue, "")
+            self.backend.declare_queue.return_value = (queue, "")
 
             self.event = Message(uuid.uuid4(), {"event_type_name": event_of_type}, None)
-            self.driver.retrieve_messages.return_value = [self.event]
+            self.backend.retrieve_messages.return_value = [self.event]
 
             event_queue_name = "a_queue_name"
             topic_to_subscribe = "a_topic_name"
@@ -122,14 +122,14 @@ class TestMessageConsumer:
             return self
 
         def the_message_has_been_acknowledged(self):
-            self.driver.acknowledge.assert_called()
+            self.backend.acknowledge.assert_called()
 
             return self
 
         def given_an_empty_queue_to_listen(self):
             queue = self._create_queue()
-            self.driver.declare_queue = MagicMock(return_value=(queue, ""))
-            self.driver.declare_topic = MagicMock()
+            self.backend.declare_queue = MagicMock(return_value=(queue, ""))
+            self.backend.declare_topic = MagicMock()
 
             event_queue_name = "a_queue_name"
             topic_to_subscribe = "a_topic_name"
@@ -146,7 +146,7 @@ class TestMessageConsumer:
         def _create_queue(self, messages=[]):
             queue = MagicMock()
 
-            self.driver.retrieve_messages.return_value = messages
+            self.backend.retrieve_messages.return_value = messages
 
             return queue
 
@@ -167,15 +167,15 @@ class TestMessageConsumerWithAWS:
         configure_exchange("aws")
 
         def teardown():
-            driver = DriverManager().get_driver()
+            backend = BackendManager().get_backend()
             if self.exchange_consumer:
                 if self.exchange_consumer._event_queue:
-                    driver.delete_queue(self.exchange_consumer._event_queue)
+                    backend.delete_queue(self.exchange_consumer._event_queue)
                 if self.exchange_consumer._dead_letter_queue:
-                    driver.delete_queue(self.exchange_consumer._dead_letter_queue)
+                    backend.delete_queue(self.exchange_consumer._dead_letter_queue)
                 if self.exchange_consumer._topics:
                     for topic in self.exchange_consumer._topics:
-                        driver.delete_topic(topic)
+                        backend.delete_topic(topic)
 
         request.addfinalizer(teardown)
 
@@ -283,20 +283,24 @@ class TestMessageConsumerWithAWS:
 
 @pytest.fixture
 def testcontext():
-    driver = MagicMock(spec=MessagingDriver)
-    DriverManager().use_driver(driver=driver)
+    backend = MagicMock(spec=MessagingBackend)
+    BackendManager().use_backend(backend=backend)
     return Bunch(
-        message_consumer=None, subscriber=None, event=None, messages=None, driver=driver
+        message_consumer=None,
+        subscriber=None,
+        event=None,
+        messages=None,
+        backend=backend,
     )
 
 
 def given_a_queue_to_listen_with_an_event(self, event_of_type=None):
     self.messages = [self._create_message(i) for i in range(1)]
     queue = self._create_queue(self.messages)
-    self.driver.declare_queue.return_value = (queue, "")
+    self.backend.declare_queue.return_value = (queue, "")
 
     self.event = Message(uuid.uuid4(), {"event_type_name": event_of_type}, None)
-    self.driver.retrieve_messages.return_value = [self.event]
+    self.backend.retrieve_messages.return_value = [self.event]
 
     event_queue_name = "a_queue_name"
     topic_to_subscribe = "a_topic_name"
@@ -330,17 +334,17 @@ def then_the_subscriber_has_processed_the_event(self):
 
 
 def the_message_has_been_acknowledged(self):
-    self.driver.acknowledge.assert_called()
+    self.backend.acknowledge.assert_called()
 
     return self
 
 
 @scenariostep
 def given_an_empty_queue_to_listen(ctx):
-    driver = ctx.driver
-    queue = _create_queue(driver)
-    driver.declare_queue = MagicMock(return_value=(queue, ""))
-    driver.declare_topic = MagicMock()
+    backend = ctx.backend
+    queue = _create_queue(backend)
+    backend.declare_queue = MagicMock(return_value=(queue, ""))
+    backend.declare_topic = MagicMock()
 
     event_queue_name = "a_queue_name"
     topic_to_subscribe = "a_topic_name"
@@ -355,10 +359,10 @@ def then_the_subscriber_has_not_processed_any_event(ctx):
     return ctx
 
 
-def _create_queue(driver, messages=None):
+def _create_queue(backend, messages=None):
     queue = MagicMock()
 
-    driver.retrieve_messages.return_value = messages or []
+    backend.retrieve_messages.return_value = messages or []
 
     return queue
 
@@ -377,19 +381,19 @@ def when_unsubscribing_the_subscriber(self):
 class TestMessageConsumerRabbitMQ:
     def setup_method(self, m):
         self.exchange_consumer = None
-        DriverManager().use_driver(driver_name="rabbitMQ", host="localhost")
-        self.driver = DriverManager().get_driver()
+        BackendManager().use_backend(backend_name="rabbitMQ", host="localhost")
+        self.backend = BackendManager().get_backend()
 
     def teardown_method(self):
         if self.exchange_consumer._topics:
             for topic in self.exchange_consumer._topics:
-                self.driver.delete_topic(topic)
+                self.backend.delete_topic(topic)
 
         if self.exchange_consumer._event_queue:
-            self.driver.delete_queue(self.exchange_consumer._event_queue)
+            self.backend.delete_queue(self.exchange_consumer._event_queue)
 
         if self.exchange_consumer._dead_letter_queue:
-            self.driver.delete_queue(self.exchange_consumer._dead_letter_queue)
+            self.backend.delete_queue(self.exchange_consumer._dead_letter_queue)
 
     def test_consume_event_from_queue(self):
         topic_name = self._get_topic_name()

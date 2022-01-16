@@ -1,6 +1,6 @@
 from uuid import uuid4
 
-from melange.drivers.interfaces import Message, MessagingDriver
+from melange.backends.interfaces import Message, MessagingBackend
 
 
 class DumbQueue:
@@ -9,7 +9,7 @@ class DumbQueue:
         self.attributes = {}
 
 
-class InMemoryMessagingDriver(MessagingDriver):
+class InMemoryMessagingBackend(MessagingBackend):
     def __init__(self, callback=None, only_queues=None):
         super().__init__()
         self._messages = []

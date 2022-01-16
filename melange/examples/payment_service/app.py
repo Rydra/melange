@@ -1,6 +1,6 @@
 import os
 
-from melange.drivers.aws.elasticmq import ElasticMQDriver
+from melange.backends.sqs.elasticmq import ElasticMQBackend
 from melange.examples.common.serializer import PickleSerializer
 from melange.examples.payment_service.consumer import PaymentConsumer
 from melange.examples.payment_service.publisher import PaymentPublisher
@@ -11,19 +11,19 @@ from melange.exchange_message_publisher import SQSPublisher
 
 if __name__ == "__main__":
     serializer = PickleSerializer()
-    driver = ElasticMQDriver(
+    backend = ElasticMQBackend(
         host=os.environ.get("SQSHOST"), port=os.environ.get("SQSPORT")
     )
 
     exchange_consumer = ExchangeMessageConsumer(
         PickleSerializer(),
-        driver=driver,
+        backend=backend,
     )
 
     payment_consumer = PaymentConsumer(
         PaymentService(
             PaymentRepository(),
-            PaymentPublisher(SQSPublisher(serializer, driver=driver)),
+            PaymentPublisher(SQSPublisher(serializer, backend=backend)),
         )
     )
 

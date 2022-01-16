@@ -48,7 +48,7 @@ class Message:
         return self.manifest
 
 
-class MessagingDriver:
+class MessagingBackend:
     def __init__(self) -> None:
         self._finalizer = weakref.finalize(self, self.close_connection)
 
@@ -59,8 +59,8 @@ class MessagingDriver:
 
         :param topic_name: The name of the topic to create
         :return: An object that represents a topic. The type of the object
-        is only relevant inside the context of the driver, so what you
-        return as a topic will be passed in next calls to the driver
+        is only relevant inside the context of the backend, so what you
+        return as a topic will be passed in next calls to the backend
         where a topic is required
         """
         raise NotImplementedError
@@ -87,8 +87,8 @@ class MessagingDriver:
         create and associate to the queue "queue_name"
         :return: A tuple, with the first element being the object queue
         created, and the second element is the dead letter queue object.
-        The type of the queue object is only relevant inside the context of the driver, so what you
-        return as a queue will be passed in next calls to the driver
+        The type of the queue object is only relevant inside the context of the backend, so what you
+        return as a queue will be passed in next calls to the backend
         where a queue is required
         """
         raise NotImplementedError
@@ -138,7 +138,7 @@ class MessagingDriver:
     def close_connection(self) -> None:
         """
         Override this function if you want to use some finalizer code
-         to shutdown your driver in a clean way
+         to shutdown your backend in a clean way
         """
         pass
 

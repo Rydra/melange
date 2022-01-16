@@ -13,7 +13,7 @@ class MessageSerializer(Generic[T]):
     def manifest(self, data: T) -> str:
         return ""
 
-    def deserialize(self, data: str, manifest: Optional[str] = None) -> str:
+    def deserialize(self, data: str, manifest: Optional[str] = None) -> T:
         pass
 
     def serialize(self, data: T) -> str:
@@ -27,7 +27,7 @@ class JsonSQSSerializer(MessageSerializer[Dict]):
     def manifest(self, data: Dict) -> str:
         return "json"
 
-    def deserialize(self, serialized_data: str, manifest: Optional[str] = None) -> str:
+    def deserialize(self, serialized_data: str, manifest: Optional[str] = None) -> Dict:
         data = json.loads(serialized_data)
         return data
 
