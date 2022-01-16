@@ -56,10 +56,12 @@ class SimpleConsumer(Consumer):
         message_serializer: MessageSerializer,
         cache: Optional[DedupCache] = None,
         backend: Optional[MessagingBackend] = None,
+        always_ack: bool = False,
     ):
         self.message_serializer = message_serializer
         self._backend = backend or BackendManager().get_backend()
         self.cache: DedupCache = cache or Cache()
+        self.always_ack = always_ack
 
     def consume_loop(
         self,
@@ -109,5 +111,5 @@ class SimpleConsumer(Consumer):
         except Exception as e:
             logger.exception(e)
 
-        if successful:
+        if self.always_ack or successful:
             self._backend.acknowledge(message)

@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Optional
+from typing import Any, Optional
 
 from simple_cqrs.domain_event import DomainEvent
 
@@ -20,8 +20,9 @@ class OrderStatus(DomainEvent):
         payment_id: str,
         status: str,
         occurred_on: Optional[datetime] = None,
+        **kwargs: Any
     ) -> None:
-        super().__init__(occurred_on)
+        super().__init__(occurred_on, **kwargs)
         self.order_id = order_id
         self.payment_id = payment_id
         self.status = status
