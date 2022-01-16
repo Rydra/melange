@@ -1,0 +1,1003 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      <link rel="icon" href="assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.1.7">
+    
+    
+      
+        <title>Melange</title>
+      
+    
+    
+      <link rel="stylesheet" href="assets/stylesheets/main.cd566b2a.min.css">
+      
+        
+        <link rel="stylesheet" href="assets/stylesheets/palette.e6a45f82.min.css">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL(".",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#melange" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="." title="Melange" class="md-header__button md-logo" aria-label="Melange" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Melange
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Home
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="." title="Melange" class="md-nav__button md-logo" aria-label="Melange" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    Melange
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Home
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="." class="md-nav__link md-nav__link--active">
+        Home
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#installing" class="md-nav__link">
+    Installing
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#getting-started" class="md-nav__link">
+    Getting started
+  </a>
+  
+    <nav class="md-nav" aria-label="Getting started">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#exchange-message-publisher" class="md-nav__link">
+    Exchange Message Publisher
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#exchange-message-consumer" class="md-nav__link">
+    Exchange Message Consumer
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#advanced-usage" class="md-nav__link">
+    Advanced usage
+  </a>
+  
+    <nav class="md-nav" aria-label="Advanced usage">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#stronger-typing" class="md-nav__link">
+    "Stronger" typing
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#threaded-exchange-message-consumer" class="md-nav__link">
+    Threaded Exchange Message Consumer
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#event-message-de-duplication" class="md-nav__link">
+    Event Message de-duplication
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#domain-driven-design" class="md-nav__link">
+    Domain-Driven Design
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adding-your-own-messaging-infrastructure" class="md-nav__link">
+    Adding your own messaging infrastructure
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="examples/" class="md-nav__link">
+        Examples
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          Code Reference
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Code Reference" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Code Reference
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="api-reference/" class="md-nav__link">
+        API reference
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#installing" class="md-nav__link">
+    Installing
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#getting-started" class="md-nav__link">
+    Getting started
+  </a>
+  
+    <nav class="md-nav" aria-label="Getting started">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#exchange-message-publisher" class="md-nav__link">
+    Exchange Message Publisher
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#exchange-message-consumer" class="md-nav__link">
+    Exchange Message Consumer
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#advanced-usage" class="md-nav__link">
+    Advanced usage
+  </a>
+  
+    <nav class="md-nav" aria-label="Advanced usage">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#stronger-typing" class="md-nav__link">
+    "Stronger" typing
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#threaded-exchange-message-consumer" class="md-nav__link">
+    Threaded Exchange Message Consumer
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#event-message-de-duplication" class="md-nav__link">
+    Event Message de-duplication
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#domain-driven-design" class="md-nav__link">
+    Domain-Driven Design
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adding-your-own-messaging-infrastructure" class="md-nav__link">
+    Adding your own messaging infrastructure
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+
+<h1 id="melange">Melange</h1>
+<p>TODO: Update the documentation to match the latest version 7.0.0</p>
+<p><img alt="melange logo" src="img/melange_logo.png" /></p>
+<p>Motto: The spice must flow! (or in this case, the events)</p>
+<p><strong>melange</strong> is a python messaging library for an easy inter-communication in distributed and 
+microservices architectures. It offers a flexible, easy-to-use library to create distributed 
+event-driven architectures using your preferred messaging infrastructure mechanism as a backend message 
+broker to dispatch messages and achieve
+inter-communication among your microservices and other components.</p>
+<p>Its main selling point is the capability to greatly decouple 
+and integrate REST apis, AWS Lambda functions and console applications, emails, cellphones... The
+interface this library offers is very clean and tries to tightly follow the best practices from Vaughn Vernon's book
+<a href="https://www.amazon.es/Implementing-Domain-Driven-Design-Vaughn-Vernon/dp/0321834577">Implementing Domain-Driven Design</a>
+as well as the recommended design patterns when dealing with messaging on distributed architectures.</p>
+<p>Out of the box Melange supports the following message brokers as backend infrastructure:</p>
+<ul>
+<li>Amazon's AWS SNS (Simple Notification Service) + SQS (Simple Queue Service).</li>
+<li>RabbitMQ</li>
+</ul>
+<p>As time goes by more brokers will be added, but if you really want to use
+the simple and attractive interface Melange offers and your backend infrastructure is not
+listed (e.g. Kafka, Kinesis) you can implement your own driver. Read the section <code>Adding your own messaging infrastructure</code>
+for more information.</p>
+<p>In addition, Melange supports event driven architectures in single-process, non-distributed, memory-based applications (Console applications, background workers)
+with the aid of the <code>DomainEventBus</code> (see <code>Domain-Driven Design</code> section). The <code>DomainEventBus</code> is great if you really 
+want to have a clean event-driven architecture with Domain Events, and its idea has been grabbed from Vaughn Vernon and his must-read book 
+Implementing Domain-Driven Design (look at <a href="http://dddcommunity.org/library/vernon_2011/">part 3 of these series</a> if you want a quick look,
+ or read this excellent article from <a href="http://udidahan.com/2009/06/14/domain-events-salvation/">Udi Dahan, founder of NServiceBus</a>).</p>
+<h2 id="installing">Installing</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>pip install melange
+</code></pre></div>
+<h2 id="getting-started">Getting started</h2>
+<p>Event-driven architectures work with the Publish/Subscribe pattern to achieve decoupling.
+With this pattern, publishers and subscribers do not know about each other while they can exchange
+information among them. In order to achieve this and communicate effectively a 
+mediator, or better said, a <strong>Message Broker</strong> is required to transfer messages from
+publishers to subscribers. Clients can subscribe this broker, waiting for events they are interested in,
+or publish messages so that the broker can distribute these messages appropriately.</p>
+<p>So, you will need two things to make this entire scene work: an <strong>Exchange Message Publisher</strong> and
+an <strong>Exchange Message Consumer</strong> to send and receive messages respectively.</p>
+<p>But before getting your feet wet into this realm, first things first. You need to tell Melange which driver backend
+you want to use. Place this line in the initialization code of your application:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># If you want to use AWS</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="n">BackendManager</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span><span class="o">.</span><span class="n">use_backend</span><span class="p">(</span><span class="n">driver_name</span><span class="o">=</span><span class="s1">&#39;aws&#39;</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># If you want to use RabbitMQ. besides the driver_name parameter, the rest of the parameters are connection parameters</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="c1"># expressed as keyword arguments used by the pika library. Check pika documentation on the ConnectionParameters:</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="c1"># https://pika.readthedocs.io/en/0.10.0/modules/parameters.html</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="n">BackendManager</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span><span class="o">.</span><span class="n">use_backend</span><span class="p">(</span><span class="n">driver_name</span><span class="o">=</span><span class="s1">&#39;rabbitMQ&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">connection_parameters</span><span class="p">)</span>
+</code></pre></div>
+<p>This will configure Melange to use your message infrastructure as your messaging broker. Now, you are ready to work!</p>
+<p>NOTES: For Melange to properly with AWS work you'll require an AWS account configured in your system 
+(environment variables, .aws/credentials file...) and you must have SNS + SQS
+permissions to create queues and topics, publish messages and perform subcriptions. 
+Personally I prefer to use environment variables. These are the AWS environment variables you would need if
+you want to go with the environment variables route:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a># Extracted from http://docs.aws.amazon.com/cli/latest/userguide/cli-environment.html
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>AWS_ACCESS_KEY_ID – AWS access key.
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>AWS_SECRET_ACCESS_KEY – AWS secret key. Access and secret key variables override credentials stored in credential and config files.
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>AWS_SESSION_TOKEN – Specify a session token if you are using temporary security credentials.
+</code></pre></div>
+<h3 id="exchange-message-publisher">Exchange Message Publisher</h3>
+<p>The simplest application that can work with Melange is creating a Publisher which will send messages:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="n">message_publisher</span> <span class="o">=</span> <span class="n">ExchangeMessagePublisher</span><span class="p">(</span><span class="n">topic</span><span class="o">=</span><span class="s1">&#39;some-topic-name&#39;</span><span class="p">)</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>    <span class="s1">&#39;event_type_name&#39;</span><span class="p">:</span> <span class="s1">&#39;ProductAdded&#39;</span><span class="p">,</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>    <span class="s1">&#39;product_id&#39;</span><span class="p">:</span> <span class="mi">12345</span><span class="p">,</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>    <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;Coolers&#39;</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="p">}</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="n">message_publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="c1"># NOTE: You can as well call publish with `message_publisher.publish(data, event_type_name=&#39;ProductAdded&#39;)`</span>
+</code></pre></div>
+<p>This piece of code will serialize the dictionary as JSON and send it to SNS to the topic <code>some-topic-name</code>.
+If the topic does not exist, it will be created (though no one will receive the message...).
+After that, all listeners subscribed to this topic will receive the message for
+further processing (be an AWS Lambda, an email address, an Exchange Message Consumer, or any other
+compatible Amazon SNS subscriber).</p>
+<p>NOTE: The <code>event_type_name</code> property must exist in the dictionary. If it doesn't,
+you must supply the event_type_name through the <code>event_type_name</code> parameter from
+the publish method</p>
+<h3 id="exchange-message-consumer">Exchange Message Consumer</h3>
+<p>After that, you may have in another separate project (be it a simple console application,
+django worker, another thread, etc) an <code>Exchange Message Consumer</code> to receive these messages. And that consumer
+will require, at least, one listener to be of any use.</p>
+<p>The simplest implementation for that would be the following one, and you could place it in
+the initialization of your application:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="k">class</span> <span class="nc">SampleListener</span><span class="p">(</span><span class="n">Consumer</span><span class="p">):</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>    <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;I&#39;ve received information about the product </span><span class="si">{</span><span class="n">event</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>    <span class="k">def</span> <span class="nf">listens_to</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>        <span class="k">return</span> <span class="p">[</span> <span class="s1">&#39;ProductAdded&#39;</span> <span class="p">]</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="n">message_consumer</span> <span class="o">=</span> <span class="n">ExchangeMessageDispatcher</span><span class="p">(</span><span class="n">event_queue_name</span><span class="o">=</span><span class="s1">&#39;my-queue&#39;</span><span class="p">,</span> <span class="n">topic_to_subscribe</span><span class="o">=</span><span class="s1">&#39;some-topic-name&#39;</span><span class="p">)</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="n">message_consumer</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="n">SampleListener</span><span class="p">())</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a>    <span class="n">message_consumer</span><span class="o">.</span><span class="n">consume_event</span><span class="p">()</span>
+</code></pre></div>
+<p>So, what's going on here? We've created a <strong>Listener</strong> that is interested in events of type
+<code>ProductAdded</code> and will react to those events when received from the Message Broker. Override
+<code>process</code> to provide behavior, and override <code>listens_to</code> to provide an array of event names you are
+interested in.</p>
+<p>We will attach this listener to a <strong>queue</strong>. A queue is a place where the messages received from
+SNS will be stored and available for the consumer application at his own time. To do so, we first create
+an <code>ExchangeMessageDispatcher</code> with a queue name and a topic. If the queue does not exist, it will create
+an <strong>SQS queue</strong> and subscribe it to the topic. </p>
+<p>Afterwards, you can subscribe an instance of your listener to the message consumer. Finally, you
+create a loop that will poll for new events and invoke the <code>process</code> method of your Consumer
+for each event of the expected type it receives.</p>
+<h2 id="advanced-usage">Advanced usage</h2>
+<p>What you've seen so far is the simplest application of Melange to easily create a simple Publish/Subscribe
+architecture. But you can go further than that and create a robust distributed application that fits
+with other architecture patterns like <strong>Hexagonal Architecture</strong>, <strong>Clean Architecture</strong> or <strong>CQRS</strong>, properly
+separating responsibilities.</p>
+<h3 id="stronger-typing">"Stronger" typing</h3>
+<p>In the examples provided above, you were passing plain dictionaries, and the framework, through the
+<code>event_type_name</code> property could propertly distribute its message to the proper listeners. However
+some people (myself included) sometimes prefer to work with objects instead of dictionaries if possible.
+In that case you could declare your own <code>EventMessage</code> classes and use them with the publish/subscribe
+methods. The example above would be rewritten like this with this approach:</p>
+<p>Publisher:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># In some file you would implement these classes</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="k">class</span> <span class="nc">ProductAddedSchema</span><span class="p">(</span><span class="n">EventSchema</span><span class="p">):</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>    <span class="sd">&quot;&quot;&quot; This is a marshmallow schema! &quot;&quot;&quot;</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>    <span class="n">product_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Int</span><span class="p">()</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>    <span class="n">name</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Str</span><span class="p">()</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>    <span class="nd">@post_load</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>    <span class="k">def</span> <span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>        <span class="k">return</span> <span class="n">ProductAdded</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;product_id&#39;</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;occurred_on&#39;</span><span class="p">])</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="k">class</span> <span class="nc">ProductAdded</span><span class="p">(</span><span class="n">EventMessage</span><span class="p">):</span>
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a>    <span class="n">event_type_name</span> <span class="o">=</span> <span class="s1">&#39;ProductAdded&#39;</span>
+<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a>
+<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">product_id</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">occurred_on</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">product_id</span> <span class="o">=</span> <span class="n">product_id</span>
+<a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+<a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a>
+<a id="__codelineno-6-18" name="__codelineno-6-18" href="#__codelineno-6-18"></a><span class="c1"># In you initialization code you would call the following line:</span>
+<a id="__codelineno-6-19" name="__codelineno-6-19" href="#__codelineno-6-19"></a><span class="n">EventSerializer</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">ProductAddedSchema</span><span class="p">)</span>
+<a id="__codelineno-6-20" name="__codelineno-6-20" href="#__codelineno-6-20"></a>
+<a id="__codelineno-6-21" name="__codelineno-6-21" href="#__codelineno-6-21"></a><span class="n">message_publisher</span> <span class="o">=</span> <span class="n">ExchangeMessagePublisher</span><span class="p">(</span><span class="n">topic</span><span class="o">=</span><span class="s1">&#39;some-topic-name&#39;</span><span class="p">)</span>
+<a id="__codelineno-6-22" name="__codelineno-6-22" href="#__codelineno-6-22"></a><span class="n">message_publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">ProductAdded</span><span class="p">(</span><span class="n">product_id</span><span class="o">=</span><span class="mi">12345</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Coolers&#39;</span><span class="p">))</span>
+</code></pre></div></p>
+<p>Consumer:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># In some file you would implement these classes</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="c1"># Bear in mind that these definition are placed in</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="c1"># another project, and you could define a different</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="c1"># ProductAdded event (e.g. without the name property,</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="c1"># maybe because you are not interested on that)</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="k">class</span> <span class="nc">ProductAddedSchema</span><span class="p">(</span><span class="n">EventSchema</span><span class="p">):</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>    <span class="sd">&quot;&quot;&quot; This is a marshmallow schema! &quot;&quot;&quot;</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>    <span class="n">product_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Int</span><span class="p">()</span>
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>    <span class="n">name</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Str</span><span class="p">()</span>
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>    <span class="nd">@post_load</span>
+<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>    <span class="k">def</span> <span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a>        <span class="k">return</span> <span class="n">ProductAdded</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;product_id&#39;</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;occurred_on&#39;</span><span class="p">])</span>
+<a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a>
+<a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a><span class="k">class</span> <span class="nc">ProductAdded</span><span class="p">(</span><span class="n">EventMessage</span><span class="p">):</span>
+<a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a>    <span class="n">event_type_name</span> <span class="o">=</span> <span class="s1">&#39;ProductAdded&#39;</span>
+<a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a>
+<a id="__codelineno-7-18" name="__codelineno-7-18" href="#__codelineno-7-18"></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">product_id</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">occurred_on</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<a id="__codelineno-7-19" name="__codelineno-7-19" href="#__codelineno-7-19"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">product_id</span> <span class="o">=</span> <span class="n">product_id</span>
+<a id="__codelineno-7-20" name="__codelineno-7-20" href="#__codelineno-7-20"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+<a id="__codelineno-7-21" name="__codelineno-7-21" href="#__codelineno-7-21"></a>
+<a id="__codelineno-7-22" name="__codelineno-7-22" href="#__codelineno-7-22"></a><span class="k">class</span> <span class="nc">SampleListener</span><span class="p">(</span><span class="n">Consumer</span><span class="p">):</span>
+<a id="__codelineno-7-23" name="__codelineno-7-23" href="#__codelineno-7-23"></a>
+<a id="__codelineno-7-24" name="__codelineno-7-24" href="#__codelineno-7-24"></a>    <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<a id="__codelineno-7-25" name="__codelineno-7-25" href="#__codelineno-7-25"></a>        <span class="c1"># Note that I&#39;m not accessing event properties by key, but as a regular object.</span>
+<a id="__codelineno-7-26" name="__codelineno-7-26" href="#__codelineno-7-26"></a>        <span class="c1"># In fact event is of type ProductAdded, and this is possible thanks to marshmallow</span>
+<a id="__codelineno-7-27" name="__codelineno-7-27" href="#__codelineno-7-27"></a>        <span class="c1"># post_load hook. If you don&#39;t add this hook, event would be again a dictionary</span>
+<a id="__codelineno-7-28" name="__codelineno-7-28" href="#__codelineno-7-28"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;I&#39;ve received information about the product </span><span class="si">{</span><span class="n">event</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-7-29" name="__codelineno-7-29" href="#__codelineno-7-29"></a>
+<a id="__codelineno-7-30" name="__codelineno-7-30" href="#__codelineno-7-30"></a>    <span class="k">def</span> <span class="nf">listens_to</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<a id="__codelineno-7-31" name="__codelineno-7-31" href="#__codelineno-7-31"></a>        <span class="k">return</span> <span class="p">[</span> <span class="s1">&#39;ProductAdded&#39;</span> <span class="p">]</span>
+<a id="__codelineno-7-32" name="__codelineno-7-32" href="#__codelineno-7-32"></a>
+<a id="__codelineno-7-33" name="__codelineno-7-33" href="#__codelineno-7-33"></a><span class="c1"># In you initialization code you would call the following line:</span>
+<a id="__codelineno-7-34" name="__codelineno-7-34" href="#__codelineno-7-34"></a><span class="n">EventSerializer</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">ProductAddedSchema</span><span class="p">)</span>
+<a id="__codelineno-7-35" name="__codelineno-7-35" href="#__codelineno-7-35"></a>
+<a id="__codelineno-7-36" name="__codelineno-7-36" href="#__codelineno-7-36"></a><span class="n">message_consumer</span> <span class="o">=</span> <span class="n">ExchangeMessageDispatcher</span><span class="p">(</span><span class="n">event_queue_name</span><span class="o">=</span><span class="s1">&#39;my-queue&#39;</span><span class="p">,</span> <span class="n">topic_to_subscribe</span><span class="o">=</span><span class="s1">&#39;some-topic-name&#39;</span><span class="p">)</span>
+<a id="__codelineno-7-37" name="__codelineno-7-37" href="#__codelineno-7-37"></a><span class="n">message_consumer</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="n">SampleListener</span><span class="p">())</span>
+<a id="__codelineno-7-38" name="__codelineno-7-38" href="#__codelineno-7-38"></a><span class="c1"># You can subscribe as many listeners as you want</span>
+<a id="__codelineno-7-39" name="__codelineno-7-39" href="#__codelineno-7-39"></a>
+<a id="__codelineno-7-40" name="__codelineno-7-40" href="#__codelineno-7-40"></a><span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+<a id="__codelineno-7-41" name="__codelineno-7-41" href="#__codelineno-7-41"></a>    <span class="n">message_consumer</span><span class="o">.</span><span class="n">consume_event</span><span class="p">()</span>
+</code></pre></div></p>
+<p>Note the <code>Schema</code> classes. These are <a href="https://marshmallow.readthedocs.io/en/latest/">marshmallow</a> schemas,
+and they are used by the <code>EventSerializer</code> to serialize the <code>EventMessage</code> objects from/to JSON when publishing
+or receiving messages. Then in your initialization code you must register the Schema in order to work with Melange.
+The Schemas and their events are linked by naming convention, so a <code>ProductAdded</code> event will
+need a <code>ProductAddedSchema</code> schema, a <code>UserRegistered</code> event will require a <code>UserRegisteredSchema</code> schema...
+you get the idea.</p>
+<p>Note as well the <code>occurred_on</code> property. It's a datetime fields that tells you when the event did
+happen. This may be of use to you to guarantee correct ordering of message arrival on the Listeners.</p>
+<p>It's a bit more complicated to implement, but the resulting code is cleaner and more readable
+to another developer, and the intent, the event type and the property types for the event are clear 
+and can be used as contract documentation for your listeners. Up to you and your needs/feelings.</p>
+<h3 id="threaded-exchange-message-consumer">Threaded Exchange Message Consumer</h3>
+<p>The <code>ThreadedExchangeMessageConsumer</code> allows you to create a consumer that will poll the message queue
+on a separate thread. The <code>ThreadedExchangeMessageConsumer</code> inherits from python <code>Thread</code> class, so
+you can use them for your threading purposes.</p>
+<p>The consumer example above would be rewritten like this:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="k">class</span> <span class="nc">SampleListener</span><span class="p">(</span><span class="n">Consumer</span><span class="p">):</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>    <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;I&#39;ve received information about the product </span><span class="si">{</span><span class="n">event</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>    <span class="k">def</span> <span class="nf">listens_to</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>        <span class="k">return</span> <span class="p">[</span> <span class="s1">&#39;ProductAdded&#39;</span> <span class="p">]</span>
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="n">message_consumer</span> <span class="o">=</span> <span class="n">ThreadedExchangeMessageConsumer</span><span class="p">(</span><span class="n">queue</span><span class="o">=</span><span class="s1">&#39;my-queue&#39;</span><span class="p">,</span> <span class="n">topic</span><span class="o">=</span><span class="s1">&#39;some-topic-name&#39;</span><span class="p">)</span>
+<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="n">message_consumer</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="n">SampleListener</span><span class="p">())</span>
+<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a>
+<a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a><span class="n">message_consumer</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+<a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a>
+<a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;You can do other stuff from here, the consumer will poll events and call subscribers&#39;</span><span class="p">)</span>
+<a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;from a separate thread&#39;</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="event-message-de-duplication">Event Message de-duplication</h3>
+<p>Distributed architectures are hard, complex and come with a good deal of burdens, but they are required to achieve levels of scalability
+and isolation harder to achieve on monolithic architectures. One of this issues is the possibility of
+of the same message being received twice by the listeners. Network failures, application crashes, etc...
+can cause this issue which, if not though or left undealt can cause your system to be out of sync and
+run in an inconsistent state. This is why you need to take measures.</p>
+<p>One of this measures is to, simply, write your listeners to be <em>idempotent</em>. This means that it does not
+matter how many times a listener is called, the result will be the same and it won't impact or leave
+the system into an inconsistent state.</p>
+<p>However, sometimes writing idempotent code is just not possible. You require <strong>message deduplication</strong> to
+account for this and ensure that a message won't be sent twice. You could use Amazon SQS FIFO Queues which
+they say they provide this message deduplication, though not only FIFO queues are more expensive than
+standard ones, <a href="https://dzone.com/articles/fifo-exactly-once-and-other-costs">but exactly-once delivery is just impossible</a>.
+In Melange we have accounted for this with a <em>Redis cache</em> that will control that no message is delivered twice.</p>
+<p>In order for this to work you have to provide the following environment variables as configuration
+so that Melange can connect to your Redis database:</p>
+<table>
+<thead>
+<tr>
+<th>ENVIRONMENT VARIABLE NAME</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CACHE_REDIS_HOST</td>
+<td>localhost</td>
+<td>The host of your Redis</td>
+</tr>
+<tr>
+<td>CACHE_REDIS_PORT</td>
+<td>6379</td>
+<td>The port of your Redis</td>
+</tr>
+<tr>
+<td>CACHE_REDIS_DB</td>
+<td>0</td>
+<td>The DB to use for your Redis</td>
+</tr>
+<tr>
+<td>CACHE_REDIS_PASSWORD</td>
+<td></td>
+<td>The password of your Redis</td>
+</tr>
+<tr>
+<td>CACHE_NAMESPACE</td>
+<td>SimpleCache</td>
+<td>You can provide a namespace so that values created by Melange do not collide with each other</td>
+</tr>
+</tbody>
+</table>
+<p>If Melange is unable to connect to your Redis it will function normally but you won't enjoy the
+benefits of ensuring message deduplication, which may lead your distributed application in an inconsitent
+state. You're warned :).</p>
+<h3 id="domain-driven-design">Domain-Driven Design</h3>
+<p>In his book "Implementing Domain-Driven Design", in Chapter 8 when talking about Domain Events describes
+an implementation of a <code>Domain Event Publisher</code>. Domain Events are part of the ubiquitous language and
+part of your Domain, and your domain should be abstracted from implementation details like your messaging
+framework. This is why I decided to integrate here a <code>DomainEventBus</code>.</p>
+<p>The <code>DomainEventBus</code> is intended to be used inside your Domain Model as the mecanism to publish
+Domain Events and forward them to interested parties. DO NOT confuse this concept of Bus with 
+Publish/Subscribe to a Message Broker like RabbitMQ or Amazon SNS+SQS. This bus lives in the same
+thread as the entity or domain service that implements your Domain Model.</p>
+<p>An example of use:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="k">class</span> <span class="nc">MySubscriber</span><span class="p">(</span><span class="n">DomainSubscriber</span><span class="p">):</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>    <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>        <span class="nb">print</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">event</span><span class="o">.</span><span class="n">product_id</span><span class="si">}{</span><span class="n">event</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>    <span class="k">def</span> <span class="nf">listens_to</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>        <span class="k">return</span> <span class="p">[</span> <span class="n">ProductAddedDomainEvent</span> <span class="p">]</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a><span class="n">DomainEventBus</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span> <span class="c1"># Remember to always reset the bus prior to usage in the current thread</span>
+<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a>
+<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a><span class="n">DomainEventBus</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="n">MySubscriber</span><span class="p">())</span>
+<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a>
+<a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a><span class="c1"># ... inside your business logic at some point ...</span>
+<a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a>
+<a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a><span class="n">product_repository</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">my_product</span><span class="p">)</span>
+<a id="__codelineno-9-16" name="__codelineno-9-16" href="#__codelineno-9-16"></a><span class="n">DomainEventBus</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">ProductAddedDomainEvent</span><span class="p">(</span><span class="n">my_product</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">my_product</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+</code></pre></div>
+<p>If you wanna learn more about how to do clean architectures and domain well isolated from
+your technology stack I advise, again, to read <em>Implementing Domain-Driven Design</em> from Vaughn Vernon
+and <em>Clean Architecture</em> from Uncle Bob</p>
+<h3 id="adding-your-own-messaging-infrastructure">Adding your own messaging infrastructure</h3>
+<p>You can implement your own driver to use with Melange if you wish so and easily plug it in the library. You just need to
+create a driver class and either add it to the list of available drivers or directly use it.</p>
+<p>To create the driver class, you need to inherit from <code>MessagingDriver</code> and override all the methods from this
+class. The documentation of this class explains very well what should these methods accepts as
+parameters and return:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="k">class</span> <span class="nc">MessagingDriver</span><span class="p">:</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_finalizer</span> <span class="o">=</span> <span class="n">weakref</span><span class="o">.</span><span class="n">finalize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">close_connection</span><span class="p">)</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>    <span class="k">def</span> <span class="nf">declare_topic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">topic_name</span><span class="p">):</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>        <span class="sd">&quot;&quot;&quot;</span>
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="sd">        Declares a topic exchange with the name &quot;topic name&quot; and</span>
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="sd">        returns an object that represent the topic</span>
+<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a>
+<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a><span class="sd">        :param topic_name: The name of the topic to create</span>
+<a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a><span class="sd">        :return: An object that represents a topic. The type of the object</span>
+<a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a><span class="sd">        is only relevant inside the context of the driver, so what you</span>
+<a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a><span class="sd">        return as a topic will be passed in next calls to the driver</span>
+<a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a><span class="sd">        where a topic is required</span>
+<a id="__codelineno-10-15" name="__codelineno-10-15" href="#__codelineno-10-15"></a><span class="sd">        &quot;&quot;&quot;</span>
+<a id="__codelineno-10-16" name="__codelineno-10-16" href="#__codelineno-10-16"></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+<a id="__codelineno-10-17" name="__codelineno-10-17" href="#__codelineno-10-17"></a>
+<a id="__codelineno-10-18" name="__codelineno-10-18" href="#__codelineno-10-18"></a>    <span class="k">def</span> <span class="nf">declare_queue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">queue_name</span><span class="p">,</span> <span class="n">topic_to_bind</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dead_letter_queue_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<a id="__codelineno-10-19" name="__codelineno-10-19" href="#__codelineno-10-19"></a>        <span class="sd">&quot;&quot;&quot;</span>
+<a id="__codelineno-10-20" name="__codelineno-10-20" href="#__codelineno-10-20"></a><span class="sd">        Declares a queue with the name &quot;queue_name&quot;. Optionally, this</span>
+<a id="__codelineno-10-21" name="__codelineno-10-21" href="#__codelineno-10-21"></a><span class="sd">         queue may be binded to the topic &quot;topic_to_bind&quot; and associated</span>
+<a id="__codelineno-10-22" name="__codelineno-10-22" href="#__codelineno-10-22"></a><span class="sd">         to a dead_letter_queue &quot;dead_letter_queue_name&quot; where messages that</span>
+<a id="__codelineno-10-23" name="__codelineno-10-23" href="#__codelineno-10-23"></a><span class="sd">         were unable to deliver will be placed.</span>
+<a id="__codelineno-10-24" name="__codelineno-10-24" href="#__codelineno-10-24"></a>
+<a id="__codelineno-10-25" name="__codelineno-10-25" href="#__codelineno-10-25"></a><span class="sd">        :param queue_name: The name of the queue to create</span>
+<a id="__codelineno-10-26" name="__codelineno-10-26" href="#__codelineno-10-26"></a><span class="sd">        :param topic_to_bind: The topic object where you will bind your queue</span>
+<a id="__codelineno-10-27" name="__codelineno-10-27" href="#__codelineno-10-27"></a><span class="sd">        :param dead_letter_queue_name: The name of the dead letter queue to</span>
+<a id="__codelineno-10-28" name="__codelineno-10-28" href="#__codelineno-10-28"></a><span class="sd">        create and associate to the queue &quot;queue_name&quot;</span>
+<a id="__codelineno-10-29" name="__codelineno-10-29" href="#__codelineno-10-29"></a><span class="sd">        :return: A tuple, with the first element being the object queue</span>
+<a id="__codelineno-10-30" name="__codelineno-10-30" href="#__codelineno-10-30"></a><span class="sd">        created, and the second element is the dead letter queue object.</span>
+<a id="__codelineno-10-31" name="__codelineno-10-31" href="#__codelineno-10-31"></a><span class="sd">        The type of the queue object is only relevant inside the context of the driver, so what you</span>
+<a id="__codelineno-10-32" name="__codelineno-10-32" href="#__codelineno-10-32"></a><span class="sd">        return as a queue will be passed in next calls to the driver</span>
+<a id="__codelineno-10-33" name="__codelineno-10-33" href="#__codelineno-10-33"></a><span class="sd">        where a queue is required</span>
+<a id="__codelineno-10-34" name="__codelineno-10-34" href="#__codelineno-10-34"></a><span class="sd">        &quot;&quot;&quot;</span>
+<a id="__codelineno-10-35" name="__codelineno-10-35" href="#__codelineno-10-35"></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+<a id="__codelineno-10-36" name="__codelineno-10-36" href="#__codelineno-10-36"></a>
+<a id="__codelineno-10-37" name="__codelineno-10-37" href="#__codelineno-10-37"></a>    <span class="k">def</span> <span class="nf">retrieve_messages</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">queue</span><span class="p">):</span>
+<a id="__codelineno-10-38" name="__codelineno-10-38" href="#__codelineno-10-38"></a>        <span class="sd">&quot;&quot;&quot;</span>
+<a id="__codelineno-10-39" name="__codelineno-10-39" href="#__codelineno-10-39"></a><span class="sd">        Returns a list of messages (instances of Message type) that have</span>
+<a id="__codelineno-10-40" name="__codelineno-10-40" href="#__codelineno-10-40"></a><span class="sd">        been received from the queue.</span>
+<a id="__codelineno-10-41" name="__codelineno-10-41" href="#__codelineno-10-41"></a>
+<a id="__codelineno-10-42" name="__codelineno-10-42" href="#__codelineno-10-42"></a><span class="sd">        :param queue: queue to poll</span>
+<a id="__codelineno-10-43" name="__codelineno-10-43" href="#__codelineno-10-43"></a><span class="sd">        :return: a list of messages to process</span>
+<a id="__codelineno-10-44" name="__codelineno-10-44" href="#__codelineno-10-44"></a><span class="sd">        &quot;&quot;&quot;</span>
+<a id="__codelineno-10-45" name="__codelineno-10-45" href="#__codelineno-10-45"></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+<a id="__codelineno-10-46" name="__codelineno-10-46" href="#__codelineno-10-46"></a>
+<a id="__codelineno-10-47" name="__codelineno-10-47" href="#__codelineno-10-47"></a>    <span class="k">def</span> <span class="nf">publish</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">,</span> <span class="n">topic</span><span class="p">):</span>
+<a id="__codelineno-10-48" name="__codelineno-10-48" href="#__codelineno-10-48"></a>        <span class="sd">&quot;&quot;&quot;</span>
+<a id="__codelineno-10-49" name="__codelineno-10-49" href="#__codelineno-10-49"></a><span class="sd">        Publishes the content to the topic. The content must be a</span>
+<a id="__codelineno-10-50" name="__codelineno-10-50" href="#__codelineno-10-50"></a><span class="sd">        string (which is the json representation of an event)</span>
+<a id="__codelineno-10-51" name="__codelineno-10-51" href="#__codelineno-10-51"></a><span class="sd">        &quot;&quot;&quot;</span>
+<a id="__codelineno-10-52" name="__codelineno-10-52" href="#__codelineno-10-52"></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+<a id="__codelineno-10-53" name="__codelineno-10-53" href="#__codelineno-10-53"></a>
+<a id="__codelineno-10-54" name="__codelineno-10-54" href="#__codelineno-10-54"></a>    <span class="k">def</span> <span class="nf">acknowledge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<a id="__codelineno-10-55" name="__codelineno-10-55" href="#__codelineno-10-55"></a>        <span class="sd">&quot;&quot;&quot;</span>
+<a id="__codelineno-10-56" name="__codelineno-10-56" href="#__codelineno-10-56"></a><span class="sd">        Acknowledges a message so that it won&#39;t be redelivered by</span>
+<a id="__codelineno-10-57" name="__codelineno-10-57" href="#__codelineno-10-57"></a><span class="sd">        the messaging infrastructure in the future</span>
+<a id="__codelineno-10-58" name="__codelineno-10-58" href="#__codelineno-10-58"></a><span class="sd">        &quot;&quot;&quot;</span>
+<a id="__codelineno-10-59" name="__codelineno-10-59" href="#__codelineno-10-59"></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+<a id="__codelineno-10-60" name="__codelineno-10-60" href="#__codelineno-10-60"></a>
+<a id="__codelineno-10-61" name="__codelineno-10-61" href="#__codelineno-10-61"></a>    <span class="k">def</span> <span class="nf">close_connection</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<a id="__codelineno-10-62" name="__codelineno-10-62" href="#__codelineno-10-62"></a>        <span class="sd">&quot;&quot;&quot;</span>
+<a id="__codelineno-10-63" name="__codelineno-10-63" href="#__codelineno-10-63"></a><span class="sd">        Override this function if you want to use some finalizer code</span>
+<a id="__codelineno-10-64" name="__codelineno-10-64" href="#__codelineno-10-64"></a><span class="sd">         to shutdown your driver in a clean way</span>
+<a id="__codelineno-10-65" name="__codelineno-10-65" href="#__codelineno-10-65"></a><span class="sd">        &quot;&quot;&quot;</span>
+<a id="__codelineno-10-66" name="__codelineno-10-66" href="#__codelineno-10-66"></a>        <span class="k">pass</span>
+<a id="__codelineno-10-67" name="__codelineno-10-67" href="#__codelineno-10-67"></a>
+<a id="__codelineno-10-68" name="__codelineno-10-68" href="#__codelineno-10-68"></a>    <span class="k">def</span> <span class="nf">delete_queue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">queue</span><span class="p">):</span>
+<a id="__codelineno-10-69" name="__codelineno-10-69" href="#__codelineno-10-69"></a>        <span class="sd">&quot;&quot;&quot;</span>
+<a id="__codelineno-10-70" name="__codelineno-10-70" href="#__codelineno-10-70"></a><span class="sd">        Deletes the queue</span>
+<a id="__codelineno-10-71" name="__codelineno-10-71" href="#__codelineno-10-71"></a><span class="sd">        &quot;&quot;&quot;</span>
+<a id="__codelineno-10-72" name="__codelineno-10-72" href="#__codelineno-10-72"></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+<a id="__codelineno-10-73" name="__codelineno-10-73" href="#__codelineno-10-73"></a>
+<a id="__codelineno-10-74" name="__codelineno-10-74" href="#__codelineno-10-74"></a>    <span class="k">def</span> <span class="nf">delete_topic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">topic</span><span class="p">):</span>
+<a id="__codelineno-10-75" name="__codelineno-10-75" href="#__codelineno-10-75"></a>        <span class="sd">&quot;&quot;&quot;</span>
+<a id="__codelineno-10-76" name="__codelineno-10-76" href="#__codelineno-10-76"></a><span class="sd">        Deletes the topic</span>
+<a id="__codelineno-10-77" name="__codelineno-10-77" href="#__codelineno-10-77"></a><span class="sd">        &quot;&quot;&quot;</span>
+<a id="__codelineno-10-78" name="__codelineno-10-78" href="#__codelineno-10-78"></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</code></pre></div>
+<p>Inspire yourself with the implementations of the AWSDriver and the RabbitMQDriver.</p>
+<p>After you created your own driver, you just need to tell the BackendManager to recognize your driver:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="n">driver</span> <span class="o">=</span> <span class="n">MyDriver</span><span class="p">()</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="n">BackendManager</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span><span class="o">.</span><span class="n">use_backend</span><span class="p">(</span><span class="n">driver</span><span class="o">=</span><span class="n">driver</span><span class="p">)</span>
+</code></pre></div>
+<p>Or if you want to register it into Melange and use it afterwards or create your own Melange plugin:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="n">driver</span> <span class="o">=</span> <span class="n">MyDriver</span><span class="p">()</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="n">BackendManager</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span><span class="o">.</span><span class="n">add_available_backends</span><span class="p">(</span><span class="n">mydriver</span><span class="o">=</span><span class="n">MyDriver</span><span class="p">)</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="o">....</span><span class="n">At</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="n">some</span>
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="n">point</span>
+<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a><span class="n">later</span>
+<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a><span class="n">you</span>
+<a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a><span class="n">would</span>
+<a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a><span class="n">call</span><span class="p">:</span>
+<a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a>
+<a id="__codelineno-12-12" name="__codelineno-12-12" href="#__codelineno-12-12"></a><span class="n">BackendManager</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span><span class="o">.</span><span class="n">use_backend</span><span class="p">(</span><span class="n">driver_name</span><span class="o">=</span><span class="s2">&quot;mydriver&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p>Now Melange will use your driver as the backend message infrastructure.</p>
+<h1 id="other-useful-uses">Other useful uses</h1>
+<h3 id="aws-lambda-functions">AWS Lambda functions</h3>
+<p>Melange is great to communicate with AWS Lambda functions and integrate them with other lambdas or systems. 
+You could:</p>
+<ul>
+<li>Use the <code>MessagePublisher</code> to publish events to SNS topics (which then could trigger other Lambdas/systems).</li>
+<li>Use the <code>MessageConsumer</code> on a schedule-job based lambda to dequeue one event from an SQS queue for processing.</li>
+</ul>
+<p>If the Lambda is triggered by SNS, SNS will wrap the message in a dictionary structure. You can deserialize the 
+message by using the <code>parse_event_from_sns</code> function.</p>
+<p>Example of a Lambda function code:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="k">def</span> <span class="nf">handle_event</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>    <span class="n">EventSerializer</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">MyEventSchema</span><span class="p">,</span> <span class="n">MyFooCreatedSchema</span><span class="p">)</span>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a>    <span class="n">event</span> <span class="o">=</span> <span class="n">parse_event_from_sns</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>
+<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a>    <span class="c1"># Here you can check whether the parsed event is the one expected by your Lambda function</span>
+<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a>    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">MyEvent</span><span class="p">):</span>
+<a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a>        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;The passed event is not a MyEvent&#39;</span><span class="p">)</span>
+<a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a>
+<a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a>    <span class="c1"># Your event-processing code here...</span>
+<a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a>    <span class="n">do_work</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+<a id="__codelineno-13-13" name="__codelineno-13-13" href="#__codelineno-13-13"></a>
+<a id="__codelineno-13-14" name="__codelineno-13-14" href="#__codelineno-13-14"></a>    <span class="n">message_publisher</span> <span class="o">=</span> <span class="n">MessagePublisher</span><span class="p">(</span><span class="n">topic</span><span class="o">=</span><span class="s1">&#39;some-topic&#39;</span><span class="p">)</span>
+<a id="__codelineno-13-15" name="__codelineno-13-15" href="#__codelineno-13-15"></a>
+<a id="__codelineno-13-16" name="__codelineno-13-16" href="#__codelineno-13-16"></a>    <span class="c1"># This publish, depending on who is suscribed to the topic, will trigger other systems.</span>
+<a id="__codelineno-13-17" name="__codelineno-13-17" href="#__codelineno-13-17"></a>    <span class="n">event_to_publish</span> <span class="o">=</span> <span class="n">MyFooCreated</span><span class="p">()</span>
+<a id="__codelineno-13-18" name="__codelineno-13-18" href="#__codelineno-13-18"></a>    <span class="n">message_publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">event_to_publish</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="interact-with-djangoflask-apis">Interact with Django/Flask APIs</h3>
+<p>SNS allows you to register endpoints on topics. You can use the <code>MessagePublisher</code> to publish messages to these 
+SNS topics and SNS will send the messages to those endpoints, allowing you to seamlessly integrate your apis and 
+other systems.</p>
+<h1 id="why-the-name-melange">Why the name 'Melange'</h1>
+<p>The name "Melange" is a reference to the drug-spice from the sci-fi book saga "Dune", a spice which is only 
+generated in a single planet in the universe (planet Dune) and every human depends on it.</p>
+<blockquote>
+<p>If the spice flows, then the spice can be controlled.<br />
+He who controls the spice, controls the universe.<br />
+The spice must flow.</p>
+</blockquote>
+<p>The analogy can be very well made on Events in a distributed architecture :)</p>
+<p><em>Logo <a href="https://www.vecteezy.com/free-vector/nature">Nature Vectors by Vecteezy</a></em></p>
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+      
+        
+        <a href="examples/" class="md-footer__link md-footer__link--next" aria-label="Next: Examples" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Examples
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": ".", "features": ["content.code.annotate"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "assets/javascripts/workers/search.22074ed6.min.js"}</script>
+    
+    
+      <script src="assets/javascripts/bundle.01de222e.min.js"></script>
+      
+    
+  </body>
+</html>
