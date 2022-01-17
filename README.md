@@ -50,7 +50,7 @@ The analogy can be very well made on Events in a distributed architecture :)
 
 ## Project Links
 
-* Docs: [https://rydra.readthedocs.io/melange](https://rydra.readthedocs.io/melange)
+* Docs: [https://rydra.github.io/melange](https://rydra.github.io/melange)
 
 ## License
 
