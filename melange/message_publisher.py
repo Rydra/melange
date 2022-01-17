@@ -4,7 +4,7 @@ from typing import Any, Dict, Optional
 
 from melange.backends.backend_manager import BackendManager
 from melange.backends.interfaces import MessagingBackend
-from melange.event_serializer import MessageSerializer
+from melange.serializers.interfaces import MessageSerializer
 
 logger = logging.getLogger(__name__)
 

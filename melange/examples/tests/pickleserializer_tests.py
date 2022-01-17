@@ -2,8 +2,8 @@ import uuid
 
 from hamcrest import *
 
-from melange.examples.common.serializer import PickleSerializer
 from melange.examples.payment_service.events import OrderResponse
+from melange.serializers.pickle import PickleSerializer
 
 
 def test_pickle_a_domain_event():

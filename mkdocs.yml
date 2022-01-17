@@ -1,9 +1,24 @@
 site_name: Melange
+repo_name: Rydra/melange
+repo_url: https://github.com/Rydra/melange
 
 theme:
   name: material
   features:
     - content.code.annotate
+  palette:
+    - scheme: default
+      primary: teal
+      accent: amber
+      toggle:
+        icon: material/lightbulb
+        name: Switch to light mode
+    - scheme: slate
+      primary: teal
+      accent: amber
+      toggle:
+        icon: material/lightbulb-outline
+        name: Switch to dark mode
 
 
 markdown_extensions:
@@ -33,6 +48,8 @@ nav:
         - Consumers: components/consumers.md
         - Publishers: components/publishers.md
         - Factory: factory.md
+    - Extending Melange: extending.md
+    - Advanced topics: advanced-topics.md
     - Examples:
         - Payment service: examples/payment-service.md
         - Saga choreography: examples/saga.md

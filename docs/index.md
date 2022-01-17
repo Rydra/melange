@@ -6,7 +6,7 @@ TODO: Update the documentation to match the latest version 7.0.0
 
 ![melange logo](img/melange_logo.png)
 
-Motto: The spice must flow! (or in this case, the events)
+*The spice must flow!*
 
 **melange** is a python messaging library for an easy inter-communication in distributed and 
 microservices architectures. It offers a flexible, easy-to-use library to create distributed 
@@ -30,9 +30,7 @@ the simple and attractive interface Melange offers and your backend infrastructu
 listed (e.g. Kafka, Kinesis) you can implement your own driver. Read the section `Adding your own messaging infrastructure`
 for more information.
 
-In addition, Melange supports event driven architectures in single-process, non-distributed, memory-based applications (Console applications, background workers)
-with the aid of the `DomainEventBus` (see `Domain-Driven Design` section). The `DomainEventBus` is great if you really 
-want to have a clean event-driven architecture with Domain Events, and its idea has been grabbed from Vaughn Vernon and his must-read book 
+If want to have a clean event-driven architecture with Domain Events, and its idea has been grabbed from Vaughn Vernon and his must-read book 
 Implementing Domain-Driven Design (look at [part 3 of these series](http://dddcommunity.org/library/vernon_2011/) if you want a quick look,
  or read this excellent article from [Udi Dahan, founder of NServiceBus](http://udidahan.com/2009/06/14/domain-events-salvation/)).
 
@@ -52,7 +50,7 @@ publishers to subscribers. Clients can subscribe this broker, waiting for events
 or publish messages so that the broker can distribute these messages appropriately.
 
 So, you will need two things to make this entire scene work: an **Exchange Message Publisher** and
-an **Exchange Message Consumer** to send and receive messages respectively.
+an **Exchange Message SingleDispatchConsumer** to send and receive messages respectively.
 
 But before getting your feet wet into this realm, first things first. You need to tell Melange which driver backend
 you want to use. Place this line in the initialization code of your application:
@@ -104,17 +102,17 @@ message_publisher.publish(data)
 This piece of code will serialize the dictionary as JSON and send it to SNS to the topic `some-topic-name`.
 If the topic does not exist, it will be created (though no one will receive the message...).
 After that, all listeners subscribed to this topic will receive the message for
-further processing (be an AWS Lambda, an email address, an Exchange Message Consumer, or any other
+further processing (be an AWS Lambda, an email address, an Exchange Message SingleDispatchConsumer, or any other
 compatible Amazon SNS subscriber).
 
 NOTE: The `event_type_name` property must exist in the dictionary. If it doesn't,
 you must supply the event_type_name through the `event_type_name` parameter from
 the publish method
 
-### Exchange Message Consumer ###
+### Exchange Message SingleDispatchConsumer ###
 
 After that, you may have in another separate project (be it a simple console application,
-django worker, another thread, etc) an `Exchange Message Consumer` to receive these messages. And that consumer
+django worker, another thread, etc) an `Exchange Message SingleDispatchConsumer` to receive these messages. And that consumer
 will require, at least, one listener to be of any use.
 
 The simplest implementation for that would be the following one, and you could place it in
@@ -123,7 +121,7 @@ the initialization of your application:
 
 ``` py
 
-class SampleListener(Consumer):
+class SampleListener(SingleDispatchConsumer):
 
 	def process(self, event, **kwargs):
 		print(f"I've received information about the product {event['name']}")
@@ -149,7 +147,7 @@ an `ExchangeMessageDispatcher` with a queue name and a topic. If the queue does 
 an **SQS queue** and subscribe it to the topic. 
 
 Afterwards, you can subscribe an instance of your listener to the message consumer. Finally, you
-create a loop that will poll for new events and invoke the `process` method of your Consumer
+create a loop that will poll for new events and invoke the `process` method of your SingleDispatchConsumer
 for each event of the expected type it receives.
 
 ## Advanced usage
@@ -193,7 +191,7 @@ message_publisher = TopicPublisher(topic='some-topic-name')
 message_publisher.publish(ProductAdded(product_id=12345, name='Coolers'))
 ```
 
-Consumer:
+SingleDispatchConsumer:
 ``` py
 # In some file you would implement these classes
 # Bear in mind that these definition are placed in
@@ -216,7 +214,7 @@ class ProductAdded(EventMessage):
 		self.product_id = product_id
 		self.name = name
 		
-class SampleListener(Consumer):
+class SampleListener(SingleDispatchConsumer):
 
 	def process(self, event, **kwargs):
 		# Note that I'm not accessing event properties by key, but as a regular object.
@@ -252,7 +250,7 @@ It's a bit more complicated to implement, but the resulting code is cleaner and 
 to another developer, and the intent, the event type and the property types for the event are clear 
 and can be used as contract documentation for your listeners. Up to you and your needs/feelings.
 
-### Threaded Exchange Message Consumer
+### Threaded Exchange Message SingleDispatchConsumer
 
 The `ThreadedExchangeMessageConsumer` allows you to create a consumer that will poll the message queue
 on a separate thread. The `ThreadedExchangeMessageConsumer` inherits from python `Thread` class, so
@@ -263,7 +261,7 @@ The consumer example above would be rewritten like this:
 
 ``` py
 
-class SampleListener(Consumer):
+class SampleListener(SingleDispatchConsumer):
 
 	def process(self, event, **kwargs):
 		print(f"I've received information about the product {event['name']}")

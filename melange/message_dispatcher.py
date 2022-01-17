@@ -3,9 +3,9 @@ from typing import Any, Callable, Iterable, List, Optional
 
 from melange.backends.backend_manager import BackendManager
 from melange.backends.interfaces import Message, MessagingBackend
-from melange.consumer import Consumer
-from melange.event_serializer import MessageSerializer
+from melange.consumer import SingleDispatchConsumer
 from melange.infrastructure.cache import Cache, DedupCache
+from melange.serializers.interfaces import MessageSerializer
 from melange.utils import get_fully_qualified_name
 
 logger = logging.getLogger(__name__)
@@ -63,19 +63,19 @@ class ExchangeMessageDispatcher:
         cache: Optional[DedupCache] = None,
         backend: Optional[MessagingBackend] = None,
     ) -> None:
-        self._exchange_listeners: List[Consumer] = []
+        self._exchange_listeners: List[SingleDispatchConsumer] = []
         self.message_serializer = message_serializer
         self._backend = backend or BackendManager().get_backend()
         self.cache: DedupCache = cache or Cache()
 
-    def subscribe(self, consumer: Consumer) -> None:
-        if not isinstance(consumer, Consumer):
+    def subscribe(self, consumer: SingleDispatchConsumer) -> None:
+        if not isinstance(consumer, SingleDispatchConsumer):
             return None
 
         if consumer not in self._exchange_listeners:
             self._exchange_listeners.append(consumer)
 
-    def unsubscribe(self, consumer: Consumer) -> None:
+    def unsubscribe(self, consumer: SingleDispatchConsumer) -> None:
         if consumer in self._exchange_listeners:
             self._exchange_listeners.remove(consumer)
 
@@ -107,7 +107,7 @@ class ExchangeMessageDispatcher:
             except Exception as e:
                 logger.exception(e)
 
-    def _get_consumers(self, manifest: Optional[str]) -> List[Consumer]:
+    def _get_consumers(self, manifest: Optional[str]) -> List[SingleDispatchConsumer]:
         return [
             listener
             for listener in self._exchange_listeners

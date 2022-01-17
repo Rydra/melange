@@ -1,11 +1,12 @@
 import os
 
 from melange.backends.sqs.elasticmq import ElasticMQBackend
-from melange.examples.common.serializer import PickleSerializer
+from melange.consumer import SimpleConsumerHandler
 from melange.examples.saga_pattern.consumer import SagaConsumer
 from melange.examples.saga_pattern.publisher import SagaPublisher
 from melange.examples.saga_pattern.repository import SagaRepository
 from melange.message_publisher import QueuePublisher
+from melange.serializers.pickle import PickleSerializer
 
 if __name__ == "__main__":
     serializer = PickleSerializer()
@@ -16,10 +17,13 @@ if __name__ == "__main__":
     payment_consumer = SagaConsumer(
         SagaRepository(),
         SagaPublisher(QueuePublisher(serializer, backend)),
+    )
+
+    print("Consuming...")
+    consumer_handler = SimpleConsumerHandler(
+        payment_consumer,
         message_serializer=PickleSerializer(),
         backend=backend,
         always_ack=True,
     )
-
-    print("Consuming...")
-    payment_consumer.consume_loop("saga-updates")
+    consumer_handler.consume_loop("saga-updates")

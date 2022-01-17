@@ -1,7 +1,7 @@
 import uuid
 from typing import Any
 
-from melange.consumer import SimpleConsumer, consumer
+from melange.consumer import SingleDispatchConsumer, consumer
 from melange.examples.common.commands import DoPayment
 from melange.examples.payment_service.events import OrderResponse, OrderStatus
 from melange.examples.saga_pattern.models import Saga
@@ -9,7 +9,7 @@ from melange.examples.saga_pattern.publisher import SagaPublisher
 from melange.examples.saga_pattern.repository import SagaRepository
 
 
-class SagaConsumer(SimpleConsumer):
+class SagaConsumer(SingleDispatchConsumer):
     def __init__(
         self,
         saga_repository: SagaRepository,

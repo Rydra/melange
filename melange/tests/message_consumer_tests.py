@@ -11,10 +11,10 @@ from pytest_tools import pipe, scenariostep
 from melange import BackendManager
 from melange.backends import configure_exchange
 from melange.backends.interfaces import Message, MessagingBackend
-from melange.consumer import Consumer, consumer
-from melange.event_serializer import MessageSerializer
+from melange.consumer import SingleDispatchConsumer, consumer
 from melange.message_dispatcher import ExchangeMessageDispatcher
 from melange.message_publisher import QueuePublisher, TopicPublisher
+from melange.serializers.interfaces import MessageSerializer
 
 
 class TestEventSerializer(MessageSerializer):
@@ -105,7 +105,7 @@ class TestMessageConsumer:
             return self
 
         def given_a_subscriber(self, listens_to=None):
-            self.subscriber = MagicMock(spec=Consumer)
+            self.subscriber = MagicMock(spec=SingleDispatchConsumer)
             self.subscriber.listens_to.return_value = listens_to
 
             self.message_consumer.subscribe(self.subscriber)
@@ -189,7 +189,7 @@ class TestMessageConsumerWithAWS:
             topic=topic_name, message_serializer=serializer
         )
 
-        class TestListener(Consumer):
+        class TestListener(SingleDispatchConsumer):
             def __init__(self):
                 super().__init__()
                 self.listened_event = None
@@ -217,7 +217,7 @@ class TestMessageConsumerWithAWS:
             queue_name=queue_name, message_serializer=serializer
         )
 
-        class TestListener(Consumer):
+        class TestListener(SingleDispatchConsumer):
             def __init__(self):
                 super().__init__()
                 self.listened_event = None
@@ -245,7 +245,7 @@ class TestMessageConsumerWithAWS:
 
         self.listened_events = set()
 
-        class TestListener(Consumer):
+        class TestListener(SingleDispatchConsumer):
             def __init__(self):
                 super().__init__(None)
 
@@ -313,7 +313,7 @@ def given_a_queue_to_listen_with_an_event(self, event_of_type=None):
 
 @scenariostep
 def given_a_subscriber(ctx, listens_to=None):
-    ctx.subscriber = MagicMock(spec=Consumer)
+    ctx.subscriber = MagicMock(spec=SingleDispatchConsumer)
     ctx.subscriber.listens_to.return_value = listens_to
 
     ctx.message_consumer.subscribe(ctx.subscriber)
@@ -406,7 +406,7 @@ class TestMessageConsumerRabbitMQ:
 
         self.listened_event = None
 
-        class TestListener(Consumer):
+        class TestListener(SingleDispatchConsumer):
             def process(x, event, **kwargs):
                 self.listened_event = event
 
@@ -429,7 +429,7 @@ class TestMessageConsumerRabbitMQ:
 
         self.listened_events = set()
 
-        class TestListener(Consumer):
+        class TestListener(SingleDispatchConsumer):
             def process(x, event, **kwargs):
                 self.listened_events.add(event["value"])
 

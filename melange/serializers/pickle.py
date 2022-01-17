@@ -4,7 +4,7 @@ from typing import Optional
 
 from simple_cqrs.domain_event import DomainEvent
 
-from melange.event_serializer import MessageSerializer
+from melange.serializers.interfaces import MessageSerializer
 
 
 class PickleSerializer(MessageSerializer[DomainEvent]):

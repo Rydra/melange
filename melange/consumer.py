@@ -6,14 +6,22 @@ from methoddispatch import SingleDispatch, singledispatch
 
 from melange.backends.backend_manager import BackendManager
 from melange.backends.interfaces import Message, MessagingBackend
-from melange.event_serializer import MessageSerializer
 from melange.infrastructure.cache import Cache, DedupCache
+from melange.serializers.interfaces import MessageSerializer
 from melange.utils import get_fully_qualified_name
 
 logger = logging.getLogger(__name__)
 
 
-class Consumer(SingleDispatch):
+class Consumer:
+    def process(self, obj: Any, **kwargs: Any) -> None:
+        pass
+
+    def accepts(self, manifest: Optional[str]) -> bool:
+        return True
+
+
+class SingleDispatchConsumer(Consumer, SingleDispatch):
     """
     This class can consume events from a queue and pass them to a processor
     """
@@ -39,25 +47,24 @@ class Consumer(SingleDispatch):
         return not self.listens_to() or manifest in self.listens_to()
 
 
-consumer = Consumer._process.register
+consumer = SingleDispatchConsumer._process.register
 
 
-class SimpleConsumer(Consumer):
+class SimpleConsumerHandler:
     """
-    A simple consumer is like a mix of the ExchangeMessageDispatcher and
-    the Consumer, with the difference that he will only concern about himself
-    and his queue when reading and processing messages.
-
-    Simple and enough for most cases
+    Handles the retrieval of messages from a queue and
+    dispatches the messages to the consumer
     """
 
     def __init__(
         self,
+        consumer: Consumer,
         message_serializer: MessageSerializer,
         cache: Optional[DedupCache] = None,
         backend: Optional[MessagingBackend] = None,
         always_ack: bool = False,
     ):
+        self.consumer = consumer
         self.message_serializer = message_serializer
         self._backend = backend or BackendManager().get_backend()
         self.cache: DedupCache = cache or Cache()
@@ -105,7 +112,7 @@ class SimpleConsumer(Consumer):
             if message_key in self.cache:
                 logger.info("detected a duplicated message, ignoring")
             else:
-                self.process(message_data, message_id=message.message_id)
+                self.consumer.process(message_data, message_id=message.message_id)
                 successful = True
                 self.cache.store(message_key, message_key)
         except Exception as e:

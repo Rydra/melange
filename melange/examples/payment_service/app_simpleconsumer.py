@@ -1,12 +1,13 @@
 import os
 
 from melange.backends.sqs.elasticmq import ElasticMQBackend
-from melange.examples.common.serializer import PickleSerializer
-from melange.examples.payment_service.consumer import PaymentSimpleConsumer
+from melange.consumer import SimpleConsumerHandler
+from melange.examples.payment_service.consumer import PaymentConsumer
 from melange.examples.payment_service.publisher import PaymentPublisher
 from melange.examples.payment_service.repository import PaymentRepository
 from melange.examples.payment_service.service import PaymentService
 from melange.message_publisher import QueuePublisher
+from melange.serializers.pickle import PickleSerializer
 
 if __name__ == "__main__":
     serializer = PickleSerializer()
@@ -14,10 +15,12 @@ if __name__ == "__main__":
         host=os.environ.get("SQSHOST"), port=os.environ.get("SQSPORT")
     )
 
-    payment_consumer = PaymentSimpleConsumer(
-        PaymentService(
-            PaymentRepository(),
-            PaymentPublisher(QueuePublisher(serializer, backend=backend)),
+    payment_consumer = SimpleConsumerHandler(
+        PaymentConsumer(
+            PaymentService(
+                PaymentRepository(),
+                PaymentPublisher(QueuePublisher(serializer, backend=backend)),
+            )
         ),
         PickleSerializer(),
         backend=backend,
