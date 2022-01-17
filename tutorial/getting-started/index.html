@@ -47,12 +47,16 @@
   
     
     
+      
     
     
     
-    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="amber">
   
     
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
@@ -60,7 +64,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#getting-started" class="md-skip">
+        <a href="#tutorial-getting-started" class="md-skip">
           Skip to content
         </a>
       
@@ -100,6 +104,28 @@
       </div>
     </div>
     
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="amber"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_2" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7M9 21a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-1H9v1z"/></svg>
+            </label>
+          
+        
+          
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="amber"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 1 7 7c0 2.38-1.19 4.47-3 5.74V17a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 0 1 7-7M9 21v-1h6v1a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1m3-17a5 5 0 0 0-5 5c0 2.05 1.23 3.81 3 4.58V16h4v-2.42c1.77-.77 3-2.53 3-4.58a5 5 0 0 0-5-5z"/></svg>
+            </label>
+          
+        
+      </form>
+    
     
     
       <label class="md-header__button md-icon" for="__search">
@@ -136,6 +162,18 @@
 </div>
     
     
+      <div class="md-header__source">
+        <a href="https://github.com/Rydra/melange/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Rydra/melange
+  </div>
+</a>
+      </div>
+    
   </nav>
   
 </header>
@@ -168,6 +206,18 @@
     </a>
     Melange
   </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/Rydra/melange/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Rydra/melange
+  </div>
+</a>
+    </div>
   
   <ul class="md-nav__list" data-md-scrollfix>
     
@@ -203,9 +253,68 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Tutorial - Getting started
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         Tutorial - Getting started
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#choosing-a-messaging-backend" class="md-nav__link">
+    Choosing a Messaging Backend
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#creating-a-queue" class="md-nav__link">
+    Creating a queue
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#publishing-messages" class="md-nav__link">
+    Publishing messages
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#consuming-messages" class="md-nav__link">
+    Consuming messages
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#where-to-go-from-here" class="md-nav__link">
+    Where to go from here
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -322,22 +431,52 @@
   
   
   
+    <li class="md-nav__item">
+      <a href="../../extending/" class="md-nav__link">
+        Extending Melange
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../advanced-topics/" class="md-nav__link">
+        Advanced topics
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
     
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" >
       
       
       
       
-        <label class="md-nav__link" for="__nav_4">
+        <label class="md-nav__link" for="__nav_6">
           Examples
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="Examples" data-md-level="1">
-        <label class="md-nav__title" for="__nav_4">
+        <label class="md-nav__title" for="__nav_6">
           <span class="md-nav__icon md-icon"></span>
           Examples
         </label>
@@ -388,18 +527,18 @@
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7" type="checkbox" id="__nav_7" >
       
       
       
       
-        <label class="md-nav__link" for="__nav_5">
+        <label class="md-nav__link" for="__nav_7">
           Code Reference
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="Code Reference" data-md-level="1">
-        <label class="md-nav__title" for="__nav_5">
+        <label class="md-nav__title" for="__nav_7">
           <span class="md-nav__icon md-icon"></span>
           Code Reference
         </label>
@@ -445,6 +584,49 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#choosing-a-messaging-backend" class="md-nav__link">
+    Choosing a Messaging Backend
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#creating-a-queue" class="md-nav__link">
+    Creating a queue
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#publishing-messages" class="md-nav__link">
+    Publishing messages
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#consuming-messages" class="md-nav__link">
+    Consuming messages
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#where-to-go-from-here" class="md-nav__link">
+    Where to go from here
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -455,8 +637,112 @@
             <article class="md-content__inner md-typeset">
               
                 
+<a href="https://github.com/Rydra/melange/edit/master/docs/tutorial/getting-started.md" title="Edit this page" class="md-content__button md-icon">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+</a>
 
-<h1 id="getting-started">Getting started</h1>
+
+<h1 id="tutorial-getting-started">Tutorial - Getting started</h1>
+<p>This tutorial assumes that you have basic understanding of the pub/sub
+mechanics. If not, there are a whole bunch of resources to get your feet
+wet on the topic. Also it's good to have <code>docker</code> installed since we are
+going to spin up local infrastructure to serve as a messaging broker.</p>
+<h2 id="choosing-a-messaging-backend">Choosing a Messaging Backend</h2>
+<p>A messaging backend is the infrastructure where your messages are going to be published
+and consumed. In this tutorial we are going to use <a href="https://github.com/softwaremill/elasticmq">ElasticMQ</a>
+as our messaging backend. Basically spinning up an ElasticMQ (for example with <code>docker-compose</code>) 
+in your machine will provide you with an SQS-like infrastructure to use with boto, which
+makes it ideal for testing and for the sake of this tutorial. You could follow the instructions
+in the ElasticMQ project to install it to your local machine. Though the quickest route
+is to launch the docker image:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>docker run -p 9324:9324 -p 9325:9325 softwaremill/elasticmq-native
+</code></pre></div>
+<p>This will start ElasticMQ in the port <code>9324</code> in <code>localhost</code>, ready to be used.</p>
+<h2 id="creating-a-queue">Creating a queue</h2>
+<p>Before using a queue you need to create it. Put the following code snippet into a
+file called <code>create_queue.py</code> and execute it to create the queue:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span> <span class="nn">melange.backends.sqs.elasticmq</span> <span class="kn">import</span> <span class="n">ElasticMQBackend</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="kn">from</span> <span class="nn">melange.backends.factory</span> <span class="kn">import</span> <span class="n">MessagingBackendFactory</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="n">backend</span> <span class="o">=</span> <span class="n">ElasticMQBackend</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s2">&quot;localhost&quot;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">9324</span><span class="p">)</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="n">factory</span> <span class="o">=</span> <span class="n">MessagingBackendFactory</span><span class="p">(</span><span class="n">backend</span><span class="p">)</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="n">factory</span><span class="o">.</span><span class="n">init_queue</span><span class="p">(</span><span class="s2">&quot;melangetutorial-queue&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="publishing-messages">Publishing messages</h2>
+<p>Publishing messages to a queue with Melange is easy. Just create an instance of the message
+publisher and <code>publish</code> the message. Put the following code snippet into a file called <code>publish_example.py</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">from</span> <span class="nn">melange.message_publisher</span> <span class="kn">import</span> <span class="n">QueuePublisher</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="kn">from</span> <span class="nn">melange.backends.sqs.elasticmq</span> <span class="kn">import</span> <span class="n">ElasticMQBackend</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="kn">from</span> <span class="nn">melange.serializers.pickle</span> <span class="kn">import</span> <span class="n">PickleSerializer</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="k">class</span> <span class="nc">MyTestMessage</span><span class="p">:</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> <span class="n">message</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>    <span class="n">backend</span> <span class="o">=</span> <span class="n">ElasticMQBackend</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s2">&quot;localhost&quot;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">9324</span><span class="p">)</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>    <span class="n">serializer</span> <span class="o">=</span> <span class="n">PickleSerializer</span><span class="p">()</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>    <span class="n">publisher</span> <span class="o">=</span> <span class="n">QueuePublisher</span><span class="p">(</span><span class="n">serializer</span><span class="p">,</span> <span class="n">backend</span><span class="p">)</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>    <span class="n">message</span> <span class="o">=</span> <span class="n">MyTestMessage</span><span class="p">(</span><span class="s2">&quot;Hello World!&quot;</span><span class="p">)</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>    <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="s2">&quot;melangetutorial-queue&quot;</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Message sent successfully!&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p>Once you run this code it will publish a message <code>MyTestMessage</code> with the contents <code>Hello World</code> in
+the queue <code>melangetutorial-queue</code>.
+You can send anything as long as your selected serializer can serialize/deserialize
+the object. Refer <a href="../../components/serializers/">Serializers</a> for further details.</p>
+<blockquote>
+<p>NOTE: For the sake of this tutorial you can use the <code>PickleSerializer</code> to serialize your messages.
+For production applications however you should probably use another type of serializer or create your own,
+since <code>pickle</code> is <a href="https://docs.python.org/3/library/pickle.html">considered unsafe</a> and
+only works with python consumers.</p>
+</blockquote>
+<h2 id="consuming-messages">Consuming messages</h2>
+<p>It's good to publish messages, but they are worth nothing if nobody reads them. Therefore,
+we need a consumer that reads these messages and reacts to them.</p>
+<p>Put the following code snippet in a file called <code>consumer-example.py</code> and run it:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">from</span> <span class="nn">melange.consumers</span> <span class="kn">import</span> <span class="n">Consumer</span><span class="p">,</span> <span class="n">ConsumerHandler</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="kn">from</span> <span class="nn">melange.backends.sqs.elasticmq</span> <span class="kn">import</span> <span class="n">ElasticMQBackend</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="kn">from</span> <span class="nn">melange.serializers.pickle</span> <span class="kn">import</span> <span class="n">PickleSerializer</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="kn">from</span> <span class="nn">publish_example</span> <span class="kn">import</span> <span class="n">MyTestMessage</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="k">class</span> <span class="nc">MyConsumer</span><span class="p">(</span><span class="n">SingleDispatchConsumer</span><span class="p">):</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>    <span class="nd">@listener</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>    <span class="k">def</span> <span class="nf">on_my_test_message_received</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">MyTestMessage</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>        <span class="nb">print</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">message</span><span class="p">)</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>    <span class="n">backend</span> <span class="o">=</span> <span class="n">ElasticMQBackend</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s2">&quot;localhost&quot;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">9324</span><span class="p">)</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>    <span class="n">serializer</span> <span class="o">=</span> <span class="n">PickleSerializer</span><span class="p">()</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>    <span class="n">consumer</span> <span class="o">=</span> <span class="n">MyConsumer</span><span class="p">()</span>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>    <span class="n">consumer_handler</span> <span class="o">=</span> <span class="n">SimpleConsumerHandler</span><span class="p">(</span>
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a>        <span class="n">serializer</span><span class="p">,</span>
+<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a>        <span class="n">backend</span><span class="o">=</span><span class="n">backend</span><span class="p">,</span>
+<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a>    <span class="p">)</span>
+<a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Consuming...&quot;</span><span class="p">)</span>
+<a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a>    <span class="n">payment_consumer</span><span class="o">.</span><span class="n">consume_loop</span><span class="p">(</span><span class="s2">&quot;melangetutorial-queue&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p>Upon hitting the <code>consume_loop</code> method, the process will start polling the queue for new
+messages. Once it receives a message, as long as the message is of type <code>MyTestMessage</code> it will
+forward this message to the <code>MyConsumer</code>. If your infrastructure was set correctly, every time
+you run the <code>publish_example.py</code> script you will see a print with the message on the screen where
+the consumer is running.</p>
+<p>Congratulations! You just run your very first example of a Pub/Sub mechanism with Melange!</p>
+<blockquote>
+<p>NOTE: It's a good idea to have shared classes (like the <code>MyTestMessage</code> in the example) in its
+own python module (e.g. <code>shared.py</code>)</p>
+</blockquote>
+<h2 id="where-to-go-from-here">Where to go from here</h2>
+<p>Although the exposed example is quite simple, it serves as the foundation to implement a number of
+use cases and distributed architectures with microservices. With Melange you can:</p>
+<ul>
+<li>Build a CQRS + Event sourcing architecture, where you publish your events to a queue or topic from the Command
+side and read those with a consumer from the Read side to create your data projections.</li>
+<li>Build choreography Sagas for long-running processes which can span several transactions.</li>
+<li>Implement microservices which consume messages from a queue to do their job (e.g. an staticstics microservice
+  that reacts to a <code>OrderCreated</code> event and increments a counter to track how many orders your system has).</li>
+</ul>
+<p>Also we have not covered the case of topics. Refer to <a href="../../advanced-topics/">Advanced Topics</a> for further details.</p>
 
               
             </article>

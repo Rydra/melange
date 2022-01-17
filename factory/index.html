@@ -47,17 +47,26 @@
   
     
     
+      
     
     
     
-    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="amber">
   
     
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
+      
+        
+        <a href="#factory" class="md-skip">
+          Skip to content
+        </a>
       
     </div>
     <div data-md-component="announce">
@@ -95,6 +104,28 @@
       </div>
     </div>
     
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="amber"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_2" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7M9 21a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-1H9v1z"/></svg>
+            </label>
+          
+        
+          
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="amber"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 1 7 7c0 2.38-1.19 4.47-3 5.74V17a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 0 1 7-7M9 21v-1h6v1a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1m3-17a5 5 0 0 0-5 5c0 2.05 1.23 3.81 3 4.58V16h4v-2.42c1.77-.77 3-2.53 3-4.58a5 5 0 0 0-5-5z"/></svg>
+            </label>
+          
+        
+      </form>
+    
     
     
       <label class="md-header__button md-icon" for="__search">
@@ -131,6 +162,18 @@
 </div>
     
     
+      <div class="md-header__source">
+        <a href="https://github.com/Rydra/melange/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Rydra/melange
+  </div>
+</a>
+      </div>
+    
   </nav>
   
 </header>
@@ -163,6 +206,18 @@
     </a>
     Melange
   </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/Rydra/melange/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Rydra/melange
+  </div>
+</a>
+    </div>
   
   <ul class="md-nav__list" data-md-scrollfix>
     
@@ -294,10 +349,57 @@
       <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
       
       
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Factory
+          <span class="md-nav__icon md-icon"></span>
+        </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
         Factory
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#creating-a-queue" class="md-nav__link">
+    Creating a queue
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#creating-a-topic" class="md-nav__link">
+    Creating a topic
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#creating-a-queue-and-subscribing-it-to-several-topics" class="md-nav__link">
+    Creating a queue and subscribing it to several topics
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -317,22 +419,52 @@
   
   
   
+    <li class="md-nav__item">
+      <a href="../extending/" class="md-nav__link">
+        Extending Melange
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced-topics/" class="md-nav__link">
+        Advanced topics
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
     
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" >
       
       
       
       
-        <label class="md-nav__link" for="__nav_4">
+        <label class="md-nav__link" for="__nav_6">
           Examples
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="Examples" data-md-level="1">
-        <label class="md-nav__title" for="__nav_4">
+        <label class="md-nav__title" for="__nav_6">
           <span class="md-nav__icon md-icon"></span>
           Examples
         </label>
@@ -383,18 +515,18 @@
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7" type="checkbox" id="__nav_7" >
       
       
       
       
-        <label class="md-nav__link" for="__nav_5">
+        <label class="md-nav__link" for="__nav_7">
           Code Reference
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="Code Reference" data-md-level="1">
-        <label class="md-nav__title" for="__nav_5">
+        <label class="md-nav__title" for="__nav_7">
           <span class="md-nav__icon md-icon"></span>
           Code Reference
         </label>
@@ -427,15 +559,126 @@
               </div>
             
             
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#creating-a-queue" class="md-nav__link">
+    Creating a queue
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#creating-a-topic" class="md-nav__link">
+    Creating a topic
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#creating-a-queue-and-subscribing-it-to-several-topics" class="md-nav__link">
+    Creating a queue and subscribing it to several topics
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
           
           <div class="md-content" data-md-component="content">
             <article class="md-content__inner md-typeset">
               
                 
+<a href="https://github.com/Rydra/melange/edit/master/docs/factory.md" title="Edit this page" class="md-content__button md-icon">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+</a>
 
-  <h1>Factory</h1>
 
-
+<h1 id="factory">Factory</h1>
+<p>Although you could set up your own topics and queues in your infrastructure
+(e.g. by using terraform) you can rely on </p>
+<p>Personally I have no strong feelings over defining your queues and topics through
+an infrastructure-as-code framework or letting the application create it's own
+queues and topics (as long as it has the appropriate permissions to do so). In any
+case, Melange offers a factory to create queues and topics for you with the
+<code>MessagingBackendFactory</code>.</p>
+<p>The factory initialization methods are idempotent. If a queue or a topic already exist, they will 
+keep the same queue or topic, but override any settings or customizations that you
+might have manually set in your PaaS platform. </p>
+<h2 id="creating-a-queue">Creating a queue</h2>
+<p>Let's say you'd wish to create an Amazon SQS queue to listen to the events for a 
+payment service. You could invoke the factory as follows:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span> <span class="nn">melange.backends.sqs.sqs_backend</span> <span class="kn">import</span> <span class="n">SQSBackend</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">from</span> <span class="nn">melange.backends.factory</span> <span class="kn">import</span> <span class="n">MessagingBackendFactory</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="n">backend</span> <span class="o">=</span> <span class="n">SQSBackend</span><span class="p">()</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">factory</span> <span class="o">=</span> <span class="n">MessagingBackendFactory</span><span class="p">(</span><span class="n">backend</span><span class="p">)</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="n">factory</span><span class="o">.</span><span class="n">init_queue</span><span class="p">(</span><span class="s2">&quot;payment-updates.fifo&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p>This will create a FIFO queue <code>payment-updates</code> in your AWS account (remember to
+appropriately set the AWS variables since the SQS backend uses <code>boto</code> behind the
+scenes).</p>
+<p>You could also define a dead letter queue for messages that could not
+be delivered successfully:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span> <span class="nn">melange.backends.sqs.sqs_backend</span> <span class="kn">import</span> <span class="n">SQSBackend</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="kn">from</span> <span class="nn">melange.backends.factory</span> <span class="kn">import</span> <span class="n">MessagingBackendFactory</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="n">backend</span> <span class="o">=</span> <span class="n">SQSBackend</span><span class="p">()</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="n">factory</span> <span class="o">=</span> <span class="n">MessagingBackendFactory</span><span class="p">(</span><span class="n">backend</span><span class="p">)</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="n">factory</span><span class="o">.</span><span class="n">init_queue</span><span class="p">(</span><span class="s2">&quot;payment-updates.fifo&quot;</span><span class="p">,</span> <span class="n">dead_letter_queue_name</span><span class="o">=</span><span class="s2">&quot;payment-updates.fifo&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="creating-a-topic">Creating a topic</h2>
+<p>Topics apply the fan-out pattern to send the message to anyone who is subscribed
+to them. They are useful to decouple your consumers from your application
+so that they don't need to know who they are sending their messages to. With
+the factory you could create a topic like this:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">from</span> <span class="nn">melange.backends.sqs.sqs_backend</span> <span class="kn">import</span> <span class="n">SQSBackend</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="kn">from</span> <span class="nn">melange.backends.factory</span> <span class="kn">import</span> <span class="n">MessagingBackendFactory</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="n">backend</span> <span class="o">=</span> <span class="n">SQSBackend</span><span class="p">()</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="n">factory</span> <span class="o">=</span> <span class="n">MessagingBackendFactory</span><span class="p">(</span><span class="n">backend</span><span class="p">)</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="n">factory</span><span class="o">.</span><span class="n">init_topic</span><span class="p">(</span><span class="s2">&quot;my-topic&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p>For the <code>SQSBackend</code> this will create an SNS topic.</p>
+<h2 id="creating-a-queue-and-subscribing-it-to-several-topics">Creating a queue and subscribing it to several topics</h2>
+<p>You could create a queue and immediately subscribe it to a number of topics:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">from</span> <span class="nn">melange.backends.sqs.sqs_backend</span> <span class="kn">import</span> <span class="n">SQSBackend</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="kn">from</span> <span class="nn">melange.backends.factory</span> <span class="kn">import</span> <span class="n">MessagingBackendFactory</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="n">backend</span> <span class="o">=</span> <span class="n">SQSBackend</span><span class="p">()</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="n">factory</span> <span class="o">=</span> <span class="n">MessagingBackendFactory</span><span class="p">(</span><span class="n">backend</span><span class="p">)</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="n">factory</span><span class="o">.</span><span class="n">init_queue</span><span class="p">(</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>    <span class="s2">&quot;payment-updates.fifo&quot;</span><span class="p">,</span> 
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>    <span class="s2">&quot;my-topic-1&quot;</span><span class="p">,</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>    <span class="s2">&quot;my-topic-2&quot;</span><span class="p">,</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>    <span class="s2">&quot;my-topic-3&quot;</span><span class="p">,</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>    <span class="n">dead_letter_queue_name</span><span class="o">=</span><span class="s2">&quot;payment-updates.fifo&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p>This will create the topics <code>my-topic-1</code>, <code>my-topic-2</code> and <code>my-topic-3</code>,
+then create the <code>payment-updates.fifo</code> queue, and subscribe it to the
+aforementioned topics. It will create the dead letter queue too.</p>
 
               
             </article>
@@ -465,13 +708,13 @@
       
       
         
-        <a href="../examples/payment-service/" class="md-footer__link md-footer__link--next" aria-label="Next: Payment service" rel="next">
+        <a href="../extending/" class="md-footer__link md-footer__link--next" aria-label="Next: Extending Melange" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              Payment service
+              Extending Melange
             </div>
           </div>
           <div class="md-footer__button md-icon">

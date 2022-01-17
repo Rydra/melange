@@ -47,12 +47,16 @@
   
     
     
+      
     
     
     
-    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="amber">
   
     
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
@@ -100,6 +104,28 @@
       </div>
     </div>
     
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="amber"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_2" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7M9 21a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-1H9v1z"/></svg>
+            </label>
+          
+        
+          
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="amber"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 1 7 7c0 2.38-1.19 4.47-3 5.74V17a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 0 1 7-7M9 21v-1h6v1a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1m3-17a5 5 0 0 0-5 5c0 2.05 1.23 3.81 3 4.58V16h4v-2.42c1.77-.77 3-2.53 3-4.58a5 5 0 0 0-5-5z"/></svg>
+            </label>
+          
+        
+      </form>
+    
     
     
       <label class="md-header__button md-icon" for="__search">
@@ -136,6 +162,18 @@
 </div>
     
     
+      <div class="md-header__source">
+        <a href="https://github.com/Rydra/melange/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Rydra/melange
+  </div>
+</a>
+      </div>
+    
   </nav>
   
 </header>
@@ -168,6 +206,18 @@
     </a>
     Melange
   </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/Rydra/melange/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Rydra/melange
+  </div>
+</a>
+    </div>
   
   <ul class="md-nav__list" data-md-scrollfix>
     
@@ -235,8 +285,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#exchange-message-consumer" class="md-nav__link">
-    Exchange Message Consumer
+  <a href="#exchange-message-singledispatchconsumer" class="md-nav__link">
+    Exchange Message SingleDispatchConsumer
   </a>
   
 </li>
@@ -262,8 +312,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#threaded-exchange-message-consumer" class="md-nav__link">
-    Threaded Exchange Message Consumer
+  <a href="#threaded-exchange-message-singledispatchconsumer" class="md-nav__link">
+    Threaded Exchange Message SingleDispatchConsumer
   </a>
   
 </li>
@@ -428,22 +478,52 @@
   
   
   
+    <li class="md-nav__item">
+      <a href="extending/" class="md-nav__link">
+        Extending Melange
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="advanced-topics/" class="md-nav__link">
+        Advanced topics
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
     
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" >
       
       
       
       
-        <label class="md-nav__link" for="__nav_4">
+        <label class="md-nav__link" for="__nav_6">
           Examples
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="Examples" data-md-level="1">
-        <label class="md-nav__title" for="__nav_4">
+        <label class="md-nav__title" for="__nav_6">
           <span class="md-nav__icon md-icon"></span>
           Examples
         </label>
@@ -494,18 +574,18 @@
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7" type="checkbox" id="__nav_7" >
       
       
       
       
-        <label class="md-nav__link" for="__nav_5">
+        <label class="md-nav__link" for="__nav_7">
           Code Reference
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="Code Reference" data-md-level="1">
-        <label class="md-nav__title" for="__nav_5">
+        <label class="md-nav__title" for="__nav_7">
           <span class="md-nav__icon md-icon"></span>
           Code Reference
         </label>
@@ -580,8 +660,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#exchange-message-consumer" class="md-nav__link">
-    Exchange Message Consumer
+  <a href="#exchange-message-singledispatchconsumer" class="md-nav__link">
+    Exchange Message SingleDispatchConsumer
   </a>
   
 </li>
@@ -607,8 +687,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#threaded-exchange-message-consumer" class="md-nav__link">
-    Threaded Exchange Message Consumer
+  <a href="#threaded-exchange-message-singledispatchconsumer" class="md-nav__link">
+    Threaded Exchange Message SingleDispatchConsumer
   </a>
   
 </li>
@@ -651,11 +731,15 @@
             <article class="md-content__inner md-typeset">
               
                 
+<a href="https://github.com/Rydra/melange/edit/master/docs/index.md" title="Edit this page" class="md-content__button md-icon">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+</a>
+
 
 <h1 id="melange">Melange</h1>
 <p>TODO: Update the documentation to match the latest version 7.0.0</p>
 <p><img alt="melange logo" src="img/melange_logo.png" /></p>
-<p>Motto: The spice must flow! (or in this case, the events)</p>
+<p><em>The spice must flow!</em></p>
 <p><strong>melange</strong> is a python messaging library for an easy inter-communication in distributed and 
 microservices architectures. It offers a flexible, easy-to-use library to create distributed 
 event-driven architectures using your preferred messaging infrastructure mechanism as a backend message 
@@ -675,9 +759,7 @@ as well as the recommended design patterns when dealing with messaging on distri
 the simple and attractive interface Melange offers and your backend infrastructure is not
 listed (e.g. Kafka, Kinesis) you can implement your own driver. Read the section <code>Adding your own messaging infrastructure</code>
 for more information.</p>
-<p>In addition, Melange supports event driven architectures in single-process, non-distributed, memory-based applications (Console applications, background workers)
-with the aid of the <code>DomainEventBus</code> (see <code>Domain-Driven Design</code> section). The <code>DomainEventBus</code> is great if you really 
-want to have a clean event-driven architecture with Domain Events, and its idea has been grabbed from Vaughn Vernon and his must-read book 
+<p>If want to have a clean event-driven architecture with Domain Events, and its idea has been grabbed from Vaughn Vernon and his must-read book 
 Implementing Domain-Driven Design (look at <a href="http://dddcommunity.org/library/vernon_2011/">part 3 of these series</a> if you want a quick look,
  or read this excellent article from <a href="http://udidahan.com/2009/06/14/domain-events-salvation/">Udi Dahan, founder of NServiceBus</a>).</p>
 <h2 id="installing">Installing</h2>
@@ -691,7 +773,7 @@ mediator, or better said, a <strong>Message Broker</strong> is required to trans
 publishers to subscribers. Clients can subscribe this broker, waiting for events they are interested in,
 or publish messages so that the broker can distribute these messages appropriately.</p>
 <p>So, you will need two things to make this entire scene work: an <strong>Exchange Message Publisher</strong> and
-an <strong>Exchange Message Consumer</strong> to send and receive messages respectively.</p>
+an <strong>Exchange Message SingleDispatchConsumer</strong> to send and receive messages respectively.</p>
 <p>But before getting your feet wet into this realm, first things first. You need to tell Melange which driver backend
 you want to use. Place this line in the initialization code of your application:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># If you want to use AWS</span>
@@ -729,18 +811,18 @@ you want to go with the environment variables route:</p>
 <p>This piece of code will serialize the dictionary as JSON and send it to SNS to the topic <code>some-topic-name</code>.
 If the topic does not exist, it will be created (though no one will receive the message...).
 After that, all listeners subscribed to this topic will receive the message for
-further processing (be an AWS Lambda, an email address, an Exchange Message Consumer, or any other
+further processing (be an AWS Lambda, an email address, an Exchange Message SingleDispatchConsumer, or any other
 compatible Amazon SNS subscriber).</p>
 <p>NOTE: The <code>event_type_name</code> property must exist in the dictionary. If it doesn't,
 you must supply the event_type_name through the <code>event_type_name</code> parameter from
 the publish method</p>
-<h3 id="exchange-message-consumer">Exchange Message Consumer</h3>
+<h3 id="exchange-message-singledispatchconsumer">Exchange Message SingleDispatchConsumer</h3>
 <p>After that, you may have in another separate project (be it a simple console application,
-django worker, another thread, etc) an <code>Exchange Message Consumer</code> to receive these messages. And that consumer
+django worker, another thread, etc) an <code>Exchange Message SingleDispatchConsumer</code> to receive these messages. And that consumer
 will require, at least, one listener to be of any use.</p>
 <p>The simplest implementation for that would be the following one, and you could place it in
 the initialization of your application:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="k">class</span> <span class="nc">SampleListener</span><span class="p">(</span><span class="n">Consumer</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="k">class</span> <span class="nc">SampleListener</span><span class="p">(</span><span class="n">SingleDispatchConsumer</span><span class="p">):</span>
 <a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>
 <a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>    <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;I&#39;ve received information about the product </span><span class="si">{</span><span class="n">event</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -763,7 +845,7 @@ SNS will be stored and available for the consumer application at his own time. T
 an <code>ExchangeMessageDispatcher</code> with a queue name and a topic. If the queue does not exist, it will create
 an <strong>SQS queue</strong> and subscribe it to the topic. </p>
 <p>Afterwards, you can subscribe an instance of your listener to the message consumer. Finally, you
-create a loop that will poll for new events and invoke the <code>process</code> method of your Consumer
+create a loop that will poll for new events and invoke the <code>process</code> method of your SingleDispatchConsumer
 for each event of the expected type it receives.</p>
 <h2 id="advanced-usage">Advanced usage</h2>
 <p>What you've seen so far is the simplest application of Melange to easily create a simple Publish/Subscribe
@@ -800,7 +882,7 @@ methods. The example above would be rewritten like this with this approach:</p>
 <a id="__codelineno-6-21" name="__codelineno-6-21" href="#__codelineno-6-21"></a><span class="n">message_publisher</span> <span class="o">=</span> <span class="n">TopicPublisher</span><span class="p">(</span><span class="n">topic</span><span class="o">=</span><span class="s1">&#39;some-topic-name&#39;</span><span class="p">)</span>
 <a id="__codelineno-6-22" name="__codelineno-6-22" href="#__codelineno-6-22"></a><span class="n">message_publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">ProductAdded</span><span class="p">(</span><span class="n">product_id</span><span class="o">=</span><span class="mi">12345</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Coolers&#39;</span><span class="p">))</span>
 </code></pre></div></p>
-<p>Consumer:
+<p>SingleDispatchConsumer:
 <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># In some file you would implement these classes</span>
 <a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="c1"># Bear in mind that these definition are placed in</span>
 <a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="c1"># another project, and you could define a different</span>
@@ -822,7 +904,7 @@ methods. The example above would be rewritten like this with this approach:</p>
 <a id="__codelineno-7-19" name="__codelineno-7-19" href="#__codelineno-7-19"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">product_id</span> <span class="o">=</span> <span class="n">product_id</span>
 <a id="__codelineno-7-20" name="__codelineno-7-20" href="#__codelineno-7-20"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
 <a id="__codelineno-7-21" name="__codelineno-7-21" href="#__codelineno-7-21"></a>
-<a id="__codelineno-7-22" name="__codelineno-7-22" href="#__codelineno-7-22"></a><span class="k">class</span> <span class="nc">SampleListener</span><span class="p">(</span><span class="n">Consumer</span><span class="p">):</span>
+<a id="__codelineno-7-22" name="__codelineno-7-22" href="#__codelineno-7-22"></a><span class="k">class</span> <span class="nc">SampleListener</span><span class="p">(</span><span class="n">SingleDispatchConsumer</span><span class="p">):</span>
 <a id="__codelineno-7-23" name="__codelineno-7-23" href="#__codelineno-7-23"></a>
 <a id="__codelineno-7-24" name="__codelineno-7-24" href="#__codelineno-7-24"></a>    <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <a id="__codelineno-7-25" name="__codelineno-7-25" href="#__codelineno-7-25"></a>        <span class="c1"># Note that I&#39;m not accessing event properties by key, but as a regular object.</span>
@@ -854,12 +936,12 @@ happen. This may be of use to you to guarantee correct ordering of message arriv
 <p>It's a bit more complicated to implement, but the resulting code is cleaner and more readable
 to another developer, and the intent, the event type and the property types for the event are clear 
 and can be used as contract documentation for your listeners. Up to you and your needs/feelings.</p>
-<h3 id="threaded-exchange-message-consumer">Threaded Exchange Message Consumer</h3>
+<h3 id="threaded-exchange-message-singledispatchconsumer">Threaded Exchange Message SingleDispatchConsumer</h3>
 <p>The <code>ThreadedExchangeMessageConsumer</code> allows you to create a consumer that will poll the message queue
 on a separate thread. The <code>ThreadedExchangeMessageConsumer</code> inherits from python <code>Thread</code> class, so
 you can use them for your threading purposes.</p>
 <p>The consumer example above would be rewritten like this:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="k">class</span> <span class="nc">SampleListener</span><span class="p">(</span><span class="n">Consumer</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="k">class</span> <span class="nc">SampleListener</span><span class="p">(</span><span class="n">SingleDispatchConsumer</span><span class="p">):</span>
 <a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>
 <a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>    <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;I&#39;ve received information about the product </span><span class="si">{</span><span class="n">event</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
