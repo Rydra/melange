@@ -5,7 +5,7 @@ from melange.examples.common.serializer import PickleSerializer
 from melange.examples.saga_pattern.consumer import SagaConsumer
 from melange.examples.saga_pattern.publisher import SagaPublisher
 from melange.examples.saga_pattern.repository import SagaRepository
-from melange.message_publisher import SQSPublisher
+from melange.message_publisher import QueuePublisher
 
 if __name__ == "__main__":
     serializer = PickleSerializer()
@@ -15,7 +15,7 @@ if __name__ == "__main__":
 
     payment_consumer = SagaConsumer(
         SagaRepository(),
-        SagaPublisher(SQSPublisher(serializer, backend)),
+        SagaPublisher(QueuePublisher(serializer, backend)),
         message_serializer=PickleSerializer(),
         backend=backend,
         always_ack=True,

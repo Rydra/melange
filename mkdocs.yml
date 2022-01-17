@@ -25,7 +25,16 @@ plugins:
 
 
 nav:
-    - Home: index.md
-    - Examples: examples.md
+    - Melange: index.md
+    - Tutorial - Getting started: tutorial/getting-started.md
+    - Building blocks:
+        - Messaging Backends: components/messaging-backends.md
+        - Serializers: components/serializers.md
+        - Consumers: components/consumers.md
+        - Publishers: components/publishers.md
+        - Factory: factory.md
+    - Examples:
+        - Payment service: examples/payment-service.md
+        - Saga choreography: examples/saga.md
     - Code Reference:
         - API reference: api-reference.md

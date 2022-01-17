@@ -9,7 +9,7 @@ from melange.event_serializer import MessageSerializer
 logger = logging.getLogger(__name__)
 
 
-class ExchangeMessagePublisher:
+class TopicPublisher:
     """
     Some documentation here is in order
     """
@@ -42,7 +42,7 @@ class ExchangeMessagePublisher:
         return True
 
 
-class SQSPublisher:
+class QueuePublisher:
     def __init__(
         self,
         message_serializer: MessageSerializer,

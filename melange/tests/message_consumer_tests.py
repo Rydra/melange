@@ -14,7 +14,7 @@ from melange.backends.interfaces import Message, MessagingBackend
 from melange.consumer import Consumer, consumer
 from melange.event_serializer import MessageSerializer
 from melange.message_dispatcher import ExchangeMessageDispatcher
-from melange.message_publisher import ExchangeMessagePublisher, SQSPublisher
+from melange.message_publisher import QueuePublisher, TopicPublisher
 
 
 class TestEventSerializer(MessageSerializer):
@@ -185,7 +185,7 @@ class TestMessageConsumerWithAWS:
         self.exchange_consumer = ExchangeMessageDispatcher(
             self._get_queue_name(), serializer, topic_name
         )
-        exchange_publisher = ExchangeMessagePublisher(
+        exchange_publisher = TopicPublisher(
             topic=topic_name, message_serializer=serializer
         )
 
@@ -213,7 +213,7 @@ class TestMessageConsumerWithAWS:
         self.exchange_consumer = ExchangeMessageDispatcher(
             queue_name, serializer, topic_name
         )
-        queue_publisher = SQSPublisher(
+        queue_publisher = QueuePublisher(
             queue_name=queue_name, message_serializer=serializer
         )
 
@@ -239,7 +239,7 @@ class TestMessageConsumerWithAWS:
         self.exchange_consumer = ExchangeMessageDispatcher(
             self._get_queue_name(), TestEventSerializer(), topic_name
         )
-        exchange_publisher = ExchangeMessagePublisher(
+        exchange_publisher = TopicPublisher(
             topic=topic_name, message_serializer=TestEventSerializer()
         )
 
@@ -402,7 +402,7 @@ class TestMessageConsumerRabbitMQ:
         self.exchange_consumer = ExchangeMessageDispatcher(
             self._get_queue_name(), topic_name
         )
-        exchange_publisher = ExchangeMessagePublisher(topic=topic_name)
+        exchange_publisher = TopicPublisher(topic=topic_name)
 
         self.listened_event = None
 
@@ -425,7 +425,7 @@ class TestMessageConsumerRabbitMQ:
         self.exchange_consumer = ExchangeMessageDispatcher(
             self._get_queue_name(), topic_name
         )
-        exchange_publisher = ExchangeMessagePublisher(topic=topic_name)
+        exchange_publisher = TopicPublisher(topic=topic_name)
 
         self.listened_events = set()
 

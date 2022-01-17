@@ -17,3 +17,5 @@ target/
 test.env
 
 \.pytest_cache/
+
+site/

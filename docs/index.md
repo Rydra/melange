@@ -90,7 +90,7 @@ AWS_SESSION_TOKEN – Specify a session token if you are using temporary securit
 The simplest application that can work with Melange is creating a Publisher which will send messages:
 
 ``` py
-message_publisher = ExchangeMessagePublisher(topic='some-topic-name')
+message_publisher = TopicPublisher(topic='some-topic-name')
 
 data = {
 	'event_type_name': 'ProductAdded',
@@ -189,7 +189,7 @@ class ProductAdded(EventMessage):
 # In you initialization code you would call the following line:
 EventSerializer.instance().register(ProductAddedSchema)
 
-message_publisher = ExchangeMessagePublisher(topic='some-topic-name')
+message_publisher = TopicPublisher(topic='some-topic-name')
 message_publisher.publish(ProductAdded(product_id=12345, name='Coolers'))
 ```
 

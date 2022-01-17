@@ -1,9 +1,9 @@
 from melange.examples.common.commands import DoPayment
-from melange.message_publisher import SQSPublisher
+from melange.message_publisher import QueuePublisher
 
 
 class SagaPublisher:
-    def __init__(self, publisher: SQSPublisher) -> None:
+    def __init__(self, publisher: QueuePublisher) -> None:
         self.publisher = publisher
 
     def publish_dopayment(self, do_payment: DoPayment) -> None:
