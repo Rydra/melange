@@ -93,7 +93,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Home
+              Melange
             
           </span>
         </div>
@@ -189,12 +189,12 @@
       
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
-          Home
+          Melange
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <a href="." class="md-nav__link md-nav__link--active">
-        Home
+        Melange
       </a>
       
         
@@ -310,8 +310,8 @@
   
   
     <li class="md-nav__item">
-      <a href="examples/" class="md-nav__link">
-        Examples
+      <a href="tutorial/getting-started/" class="md-nav__link">
+        Tutorial - Getting started
       </a>
     </li>
   
@@ -334,12 +334,178 @@
       
       
         <label class="md-nav__link" for="__nav_3">
+          Building blocks
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Building blocks" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Building blocks
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="components/messaging-backends/" class="md-nav__link">
+        Messaging Backends
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="components/serializers/" class="md-nav__link">
+        Serializers
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="components/consumers/" class="md-nav__link">
+        Consumers
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="components/publishers/" class="md-nav__link">
+        Publishers
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="factory/" class="md-nav__link">
+        Factory
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4">
+          Examples
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Examples" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Examples
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="examples/payment-service/" class="md-nav__link">
+        Payment service
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="examples/saga/" class="md-nav__link">
+        Saga choreography
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5">
           Code Reference
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="Code Reference" data-md-level="1">
-        <label class="md-nav__title" for="__nav_3">
+        <label class="md-nav__title" for="__nav_5">
           <span class="md-nav__icon md-icon"></span>
           Code Reference
         </label>
@@ -550,7 +716,7 @@ you want to go with the environment variables route:</p>
 </code></pre></div>
 <h3 id="exchange-message-publisher">Exchange Message Publisher</h3>
 <p>The simplest application that can work with Melange is creating a Publisher which will send messages:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="n">message_publisher</span> <span class="o">=</span> <span class="n">ExchangeMessagePublisher</span><span class="p">(</span><span class="n">topic</span><span class="o">=</span><span class="s1">&#39;some-topic-name&#39;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="n">message_publisher</span> <span class="o">=</span> <span class="n">TopicPublisher</span><span class="p">(</span><span class="n">topic</span><span class="o">=</span><span class="s1">&#39;some-topic-name&#39;</span><span class="p">)</span>
 <a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
 <a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
 <a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>    <span class="s1">&#39;event_type_name&#39;</span><span class="p">:</span> <span class="s1">&#39;ProductAdded&#39;</span><span class="p">,</span>
@@ -631,7 +797,7 @@ methods. The example above would be rewritten like this with this approach:</p>
 <a id="__codelineno-6-18" name="__codelineno-6-18" href="#__codelineno-6-18"></a><span class="c1"># In you initialization code you would call the following line:</span>
 <a id="__codelineno-6-19" name="__codelineno-6-19" href="#__codelineno-6-19"></a><span class="n">EventSerializer</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">ProductAddedSchema</span><span class="p">)</span>
 <a id="__codelineno-6-20" name="__codelineno-6-20" href="#__codelineno-6-20"></a>
-<a id="__codelineno-6-21" name="__codelineno-6-21" href="#__codelineno-6-21"></a><span class="n">message_publisher</span> <span class="o">=</span> <span class="n">ExchangeMessagePublisher</span><span class="p">(</span><span class="n">topic</span><span class="o">=</span><span class="s1">&#39;some-topic-name&#39;</span><span class="p">)</span>
+<a id="__codelineno-6-21" name="__codelineno-6-21" href="#__codelineno-6-21"></a><span class="n">message_publisher</span> <span class="o">=</span> <span class="n">TopicPublisher</span><span class="p">(</span><span class="n">topic</span><span class="o">=</span><span class="s1">&#39;some-topic-name&#39;</span><span class="p">)</span>
 <a id="__codelineno-6-22" name="__codelineno-6-22" href="#__codelineno-6-22"></a><span class="n">message_publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">ProductAdded</span><span class="p">(</span><span class="n">product_id</span><span class="o">=</span><span class="mi">12345</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Coolers&#39;</span><span class="p">))</span>
 </code></pre></div></p>
 <p>Consumer:
@@ -957,13 +1123,13 @@ The spice must flow.</p>
       
       
         
-        <a href="examples/" class="md-footer__link md-footer__link--next" aria-label="Next: Examples" rel="next">
+        <a href="tutorial/getting-started/" class="md-footer__link md-footer__link--next" aria-label="Next: Tutorial - Getting started" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              Examples
+              Tutorial - Getting started
             </div>
           </div>
           <div class="md-footer__button md-icon">
