@@ -433,7 +433,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../extending/" class="md-nav__link">
+      <a href="../../extending.md" class="md-nav__link">
         Extending Melange
       </a>
     </li>
@@ -645,8 +645,8 @@
 <h1 id="serializers">Serializers</h1>
 <p>Serializers are the component that translates (serializes) your python objects into a
 string that can be sent through the messaging infrastructure, and then
-translates it back (deserializes) that string back to the python object.</p>
-<p>Melange is bundled with two serializers: a <code>JSONSerializer</code> (to
+translates it (deserializes) that string back to the python object.</p>
+<p>Melange is bundled with two serializers: a <code>JSONSerializer</code> to
 serialize python dictionaries and a <code>PickleSerializer</code> that will
 serialize any python object, but will only be deserializable from
 another python process and it's generally regarded as unsafe).</p>

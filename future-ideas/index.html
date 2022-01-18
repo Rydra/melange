@@ -13,7 +13,7 @@
     
     
       
-        <title>Future ideas - Melange</title>
+        <title>Future ideas to implement - Melange</title>
       
     
     
@@ -63,6 +63,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#future-ideas-to-implement" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -92,7 +97,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Future ideas
+              Future ideas to implement
             
           </span>
         </div>
@@ -358,7 +363,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../extending/" class="md-nav__link">
+      <a href="../extending.md" class="md-nav__link">
         Extending Melange
       </a>
     </li>
@@ -497,6 +502,39 @@
               </div>
             
             
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#multiple-serializers" class="md-nav__link">
+    Multiple serializers
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
           
           <div class="md-content" data-md-component="content">
             <article class="md-content__inner md-typeset">
@@ -507,9 +545,15 @@
 </a>
 
 
-  <h1>Future ideas</h1>
-
-
+<h1 id="future-ideas-to-implement">Future ideas to implement</h1>
+<h2 id="multiple-serializers">Multiple serializers</h2>
+<p>Right now, you can only supply one serializer to a publisher or a consumer,
+and the same serializer will always be used for all the messages published and received. 
+This could be extended to support multiple serializers, and then let 
+the library choose the appropriate library to use depending on the type
+of the message or the attached manifest. That way you could even implement
+serializer versioning (e.g. have different versions of the same serializer)</p>
+<p>The akka framework implements a <a href="https://doc.akka.io/docs/akka/current/serialization.html">similar concept</a>.</p>
 
               
             </article>
