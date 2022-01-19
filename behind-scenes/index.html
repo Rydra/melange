@@ -13,7 +13,7 @@
     
     
       
-        <title>Future ideas to implement - Melange</title>
+        <title>Behind the scenes - Melange</title>
       
     
     
@@ -64,7 +64,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#future-ideas-to-implement" class="md-skip">
+        <a href="#behind-the-scenes" class="md-skip">
           Skip to content
         </a>
       
@@ -97,7 +97,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Future ideas to implement
+              Behind the scenes
             
           </span>
         </div>
@@ -361,11 +361,101 @@
 
   
   
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4">
+          Advanced topics
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Advanced topics" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Advanced topics
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
   
     <li class="md-nav__item">
       <a href="../advanced-topics/" class="md-nav__link">
         Advanced topics
       </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Behind the scenes
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Behind the scenes
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#how-are-messages-serialized" class="md-nav__link">
+    How are messages serialized
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
     </li>
   
 
@@ -469,22 +559,37 @@
   
   
   
+    <li class="md-nav__item">
+      <a href="../roadmap/" class="md-nav__link">
+        Roadmap
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
     
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_8" type="checkbox" id="__nav_8" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_9" type="checkbox" id="__nav_9" >
       
       
       
       
-        <label class="md-nav__link" for="__nav_8">
+        <label class="md-nav__link" for="__nav_9">
           Code Reference
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="Code Reference" data-md-level="1">
-        <label class="md-nav__title" for="__nav_8">
+        <label class="md-nav__title" for="__nav_9">
           <span class="md-nav__icon md-icon"></span>
           Code Reference
         </label>
@@ -537,8 +642,8 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#multiple-serializers" class="md-nav__link">
-    Multiple serializers
+  <a href="#how-are-messages-serialized" class="md-nav__link">
+    How are messages serialized
   </a>
   
 </li>
@@ -555,20 +660,59 @@
             <article class="md-content__inner md-typeset">
               
                 
-<a href="https://github.com/Rydra/melange/edit/master/docs/future-ideas.md" title="Edit this page" class="md-content__button md-icon">
+<a href="https://github.com/Rydra/melange/edit/master/docs/behind-scenes.md" title="Edit this page" class="md-content__button md-icon">
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
 </a>
 
 
-<h1 id="future-ideas-to-implement">Future ideas to implement</h1>
-<h2 id="multiple-serializers">Multiple serializers</h2>
-<p>Right now, you can only supply one serializer to a publisher or a consumer,
-and the same serializer will always be used for all the messages published and received. 
-This could be extended to support multiple serializers, and then let 
-the library choose the appropriate library to use depending on the type
-of the message or the attached manifest. That way you could even implement
-serializer versioning (e.g. have different versions of the same serializer)</p>
-<p>The akka framework implements a <a href="https://doc.akka.io/docs/akka/current/serialization.html">similar concept</a>.</p>
+<h1 id="behind-the-scenes">Behind the scenes</h1>
+<h2 id="how-are-messages-serialized">How are messages serialized</h2>
+<p>Messages, when serialized, they have the shape of a string. Some serializing formats 
+might not require anything more that the message itself (like pickle). 
+The message itself contains headers of some kind that tells deserializers
+how they have to deserialize that message (assuming you already know you
+always have to use that specific serializer). Other formats (like protobuf)
+require some kind of specification that tells the consumers how the message
+needs to be deserialized.</p>
+<p>This is why <em>manifests</em> exist and are necessary. A manifest tells the aplicacion which shape
+(manifestation) an array of bytes or a string had. This way we can appropriately
+choose the serializer that is able to properly deserialize the message.</p>
+<p>Imagine we want to serialize an object with a serializer that performs encryption as well:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nd">@dataclass</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="k">class</span> <span class="nc">ProductCreated</span><span class="p">:</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    <span class="nb">id</span><span class="p">:</span> <span class="nb">int</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="n">event</span> <span class="o">=</span> <span class="n">ProductCreated</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;Banana&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="n">serialzer</span> <span class="o">=</span> <span class="n">MyCryptographicSerializer</span><span class="p">()</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="n">serialized_event</span> <span class="o">=</span> <span class="n">serializer</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="c1"># Let&#39;s say `serialized_event` has this content:</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="c1"># a&amp;/(67567ulmtensr/((&amp;/...29747JJJ</span>
+</code></pre></div>
+<p>If we just sent that string to an outsider, how does it know that is a <code>ProductCreated</code>
+which has been serialized with a special serializer?</p>
+<p>However, with the aid of the manifest, we can give some clue to the
+deserializer on how that message was serialized:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nd">@dataclass</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="k">class</span> <span class="nc">ProductCreated</span><span class="p">:</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>    <span class="nb">id</span><span class="p">:</span> <span class="nb">int</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="n">event</span> <span class="o">=</span> <span class="n">ProductCreated</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;Banana&quot;</span><span class="p">)</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="n">serialzer</span> <span class="o">=</span> <span class="n">MyCryptographicSerializer</span><span class="p">()</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="n">serialized_event</span> <span class="o">=</span> <span class="n">serializer</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="c1"># Let&#39;s say `serialized_event` has this content:</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="c1"># a&amp;/(67567ulmtensr/((&amp;/...29747JJJ</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="n">manifest</span> <span class="o">=</span> <span class="n">serializer</span><span class="o">.</span><span class="n">manifest</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="c1"># manifest could be something like `mycryptoserializer:sha1:ProductCreated`</span>
+</code></pre></div>
+<p>That way we tell the consumer who has to deserialize the message that
+the message was serialized with the <code>MyCryptographicSerializer</code>, with a <code>SHA1</code>
+algorithm, and that it is a <code>ProductCreated</code> event. The publishers, when
+sending the message, they send the manifest as well as the serialized message
+to provide the consumers with this valuable information. The manifest
+could be sent through the means of metadata (if your messaging infrastructure
+supports it) or through any other means that could be retrieved by the consumer.</p>
 
               
             </article>
@@ -578,6 +722,41 @@ serializer versioning (e.g. have different versions of the same serializer)</p>
       </main>
       
         <footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="../advanced-topics/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Advanced topics" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Advanced topics
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../examples/payment-service/" class="md-footer__link md-footer__link--next" aria-label="Next: Payment service" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Payment service
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
   
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
