@@ -1,12 +1,12 @@
 import os
 
 from melange.backends.sqs.elasticmq import ElasticMQBackend
-from melange.consumer import SimpleConsumerHandler
 from melange.examples.payment_service.consumer import PaymentConsumer
 from melange.examples.payment_service.publisher import PaymentPublisher
 from melange.examples.payment_service.repository import PaymentRepository
 from melange.examples.payment_service.service import PaymentService
-from melange.message_publisher import QueuePublisher
+from melange.message_dispatcher import SimpleConsumerHandler
+from melange.publishers import QueuePublisher
 from melange.serializers.pickle import PickleSerializer
 
 if __name__ == "__main__":

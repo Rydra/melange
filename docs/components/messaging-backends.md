@@ -1,7 +1,14 @@
 # Messaging backends
 
-## SQS
+A **messaging backend** is a wrapper over your message broker. It exposes 
+several methods that abstract the broker functionality, making it simpler to work with.
 
-## RabbitMQ
+Out of the box Melange provides you with three messaging backends: The `SQSBackend`,
+the `RabbitMQBackend` and the `ElasticMQBackend`.
 
-## Writing your own backend
+## Writing your own Messaging Backend
+
+Subclass the `MessagingBackend` interface and implement all the methods of that
+class. Here is the documentation of the interface class and all its methods:
+
+::: melange.backends.interfaces

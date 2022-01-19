@@ -1,5 +1,12 @@
 # Tutorial - Getting started
 
+Event-driven architectures work with the Publish/Subscribe pattern to achieve decoupling.
+With this pattern, publishers and subscribers do not know about each other while they can exchange
+information among them. In order to achieve this and communicate effectively a 
+mediator, or better said, a **Message Broker** is required to transfer messages from
+publishers to subscribers. Clients can subscribe this broker, waiting for events they are interested in,
+or publish messages so that the broker can distribute these messages appropriately.
+
 This tutorial assumes that you have basic understanding of the pub/sub
 mechanics. If not, there are a whole bunch of resources to get your feet
 wet on the topic. Also it's good to have `docker` installed since we are
@@ -62,7 +69,7 @@ if __name__ == "__main__":
 Once you run this code it will publish a message `MyTestMessage` with the contents `Hello World` in
 the queue `melangetutorial-queue`.
 You can send anything as long as your selected serializer can serialize/deserialize
-the object. Refer [Serializers](components/serializers.md) for further details.
+the object. Refer [Serializers](../components/serializers.md) for further details.
 
 > NOTE: For the sake of this tutorial you can use the `PickleSerializer` to serialize your messages.
 For production applications however you should probably use another type of serializer or create your own,
@@ -122,4 +129,8 @@ side and read those with a consumer from the Read side to create your data proje
 * Implement microservices which consume messages from a queue to do their job (e.g. an staticstics microservice
   that reacts to a `OrderCreated` event and increments a counter to track how many orders your system has).
 
-Also we have not covered the case of topics. Refer to [Advanced Topics](advanced-topics.md) for further details.
+We have not covered the case of topics. Refer to [Publishers](components/publishers.md) for further details.
+
+In addition, Melange is bundled with a consumer that works with a python application. But the consumer
+can be implemented in any language and any technology that can read messages from your queue (AWS Lambda, Azure functions, 
+a NodeJS app...)

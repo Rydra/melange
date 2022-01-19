@@ -1,4 +1,4 @@
-from typing import Any, Dict, Optional
+from typing import Optional
 
 from singleton import Singleton
 
@@ -13,32 +13,15 @@ class BackendManager(metaclass=Singleton):
 
     def __init__(self) -> None:
         self._backend: Optional[MessagingBackend] = None
-        self._backends: Dict[str, Any] = {}
-
-    def add_available_backends(self, **kwargs: Any) -> None:
-        self._backends.update(kwargs)
 
     def use_backend(
         self,
-        backend: Optional[MessagingBackend] = None,
-        backend_name: Optional[str] = None,
-        **kwargs: Any
+        backend: MessagingBackend,
     ) -> None:
-        if backend:
-            if not isinstance(backend, MessagingBackend):
-                raise Exception("Invalid backend supplied")
+        if not isinstance(backend, MessagingBackend):
+            raise Exception("Invalid backend supplied")
 
-            self._backend = backend
-
-        elif backend_name:
-            backend = self._backends.get(backend_name)
-            if not backend:
-                raise Exception("Invalid backend supplied")
-
-            self._backend = backend(**kwargs)
-
-        else:
-            raise Exception("You need to either supply a backend or a backend_name!")
+        self._backend = backend
 
     def get_backend(self) -> MessagingBackend:
         if not self._backend:

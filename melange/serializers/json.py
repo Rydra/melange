@@ -4,7 +4,7 @@ from typing import Dict, Optional
 from melange.serializers.interfaces import MessageSerializer
 
 
-class JsonSQSSerializer(MessageSerializer[Dict]):
+class JsonSerializer(MessageSerializer[Dict]):
     def manifest(self, data: Dict) -> str:
         return "json"
 

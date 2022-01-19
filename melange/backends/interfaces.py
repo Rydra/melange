@@ -66,6 +66,15 @@ class MessagingBackend:
         raise NotImplementedError
 
     def get_queue(self, queue_name: str) -> Queue:
+        """
+        Gets the queue with the name `queue_name`.
+
+        Args:
+            queue_name: the name of the queue to retrieve
+
+        Returns:
+            A `Queue` object that represents the created the queue
+        """
         raise NotImplementedError
 
     def declare_queue(
@@ -76,21 +85,21 @@ class MessagingBackend:
         **kwargs: Any
     ) -> Tuple[Queue, Optional[Queue]]:
         """
-        Declares a queue with the name "queue_name". Optionally, this
-         queue may be binded to the topic "topic_to_bind" and associated
-         to a dead_letter_queue "dead_letter_queue_name" where messages that
-         were unable to deliver will be placed.
+        Creates a queue named `queue_name` if it does not exist. with
+        default settings.
 
-        :param queue_name: The name of the queue to create
-        :param topic_to_bind: The topic object where you will bind your queue
-        :param dead_letter_queue_name: The name of the dead letter queue to
-        create and associate to the queue "queue_name"
-        :return: A tuple, with the first element being the object queue
-        created, and the second element is the dead letter queue object.
-        The type of the queue object is only relevant inside the context of the backend, so what you
-        return as a queue will be passed in next calls to the backend
-        where a queue is required
+        Args:
+            queue_name: the name of the queue to create
+            *topics_to_bind: if provided, creates all these topics and subscribes
+                the created queue to them
+            dead_letter_queue_name: if provided, create a dead letter queue attached to
+                the created `queue_name`.
+            **kwargs:
+
+        Returns:
+            A tuple with the created queue and the dead letter queue (if applies)
         """
+
         raise NotImplementedError
 
     def retrieve_messages(

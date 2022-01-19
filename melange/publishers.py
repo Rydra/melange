@@ -1,6 +1,6 @@
 import logging
 import uuid
-from typing import Any, Dict, Optional
+from typing import Any, Optional
 
 from melange.backends.backend_manager import BackendManager
 from melange.backends.interfaces import MessagingBackend
@@ -17,24 +17,19 @@ class TopicPublisher:
     def __init__(
         self,
         message_serializer: MessageSerializer,
-        topic: str,
         backend: Optional[MessagingBackend] = None,
     ) -> None:
         self._backend = backend or BackendManager().get_backend()
         self.message_serializer = message_serializer
-        self._topic_name = topic
 
-    def init(self) -> None:
-        self._topic = self._backend.declare_topic(self._topic_name)
-
-    def publish(self, data: Any, extra_attributes: Optional[Dict] = None) -> bool:
+    def publish(self, topic_name: str, data: Any, **extra_attributes: Any) -> bool:
+        topic = self._backend.declare_topic(topic_name)
         content = self.message_serializer.serialize(data)
         manifest = self.message_serializer.manifest(data)
 
-        self.init()
         self._backend.publish(
             content,
-            self._topic,
+            topic,
             event_type_name=manifest,
             extra_attributes=extra_attributes,
         )

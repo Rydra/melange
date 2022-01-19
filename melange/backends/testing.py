@@ -1,6 +1,23 @@
+from typing import List
 from uuid import uuid4
 
 from melange.backends.interfaces import Message, MessagingBackend
+from melange.consumers import Consumer
+from melange.message_dispatcher import ConsumerDispatcher
+from melange.serializers.interfaces import MessageSerializer
+
+
+def link_synchronously(
+    queue_name: str,
+    consumers: List[Consumer],
+    serializer: MessageSerializer,
+    backend: "InMemoryMessagingBackend",
+) -> None:
+    consumer_dispatcher = ConsumerDispatcher(serializer, backend=backend)
+    for consumer in consumers:
+        consumer_dispatcher.subscribe(consumer)
+
+    backend.set_callback(queue_name, consumer_dispatcher.consume_event)
 
 
 class DumbQueue:
@@ -10,14 +27,13 @@ class DumbQueue:
 
 
 class InMemoryMessagingBackend(MessagingBackend):
-    def __init__(self, callback=None, only_queues=None):
+    def __init__(self):
         super().__init__()
         self._messages = []
-        self.callback = callback
-        self._only_queues = only_queues or []
+        self.callbacks = {}
 
-    def set_callback(self, callback):
-        self.callback = callback
+    def set_callback(self, queue_name, callback):
+        self.callbacks[queue_name] = callback
 
     def declare_topic(self, topic_name):
         return None
@@ -36,12 +52,13 @@ class InMemoryMessagingBackend(MessagingBackend):
         return messages
 
     def publish(self, content, topic, event_type_name, extra_attributes=None):
-        if not self._only_queues or topic.name in self._only_queues:
+        if topic.name in self.callbacks:
             message = Message(str(uuid4()), content, None, manifest=event_type_name)
+            # Append the message internally to simulate "the queue",
+            # then call the
             self._messages.append(message)
 
-            if self.callback:
-                self.callback(message)
+            self.callbacks[topic.name](topic.name)
 
     def queue_publish(
         self,

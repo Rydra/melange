@@ -20,11 +20,9 @@ want to have a clean event-driven architecture with Domain Events, and its idea 
 Implementing Domain-Driven Design (look at [part 3 of these series](http://dddcommunity.org/library/vernon_2011/) if you want a quick look,
  or read this excellent article from [Udi Dahan, founder of NServiceBus](http://udidahan.com/2009/06/14/domain-events-salvation/)).
 
-
 ## Documentation
 
 Full documentation is available at [https://rydra.github.io/melange/](https://rydra.github.io/melange/)
-
 
 ## Examples
 
@@ -44,9 +42,9 @@ The spice must flow.
 
 The analogy can be very well made on Events in a distributed architecture :)
 
-
 ## Contributing
 
+We're open to contributions and opinions!
 
 ## Project Links
 

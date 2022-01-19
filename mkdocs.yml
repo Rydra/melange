@@ -8,14 +8,14 @@ theme:
     - content.code.annotate
   palette:
     - scheme: default
-      primary: teal
-      accent: amber
+      primary: deep orange
+      accent: light blue
       toggle:
         icon: material/lightbulb
         name: Switch to light mode
     - scheme: slate
-      primary: teal
-      accent: amber
+      primary: deep orange
+      accent: light blue
       toggle:
         icon: material/lightbulb-outline
         name: Switch to dark mode
@@ -48,10 +48,12 @@ nav:
         - Consumers: components/consumers.md
         - Publishers: components/publishers.md
         - Factory: factory.md
-    - Extending Melange: extending.md
     - Advanced topics: advanced-topics.md
     - Examples:
         - Payment service: examples/payment-service.md
         - Saga choreography: examples/saga.md
+    - Principles: principles.md
+    - Testing: testing.md
+    - Roadmap: roadmap.md
     - Code Reference:
         - API reference: api-reference.md

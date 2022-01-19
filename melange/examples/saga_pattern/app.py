@@ -1,11 +1,11 @@
 import os
 
 from melange.backends.sqs.elasticmq import ElasticMQBackend
-from melange.consumer import SimpleConsumerHandler
 from melange.examples.saga_pattern.consumer import SagaConsumer
 from melange.examples.saga_pattern.publisher import SagaPublisher
 from melange.examples.saga_pattern.repository import SagaRepository
-from melange.message_publisher import QueuePublisher
+from melange.message_dispatcher import SimpleConsumerHandler
+from melange.publishers import QueuePublisher
 from melange.serializers.pickle import PickleSerializer
 
 if __name__ == "__main__":

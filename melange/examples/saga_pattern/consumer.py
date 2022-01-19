@@ -1,7 +1,7 @@
 import uuid
 from typing import Any
 
-from melange.consumer import SingleDispatchConsumer, consumer
+from melange.consumers import SingleDispatchConsumer, consumer
 from melange.examples.common.commands import DoPayment
 from melange.examples.payment_service.events import OrderResponse, OrderStatus
 from melange.examples.saga_pattern.models import Saga

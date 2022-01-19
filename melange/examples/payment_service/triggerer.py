@@ -3,7 +3,7 @@ import uuid
 
 from melange.backends.sqs.elasticmq import ElasticMQBackend
 from melange.examples.payment_service.events import OrderResponse
-from melange.message_publisher import QueuePublisher
+from melange.publishers import QueuePublisher
 from melange.serializers.pickle import PickleSerializer
 
 if __name__ == "__main__":

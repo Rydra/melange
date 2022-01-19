@@ -5,8 +5,8 @@ from melange.examples.payment_service.consumer import PaymentConsumer
 from melange.examples.payment_service.publisher import PaymentPublisher
 from melange.examples.payment_service.repository import PaymentRepository
 from melange.examples.payment_service.service import PaymentService
-from melange.message_dispatcher import ExchangeMessageDispatcher
-from melange.message_publisher import QueuePublisher
+from melange.message_dispatcher import ConsumerDispatcher
+from melange.publishers import QueuePublisher
 from melange.serializers.pickle import PickleSerializer
 
 if __name__ == "__main__":
@@ -15,7 +15,7 @@ if __name__ == "__main__":
         host=os.environ.get("SQSHOST"), port=os.environ.get("SQSPORT")
     )
 
-    dispatcher = ExchangeMessageDispatcher(
+    dispatcher = ConsumerDispatcher(
         PickleSerializer(),
         backend=backend,
     )

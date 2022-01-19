@@ -5,8 +5,7 @@ from melange.helpers.typing import T
 
 class MessageSerializer(Generic[T]):
     """
-    You need to provide a way to convert a message from your sqs
-    into something meaningful for your domain (e.g. into a Domain Event)
+    Base interface to inherit for all the serializers of the platform
     """
 
     def manifest(self, data: T) -> str:

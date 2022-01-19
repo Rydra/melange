@@ -1,7 +1,7 @@
 from typing import Any, Optional
 
 from melange.backends.backend_manager import BackendManager
-from melange.backends.interfaces import MessagingBackend, Topic
+from melange.backends.interfaces import MessagingBackend, Queue, Topic
 
 
 class MessagingBackendFactory:
@@ -14,15 +14,17 @@ class MessagingBackendFactory:
         *topic_names_to_subscribe: str,
         dlq_name: Optional[str] = None,
         **kwargs: Any
-    ) -> None:
+    ) -> Queue:
         topics = [self.init_topic(t) for t in topic_names_to_subscribe]
 
-        self._backend.declare_queue(
+        queue, dlq = self._backend.declare_queue(
             queue_name,
             *topics,
             dead_letter_queue_name=dlq_name,
             filter_events=kwargs.get("filter_events")
         )
+
+        return queue
 
     def init_topic(self, topic_name: str) -> Topic:
         return self._backend.declare_topic(topic_name)
