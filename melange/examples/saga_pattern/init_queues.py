@@ -1,10 +1,10 @@
 import os
 
 from melange.backends.factory import MessagingBackendFactory
-from melange.backends.sqs.elasticmq import ElasticMQBackend
+from melange.backends.sqs.elasticmq import LocalSQSBackend
 
 if __name__ == "__main__":
-    backend = ElasticMQBackend(
+    backend = LocalSQSBackend(
         host=os.environ.get("SQSHOST"), port=os.environ.get("SQSPORT")
     )
 

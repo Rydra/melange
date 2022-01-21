@@ -8,7 +8,8 @@ import json
 
 import pika
 
-from melange.backends.interfaces import Message, MessagingBackend
+from melange.backends.interfaces import MessagingBackend
+from melange.models import Message
 
 
 class RabbitMQBackend(MessagingBackend):

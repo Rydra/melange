@@ -2,9 +2,10 @@ import logging
 from typing import Any, Callable, List, Optional
 
 from melange.backends.backend_manager import BackendManager
-from melange.backends.interfaces import Message, MessagingBackend
+from melange.backends.interfaces import MessagingBackend
 from melange.consumers import Consumer
 from melange.infrastructure.cache import DeduplicationCache, NullCache
+from melange.models import Message
 from melange.serializers.interfaces import MessageSerializer
 from melange.utils import get_fully_qualified_name
 

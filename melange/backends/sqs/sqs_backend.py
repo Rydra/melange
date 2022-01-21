@@ -6,12 +6,8 @@ from typing import Any, Dict, Iterable, List, Optional, Tuple
 
 import boto3
 
-from melange.backends.interfaces import (
-    Message,
-    MessagingBackend,
-    QueueWrapper,
-    TopicWrapper,
-)
+from melange.backends.interfaces import MessagingBackend
+from melange.models import Message, QueueWrapper, TopicWrapper
 
 logger = logging.getLogger(__name__)
 
@@ -28,9 +24,10 @@ class BaseSQSBackend(MessagingBackend):
         self.wait_time_seconds = kwargs.get("wait_time_seconds", 10)
 
         self.extra_settings = kwargs.get("extra_settings", {})
+        self.sns_settings = kwargs.get("sns_settings", {})
 
     def declare_topic(self, topic_name: str) -> TopicWrapper:
-        sns = boto3.resource("sns")
+        sns = boto3.resource("sns", **self.sns_settings)
         topic = sns.create_topic(Name=topic_name)
         return TopicWrapper(topic)
 
@@ -50,10 +47,13 @@ class BaseSQSBackend(MessagingBackend):
                     "Principal": "*",
                     "Resource": queue.unwrapped_obj.attributes["QueueArn"],
                     "Action": "sqs:SendMessage",
-                    "Condition": {"ArnEquals": {"aws:SourceArn": topic.unwrapped_obj.arn}},  # type: ignore
+                    "Condition": {
+                        "ArnEquals": {"aws:SourceArn": topic.unwrapped_obj.arn}
+                    },
                 }
 
                 statements.append(statement)
+
                 subscription = topic.unwrapped_obj.subscribe(
                     Protocol="sqs",
                     Endpoint=queue.unwrapped_obj.attributes[
@@ -128,10 +128,10 @@ class BaseSQSBackend(MessagingBackend):
                 "true" if kwargs.get("content_based_deduplication") else "false"
             )
         queue = sqs_res.create_queue(QueueName=queue_name, Attributes=attributes)
-        return queue
+        return QueueWrapper(queue)
 
     def retrieve_messages(self, queue: QueueWrapper, **kwargs: Any) -> List[Message]:
-        kwargs = dict(
+        args = dict(
             MaxNumberOfMessages=self.max_number_of_messages,
             VisibilityTimeout=self.visibility_timeout,
             WaitTimeSeconds=self.wait_time_seconds,
@@ -140,35 +140,38 @@ class BaseSQSBackend(MessagingBackend):
         )
 
         if "attempt_id" in kwargs:
-            kwargs["ReceiveRequestAttemptId"] = kwargs["attempt_id"]
+            args["ReceiveRequestAttemptId"] = kwargs["attempt_id"]
 
-        messages = queue.unwrapped_obj.receive_messages(**kwargs)
+        messages = queue.unwrapped_obj.receive_messages(**args)
 
         # We need to differentiate here whether the message came from SNS or SQS
-
         return [self._construct_message(message) for message in messages]
 
     def publish_to_queue(
-        self,
-        message: Message,
-        queue: QueueWrapper,
-        message_group_id: Optional[str] = None,
-        message_deduplication_id: Optional[str] = None,
+        self, message: Message, queue: QueueWrapper, **kwargs: Any
     ) -> None:
-        kwargs: Dict = dict(MessageBody=json.dumps({"Message": message.content}))
+        message_args: Dict = {}
+        message_args["MessageBody"] = json.dumps({"Message": message.content})
+
+        is_fifo = queue.unwrapped_obj.attributes.get("FifoQueue") == "true"
+        message_deduplication_id = (
+            None
+            if not is_fifo
+            else kwargs.get("message_deduplication_id", str(uuid.uuid4()))
+        )
 
         if message.manifest:
-            kwargs["MessageAttributes"] = {
+            message_args["MessageAttributes"] = {
                 "manifest": {"DataType": "String", "StringValue": message.manifest}
             }
 
-        if message_group_id:
-            kwargs["MessageGroupId"] = message_group_id
+        if kwargs.get("message_group_id"):
+            message_args["MessageGroupId"] = kwargs["message_group_id"]
 
         if message_deduplication_id:
-            kwargs["MessageDeduplicationId"] = message_deduplication_id
+            message_args["MessageDeduplicationId"] = message_deduplication_id
 
-        queue.unwrapped_obj.send_message(**kwargs)
+        queue.unwrapped_obj.send_message(**message_args)
 
     def publish_to_topic(
         self,
@@ -179,7 +182,10 @@ class BaseSQSBackend(MessagingBackend):
         args: Dict = dict(
             Message=message.content,
             MessageAttributes={
-                "manifest": {"DataType": "String", "StringValue": message.manifest}
+                "manifest": {
+                    "DataType": "String",
+                    "StringValue": message.manifest or "",
+                }
             },
         )
 
@@ -243,7 +249,7 @@ class BaseSQSBackend(MessagingBackend):
 
 class AWSBackend(BaseSQSBackend):
     """
-    backend to use with elasticMQ
+    Backend to use with AWS
     """
 
     def __init__(self, **kwargs: Any) -> None:

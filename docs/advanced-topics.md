@@ -20,7 +20,7 @@ like this.
 
 ``` py
 from melange.message_publisher import QueuePublisher
-from melange.backends.sqs.elasticmq import ElasticMQBackend
+from melange.backends.sqs.elasticmq import LocalSQSBackend
 from melange.backends.sqs.backend_manager import BackendManager
 from melange.serializers.pickle import PickleSerializer
 
@@ -29,7 +29,7 @@ class MyTestMessage:
         self.message = message
 
 if __name__ == "__main__":
-    backend = ElasticMQBackend(host="localhost", port=9324)
+    backend = LocalSQSBackend(host="localhost", port=9324)
     serializer = PickleSerializer()
     BackendManager().use_backend(backend)
     

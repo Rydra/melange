@@ -1,6 +1,6 @@
 import os
 
-from melange.backends.sqs.elasticmq import ElasticMQBackend
+from melange.backends.sqs.elasticmq import LocalSQSBackend
 from melange.examples.saga_pattern.consumer import SagaConsumer
 from melange.examples.saga_pattern.publisher import SagaPublisher
 from melange.examples.saga_pattern.repository import SagaRepository
@@ -10,7 +10,7 @@ from melange.serializers.pickle import PickleSerializer
 
 if __name__ == "__main__":
     serializer = PickleSerializer()
-    backend = ElasticMQBackend(
+    backend = LocalSQSBackend(
         host=os.environ.get("SQSHOST"), port=os.environ.get("SQSPORT")
     )
 

@@ -38,7 +38,7 @@ import polling
 from hamcrest import *
 
 from melange.backends.factory import MessagingBackendFactory
-from melange.backends.sqs.elasticmq import ElasticMQBackend
+from melange.backends.sqs.elasticmq import LocalSQSBackend
 from melange.consumers import Consumer, SimpleMessageDispatcher
 from melange.examples.doc_examples.probe import Probe
 from melange.publishers import QueuePublisher
@@ -74,7 +74,7 @@ def test_async_consumer(request):
     serializer = PickleSerializer()
 
     # We'll use the ElasticMQ as backend since it works like a real SQS queue
-    backend = ElasticMQBackend(
+    backend = LocalSQSBackend(
         host=os.environ.get("SQSHOST"), port=os.environ.get("SQSPORT")
     )
     queue_name = "testqueue"

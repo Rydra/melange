@@ -1,9 +1,9 @@
 import logging
-import uuid
 from typing import Any, Optional
 
 from melange.backends.backend_manager import BackendManager
-from melange.backends.interfaces import Message, MessagingBackend
+from melange.backends.interfaces import MessagingBackend
+from melange.models import Message
 from melange.serializers.interfaces import MessageSerializer
 
 logger = logging.getLogger(__name__)
@@ -56,24 +56,12 @@ class QueuePublisher:
             queue_name: The queue to send the message to.
             data: The data to send to this queue. It will be serialized before sending to the
                 queue using the serializers.
-            **extra_attributes: Any extra attributes. They will be passed to the backend upon publish.
+            **kwargs: Any extra attributes. They will be passed to the backend upon publish.
         """
         content = self.message_serializer.serialize(data)
         manifest = self.message_serializer.manifest(data)
-        event_queue = self._backend.get_queue(queue_name)
-        is_fifo = event_queue.unwrapped_obj.attributes.get("FifoQueue") == "true"
-        default_message_group_id = kwargs.get("message_group_id")
-        message_group_id = kwargs.get("message_group_id", default_message_group_id)
-
-        message_deduplication_id = (
-            None
-            if not is_fifo
-            else kwargs.get("message_deduplication_id", str(uuid.uuid4()))
-        )
+        queue = self._backend.get_queue(queue_name)
 
         self._backend.publish_to_queue(
-            Message.create(content, manifest),
-            event_queue,
-            message_group_id=message_group_id,
-            message_deduplication_id=message_deduplication_id,
+            Message.create(content, manifest), queue, **kwargs
         )

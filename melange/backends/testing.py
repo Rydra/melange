@@ -1,13 +1,9 @@
 from typing import Any, Callable, Dict, List, Optional, Tuple
 
-from melange.backends.interfaces import (
-    Message,
-    MessagingBackend,
-    QueueWrapper,
-    TopicWrapper,
-)
+from melange.backends.interfaces import MessagingBackend
 from melange.consumers import Consumer
 from melange.message_dispatcher import MessageDispatcher
+from melange.models import Message, QueueWrapper, TopicWrapper
 from melange.serializers.interfaces import MessageSerializer
 
 
@@ -24,10 +20,9 @@ def link_synchronously(
     backend.set_callback(queue_name, consumer_dispatcher.consume_event)
 
 
-class DumbQueue(QueueWrapper):
+class DumbObject:
     def __init__(self, name: str) -> None:
         self.name = name
-        self.attributes: Dict = {}
 
 
 class InMemoryMessagingBackend(MessagingBackend):
@@ -40,10 +35,10 @@ class InMemoryMessagingBackend(MessagingBackend):
         self.callbacks[queue_name] = callback
 
     def declare_topic(self, topic_name: str) -> TopicWrapper:
-        raise NotImplementedError
+        return TopicWrapper(DumbObject(topic_name))
 
     def get_queue(self, queue_name: str) -> QueueWrapper:
-        return DumbQueue(queue_name)
+        return QueueWrapper(DumbObject(queue_name))
 
     def declare_queue(
         self,
@@ -52,7 +47,7 @@ class InMemoryMessagingBackend(MessagingBackend):
         dead_letter_queue_name: Optional[str] = None,
         **kwargs: Any
     ) -> Tuple[QueueWrapper, Optional[QueueWrapper]]:
-        return QueueWrapper(DumbQueue(queue_name)), None
+        return QueueWrapper(DumbObject(queue_name)), None
 
     def retrieve_messages(self, queue: QueueWrapper, **kwargs: Any) -> List[Message]:
         messages = self._messages
@@ -73,11 +68,7 @@ class InMemoryMessagingBackend(MessagingBackend):
             self.callbacks[topic.unwrapped_obj.name](topic.unwrapped_obj.name)
 
     def publish_to_queue(
-        self,
-        message: Message,
-        queue: QueueWrapper,
-        message_group_id: Optional[str] = None,
-        message_deduplication_id: Optional[str] = None,
+        self, message: Message, queue: QueueWrapper, **kwargs: Any
     ) -> None:
         if queue.unwrapped_obj.name in self.callbacks:
             # Append the message internally to simulate "the queue",

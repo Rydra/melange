@@ -36,10 +36,10 @@ Before using a queue you need to create it. Put the following code snippet into 
 file called `create_queue.py` and execute it to create the queue:
 
 ``` py
-from melange.backends.sqs.elasticmq import ElasticMQBackend
+from melange.backends.sqs.elasticmq import LocalSQSBackend
 from melange.backends.factory import MessagingBackendFactory
 
-backend = ElasticMQBackend(host="localhost", port=9324)
+backend = LocalSQSBackend(host="localhost", port=9324)
 factory = MessagingBackendFactory(backend)
 factory.init_queue("melangetutorial-queue")
 ```
@@ -51,7 +51,7 @@ publisher and `publish` the message. Put the following code snippet into a file 
 
 ``` py
 from melange.message_publisher import QueuePublisher
-from melange.backends.sqs.elasticmq import ElasticMQBackend
+from melange.backends.sqs.elasticmq import LocalSQSBackend
 from melange.serializers.pickle import PickleSerializer
 
 class MyTestMessage:
@@ -59,7 +59,7 @@ class MyTestMessage:
         self.message = message
 
 if __name__ == "__main__":
-    backend = ElasticMQBackend(host="localhost", port=9324)
+    backend = LocalSQSBackend(host="localhost", port=9324)
     serializer = PickleSerializer()
     publisher = QueuePublisher(serializer, backend)
     message = MyTestMessage("Hello World!")
@@ -87,7 +87,7 @@ Put the following code snippet in a file called `consumer-example.py` and run it
 
 ``` py
 from melange.consumers import Consumer, ConsumerHandler
-from melange.backends.sqs.elasticmq import ElasticMQBackend
+from melange.backends.sqs.elasticmq import LocalSQSBackend
 from melange.serializers.pickle import PickleSerializer
 from publish_example import MyTestMessage
 
@@ -97,7 +97,7 @@ class MyConsumer(SingleDispatchConsumer):
         print(event.message)
         
 if __name__ == "__main__":
-    backend = ElasticMQBackend(host="localhost", port=9324)
+    backend = LocalSQSBackend(host="localhost", port=9324)
     serializer = PickleSerializer()
     consumer = MyConsumer()
     consumer_handler = SimpleMessageDispatcher(

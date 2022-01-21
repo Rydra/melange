@@ -2,8 +2,9 @@ from typing import List, cast
 
 from doubles import InstanceDouble, allow, expect
 
-from melange.backends.interfaces import Message, MessagingBackend
+from melange.backends.interfaces import MessagingBackend
 from melange.message_dispatcher import SimpleMessageDispatcher
+from melange.models import Message
 from tests.fixtures import (
     BananaConsumer,
     BananaHappened,

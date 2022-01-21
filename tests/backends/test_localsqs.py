@@ -6,16 +6,19 @@ import uuid
 import pytest
 from hamcrest import *
 
-from melange.backends.sqs.elasticmq import ElasticMQBackend
+from melange.backends.sqs.elasticmq import LocalSQSBackend
+from melange.models import Message
 
 
 @pytest.fixture
 def backend():
-    return ElasticMQBackend(
+    return LocalSQSBackend(
         wait_time_seconds=1,
         visibility_timeout=10,
-        host=os.environ.get("SQSHOST"),
-        port=os.environ.get("SQSPORT"),
+        host=os.environ.get("SQSHOST") or "http://localhost",
+        port=os.environ.get("SQSPORT") or 4566,
+        sns_host=os.environ.get("SNSHOST") or "http://localhost",
+        sns_port=os.environ.get("SNSPORT") or 4566,
     )
 
 
@@ -37,7 +40,7 @@ def test_create_fifo_queue(backend, request):
     queue = backend.get_queue(queue_name)
 
     assert_that(
-        queue.attributes,
+        queue.unwrapped_obj.attributes,
         has_entries(FifoQueue="true", ContentBasedDeduplication="true"),
     )
 
@@ -56,11 +59,12 @@ def test_create_fifo_queue_with_dlq(backend, request):
     )
 
     assert_that(
-        queue.attributes,
+        queue.unwrapped_obj.attributes,
         has_entries(FifoQueue="true", ContentBasedDeduplication="true"),
     )
     assert_that(
-        dlq.attributes, has_entries(FifoQueue="true", ContentBasedDeduplication="true")
+        dlq.unwrapped_obj.attributes,
+        has_entries(FifoQueue="true", ContentBasedDeduplication="true"),
     )
 
 
@@ -75,7 +79,7 @@ def test_create_a_non_fifo_queue(backend, request):
     queue = backend.get_queue(queue_name)
 
     assert_that(
-        queue.attributes,
+        queue.unwrapped_obj.attributes,
         not_(has_entries(FifoQueue="true", ContentBasedDeduplication="true")),
     )
 
@@ -94,11 +98,11 @@ def test_create_normal_queue_with_dlq(backend, request):
     )
 
     assert_that(
-        queue.attributes,
+        queue.unwrapped_obj.attributes,
         not_(has_entries(FifoQueue="true", ContentBasedDeduplication="true")),
     )
     assert_that(
-        dlq.attributes,
+        dlq.unwrapped_obj.attributes,
         not_(has_entries(FifoQueue="true", ContentBasedDeduplication="true")),
     )
 
@@ -119,11 +123,10 @@ def test_send_messages_through_a_fifo_queue_and_make_sure_they_are_always_ordere
     for i in range(100):
         message_dedup_id = str(uuid.uuid4())
         backend.publish_to_queue(
-            f"my-message-{i}",
+            Message.create(f"my-message-{i}", "my-event-type"),
             queue,
-            "my-event-type",
-            message_group_id,
-            message_dedup_id,
+            message_group_id=message_group_id,
+            message_deduplication_id=message_dedup_id,
         )
 
     received_messages = []
@@ -137,7 +140,7 @@ def test_send_messages_through_a_fifo_queue_and_make_sure_they_are_always_ordere
         retrieved_messages = backend.retrieve_messages(queue)
 
     expected_array = [f"my-message-{i}" for i in range(100)]
-    assert_that(received_messages, contains(*expected_array))
+    assert_that(received_messages, contains_exactly(*expected_array))
 
 
 def test_not_acknowledging_any_of_the_messages_on_a_fifo_queue_will_delay_the_delivery_of_the_rest(
@@ -156,11 +159,10 @@ def test_not_acknowledging_any_of_the_messages_on_a_fifo_queue_will_delay_the_de
     for i in range(20):
         message_dedup_id = str(uuid.uuid4())
         backend.publish_to_queue(
-            f"my-message-{i}",
+            Message.create(f"my-message-{i}", "my-event-type"),
             queue,
-            "my-event-type",
-            message_group_id,
-            message_dedup_id,
+            message_group_id=message_group_id,
+            message_deduplication_id=message_dedup_id,
         )
 
     received_messages = []
@@ -178,7 +180,7 @@ def test_not_acknowledging_any_of_the_messages_on_a_fifo_queue_will_delay_the_de
         retrieved_messages = backend.retrieve_messages(queue)
 
     expected_array = [f"my-message-{i}" for i in range(20)]
-    assert_that(received_messages, contains(*expected_array))
+    assert_that(received_messages, contains_exactly(*expected_array))
 
 
 def test_send_messages_through_a_non_fifo_queue_does_not_guarantee_order(
@@ -193,7 +195,9 @@ def test_send_messages_through_a_non_fifo_queue_does_not_guarantee_order(
     queue, _ = backend.declare_queue(queue_name)
 
     for i in range(100):
-        backend.publish_to_queue(f"my-message-{i}", queue, "my-event-type")
+        backend.publish_to_queue(
+            Message.create(f"my-message-{i}", "my-event-type"), queue
+        )
 
     received_messages = []
     retrieved_messages = backend.retrieve_messages(queue)
@@ -206,7 +210,6 @@ def test_send_messages_through_a_non_fifo_queue_does_not_guarantee_order(
         retrieved_messages = backend.retrieve_messages(queue)
 
     expected_array = [f"my-message-{i}" for i in range(100)]
-    assert_that(received_messages, not_(contains(*expected_array)))
     assert_that(received_messages, contains_inanyorder(*expected_array))
 
 
@@ -225,14 +228,18 @@ def test_backend_declare_a_queue_for_a_topic_filtering_the_events_it_sends_to_ce
         queue_3, _ = backend.declare_queue("dev-queue-{}".format(uuid.uuid4()), topic)
 
         backend.publish_to_topic(
-            json.dumps({"event_type_name": "MyBananaEvent", "value": 3}),
+            Message.create(
+                json.dumps({"event_type_name": "MyBananaEvent", "value": 3}),
+                "MyBananaEvent",
+            ),
             topic,
-            event_type_name="MyBananaEvent",
         )
         backend.publish_to_topic(
-            json.dumps({"event_type_name": "MyNonBananaEvent", "value": 5}),
+            Message.create(
+                json.dumps({"event_type_name": "MyNonBananaEvent", "value": 5}),
+                "MyNonBananaEvent",
+            ),
             topic,
-            event_type_name="MyNonBananaEvent",
         )
         time.sleep(2)
 
@@ -258,6 +265,6 @@ def _assert_messages(backend, queue, expected_types_contained, expected_num_mess
 
     assert expected_num_messages == len(messages)
 
-    received_event_types = [message.content["event_type_name"] for message in messages]
+    received_event_types = [message.manifest for message in messages]
     for type in expected_types_contained:
         assert type in received_event_types

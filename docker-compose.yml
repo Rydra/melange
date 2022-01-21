@@ -7,14 +7,31 @@ services:
   app:
     build: .
     environment:
-      - SQSHOST=http://elasticmq
-      - SQSPORT=9324
+      - SQSHOST=http://localstack
+      - SQSPORT=4566
+      - SNSHOST=http://localstack
+      - SNSPORT=4566
     volumes:
       - .:/app
     links:
-      - elasticmq
+      - localstack
 
-  elasticmq:
-    image: softwaremill/elasticmq-native
+  localstack:
+    image: localstack/localstack
+    ports:
+      - "${PORT_WEB_UI-8080}:${PORT_WEB_UI-8080}"
     expose:
-      - "9324"
+      - "4510-4530"
+      - "4566"
+      - "4571"
+    environment:
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - SERVICES=sns,sqs
+      - DEBUG=1
+      - DEFAULT_REGION=us-east-1
+      - SQS_PROVIDER=elasticmq
+      - DATA_DIR=${DATA_DIR-}
+      - HOST_TMP_FOLDER=${TMPDIR:-/tmp/}localstack
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "${TMPDIR:-/tmp}/localstack:/tmp/localstack"

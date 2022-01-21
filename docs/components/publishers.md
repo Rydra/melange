@@ -15,7 +15,7 @@ call the `publish` method with your message:
 
 ``` py
 from melange.message_publisher import QueuePublisher
-from melange.backends.sqs.elasticmq import ElasticMQBackend
+from melange.backends.sqs.elasticmq import LocalSQSBackend
 from melange.serializers.pickle import PickleSerializer
 
 class MyTestMessage:
@@ -23,7 +23,7 @@ class MyTestMessage:
         self.message = message
 
 if __name__ == "__main__":
-    backend = ElasticMQBackend(host="localhost", port=9324)
+    backend = LocalSQSBackend(host="localhost", port=9324)
     serializer = PickleSerializer()
     publisher = QueuePublisher(serializer, backend)
     message = MyTestMessage("Hello World!")
@@ -50,7 +50,7 @@ call the `publish` method with your message:
 
 ``` py
 from melange.message_publisher import TopicPublisher
-from melange.backends.sqs.elasticmq import ElasticMQBackend
+from melange.backends.sqs.elasticmq import LocalSQSBackend
 from melange.serializers.pickle import PickleSerializer
 
 class MyTestMessage:
@@ -58,7 +58,7 @@ class MyTestMessage:
         self.message = message
 
 if __name__ == "__main__":
-    backend = ElasticMQBackend(host="localhost", port=9324)
+    backend = LocalSQSBackend(host="localhost", port=9324)
     serializer = PickleSerializer()
     publisher = TopicPublisher(serializer, backend)
     message = MyTestMessage("Hello World!")

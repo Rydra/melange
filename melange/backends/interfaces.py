@@ -1,52 +1,7 @@
 import weakref
 from typing import Any, Dict, List, Optional, Tuple
 
-
-class TopicWrapper:
-    def __init__(self, obj: Any) -> None:
-        self.obj = obj
-
-    @property
-    def unwrapped_obj(self) -> Any:
-        return self.obj
-
-    def unwrap(self) -> Any:
-        return self.obj
-
-
-class QueueWrapper:
-    def __init__(self, obj: Any) -> None:
-        self.obj = obj
-
-    @property
-    def unwrapped_obj(self) -> Any:
-        return self.obj
-
-    def unwrap(self) -> Any:
-        return self.obj
-
-
-class Message:
-    def __init__(
-        self,
-        message_id: Optional[str],
-        content: str,
-        metadata: Any,
-        manifest: Optional[str] = None,
-    ) -> None:
-        self.message_id = message_id
-        self.content = content
-        self.metadata = metadata
-        self.manifest = manifest
-
-    @staticmethod
-    def create(
-        content: str, manifest: Optional[str] = None, metadata: Any = None
-    ) -> "Message":
-        return Message(None, content, manifest, metadata)
-
-    def get_message_manifest(self) -> Optional[str]:
-        return self.manifest
+from melange.models import Message, QueueWrapper, TopicWrapper
 
 
 class MessagingBackend:
@@ -134,11 +89,7 @@ class MessagingBackend:
         raise NotImplementedError
 
     def publish_to_queue(
-        self,
-        message: Message,
-        queue: QueueWrapper,
-        message_group_id: Optional[str] = None,
-        message_deduplication_id: Optional[str] = None,
+        self, message: Message, queue: QueueWrapper, **kwargs: Any
     ) -> None:
         raise NotImplementedError
 
