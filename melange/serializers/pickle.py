@@ -9,7 +9,7 @@ from melange.serializers.interfaces import MessageSerializer
 
 class PickleSerializer(MessageSerializer[DomainEvent]):
     """
-    Serializes DomainEvents with pickle
+    Serializes DomainEvents with pickle.
     """
 
     def manifest(self, data: DomainEvent) -> str:

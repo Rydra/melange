@@ -11,9 +11,8 @@ could potentially use the library in your tests.
 
 ## Asynchronous testing with threads
 
-In a regular test, you would have to do the following
-steps if you would like to test a Consumer, or see if your whole network of consumers reacts
-appropriately to the messages your application sends (when doing, for example, end-to-end tests):
+Follow the next steps whenever you need to have one or more consumers running on the
+background of your test:
 
 1. Make sure to create (or ensure that they exist at least) the queues and topics where the 
    message exchange happens.
@@ -23,9 +22,9 @@ appropriately to the messages your application sends (when doing, for example, e
    
 3. Call your code that invokes the publishing methods, and have `probes` in place
 that poll the environment to check whether the consumers have done their work or not before
-   doing any kind of assertion that requires the work of some consumer to be done.
+doing any kind of assertion that requires of the consumers' results.
    
-4. Bonus: After the test is finished, take down the queue/topic to keep the environment clean.
+4. Bonus: After the test is finished, delete the queue/topic to keep the environment clean.
    
 Full Example:
 
@@ -40,7 +39,7 @@ from hamcrest import *
 
 from melange.backends.factory import MessagingBackendFactory
 from melange.backends.sqs.elasticmq import ElasticMQBackend
-from melange.consumers import Consumer, SimpleConsumerHandler
+from melange.consumers import Consumer, SimpleMessageDispatcher
 from melange.examples.doc_examples.probe import Probe
 from melange.publishers import QueuePublisher
 from melange.serializers.pickle import PickleSerializer
@@ -96,7 +95,7 @@ def test_async_consumer(request):
         state.value_set = message["value"]
         
     consumer = Consumer(on_message=set_state)
-    handler = SimpleConsumerHandler(consumer, serializer, backend=backend)
+    handler = SimpleMessageDispatcher(consumer, serializer, backend=backend)
     # Start the consumer loop thread to run the consumer loop in the background
     threading.Thread(target=lambda: handler.consume_loop(queue_name), daemon=True).start()
 

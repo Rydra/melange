@@ -9,10 +9,10 @@ from hamcrest import *
 from melange.backends.factory import MessagingBackendFactory
 from melange.backends.sqs.elasticmq import ElasticMQBackend
 from melange.consumers import Consumer
-from melange.examples.doc_examples.probe import Probe
-from melange.message_dispatcher import SimpleConsumerHandler
+from melange.message_dispatcher import SimpleMessageDispatcher
 from melange.publishers import QueuePublisher
 from melange.serializers.pickle import PickleSerializer
+from tests.probe import Probe
 
 
 class StateProbe(Probe):
@@ -65,7 +65,7 @@ def test_async_consumer(request):
         state.value_set = message["value"]
 
     consumer = Consumer(on_message=set_state)
-    handler = SimpleConsumerHandler(consumer, serializer, backend=backend)
+    handler = SimpleMessageDispatcher(consumer, serializer, backend=backend)
     # Start the consumer loop thread to run the consumer loop in the background
     threading.Thread(
         target=lambda: handler.consume_loop(queue_name), daemon=True

@@ -1,5 +1,7 @@
 # Tutorial - Getting started
 
+> *Talk is cheap, show me the code*
+
 Event-driven architectures work with the Publish/Subscribe pattern to achieve decoupling.
 With this pattern, publishers and subscribers do not know about each other while they can exchange
 information among them. In order to achieve this and communicate effectively a 
@@ -11,7 +13,6 @@ This tutorial assumes that you have basic understanding of the pub/sub
 mechanics. If not, there are a whole bunch of resources to get your feet
 wet on the topic. Also it's good to have `docker` installed since we are
 going to spin up local infrastructure to serve as a messaging broker.
-
 
 ## Choosing a Messaging Backend
 
@@ -99,7 +100,7 @@ if __name__ == "__main__":
     backend = ElasticMQBackend(host="localhost", port=9324)
     serializer = PickleSerializer()
     consumer = MyConsumer()
-    consumer_handler = SimpleConsumerHandler(
+    consumer_handler = SimpleMessageDispatcher(
         serializer,
         backend=backend,
     )
@@ -120,7 +121,15 @@ Congratulations! You just run your very first example of a Pub/Sub mechanism wit
 
 ## Where to go from here
 
-Although the exposed example is quite simple, it serves as the foundation to implement a number of
+Now that you grasped the basic idea on how you could use Melange, you could go further and read more
+details about:
+
+* [Consumers](../components/consumers.md)
+* [Publishers](../components/publishers.md)
+* [Messaging Backend](../components/messaging-backends.md)
+* [Serializers](../components/serializers.md)
+
+To add to that, although the exposed example is quite simple, it serves as the foundation to implement a number of
 use cases and distributed architectures with microservices. With Melange you can:
 
 * Build a CQRS + Event sourcing architecture, where you publish your events to a queue or topic from the Command
@@ -128,8 +137,8 @@ side and read those with a consumer from the Read side to create your data proje
 * Build choreography Sagas for long-running processes which can span several transactions.
 * Implement microservices which consume messages from a queue to do their job (e.g. an staticstics microservice
   that reacts to a `OrderCreated` event and increments a counter to track how many orders your system has).
-
-We have not covered the case of topics. Refer to [Publishers](components/publishers.md) for further details.
+  
+We have not covered the case of topics. Refer to [Publishers](../components/publishers.md) for further details.
 
 In addition, Melange is bundled with a consumer that works with a python application. But the consumer
 can be implemented in any language and any technology that can read messages from your queue (AWS Lambda, Azure functions, 

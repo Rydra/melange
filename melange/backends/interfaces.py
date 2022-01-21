@@ -1,41 +1,36 @@
 import weakref
-from typing import Any, Dict, List, Optional, Protocol, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 
-class Topic(Protocol):
-    arn: str
+class TopicWrapper:
+    def __init__(self, obj: Any) -> None:
+        self.obj = obj
 
-    def subscribe(self, *args: Any, **kwargs: Any) -> Any:
-        ...
+    @property
+    def unwrapped_obj(self) -> Any:
+        return self.obj
 
-    def publish(self, *args: Any, **kwargs: Any) -> Dict:
-        ...
-
-    def delete(self) -> None:
-        ...
+    def unwrap(self) -> Any:
+        return self.obj
 
 
-class Queue(Protocol):
-    attributes: Dict
+class QueueWrapper:
+    def __init__(self, obj: Any) -> None:
+        self.obj = obj
 
-    def set_attributes(self, *args: Any, **kwargs: Any) -> None:
-        ...
+    @property
+    def unwrapped_obj(self) -> Any:
+        return self.obj
 
-    def receive_messages(self, *args: Any, **kwargs: Any) -> List[Any]:
-        ...
-
-    def delete(self) -> None:
-        ...
-
-    def send_message(self, **kwargs: Any) -> None:
-        ...
+    def unwrap(self) -> Any:
+        return self.obj
 
 
 class Message:
     def __init__(
         self,
-        message_id: str,
-        content: Any,
+        message_id: Optional[str],
+        content: str,
         metadata: Any,
         manifest: Optional[str] = None,
     ) -> None:
@@ -43,6 +38,12 @@ class Message:
         self.content = content
         self.metadata = metadata
         self.manifest = manifest
+
+    @staticmethod
+    def create(
+        content: str, manifest: Optional[str] = None, metadata: Any = None
+    ) -> "Message":
+        return Message(None, content, manifest, metadata)
 
     def get_message_manifest(self) -> Optional[str]:
         return self.manifest
@@ -52,22 +53,24 @@ class MessagingBackend:
     def __init__(self) -> None:
         self._finalizer = weakref.finalize(self, self.close_connection)
 
-    def declare_topic(self, topic_name: str) -> Topic:
+    def declare_topic(self, topic_name: str) -> TopicWrapper:
         """
-        Declares a topic exchange with the name "topic name" and
-        returns an object that represent the topic
+        Gets or creates a topic.
 
-        :param topic_name: The name of the topic to create
-        :return: An object that represents a topic. The type of the object
-        is only relevant inside the context of the backend, so what you
-        return as a topic will be passed in next calls to the backend
-        where a topic is required
+        Args:
+            topic_name: The name of the topic to create
+
+        Returns:
+            An object that represents a topic. The type of the object
+            is only relevant inside the context of the backend, so what you
+            return as a topic will be passed in next calls to the backend
+            where a topic is required
         """
         raise NotImplementedError
 
-    def get_queue(self, queue_name: str) -> Queue:
+    def get_queue(self, queue_name: str) -> QueueWrapper:
         """
-        Gets the queue with the name `queue_name`.
+        Gets the queue with the name `queue_name`. Does not perform creation.
 
         Args:
             queue_name: the name of the queue to retrieve
@@ -80,13 +83,12 @@ class MessagingBackend:
     def declare_queue(
         self,
         queue_name: str,
-        *topics_to_bind: Topic,
+        *topics_to_bind: TopicWrapper,
         dead_letter_queue_name: Optional[str] = None,
         **kwargs: Any
-    ) -> Tuple[Queue, Optional[Queue]]:
+    ) -> Tuple[QueueWrapper, Optional[QueueWrapper]]:
         """
-        Creates a queue named `queue_name` if it does not exist. with
-        default settings.
+        Gets or creates a queue.
 
         Args:
             queue_name: the name of the queue to create
@@ -102,36 +104,39 @@ class MessagingBackend:
 
         raise NotImplementedError
 
-    def retrieve_messages(
-        self, queue: Queue, attempt_id: Optional[str] = None
-    ) -> List[Message]:
+    def retrieve_messages(self, queue: QueueWrapper, **kwargs: Any) -> List[Message]:
         """
-        Returns a list of messages (instances of Message type) that have
-        been received from the queue.
+        Retrieves a list of available messages from the queue.
 
-        :param queue: queue to poll
-        :return: a list of messages to process
+        Args:
+            queue: the queue object
+            **kwargs: Other parameters/options required by the backend
+
+        Returns:
+            A list of available messages from the queue
         """
         raise NotImplementedError
 
-    def publish(
+    def publish_to_topic(
         self,
-        content: str,
-        topic: Topic,
-        event_type_name: str,
+        message: Message,
+        topic: TopicWrapper,
         extra_attributes: Optional[Dict] = None,
     ) -> None:
         """
-        Publishes the content to the topic. The content must be a
-        string (which is the json representation of an event)
+        Publishes a message content and the manifest to the topic
+
+        Args:
+            message: the message to send
+            topic: the topic to send the message to
+            extra_attributes: extra properties that might be required for the backend
         """
         raise NotImplementedError
 
-    def queue_publish(
+    def publish_to_queue(
         self,
-        content: str,
-        queue: Queue,
-        event_type_name: Optional[str] = None,
+        message: Message,
+        queue: QueueWrapper,
         message_group_id: Optional[str] = None,
         message_deduplication_id: Optional[str] = None,
     ) -> None:
@@ -151,13 +156,13 @@ class MessagingBackend:
         """
         pass
 
-    def delete_queue(self, queue: Queue) -> None:
+    def delete_queue(self, queue: QueueWrapper) -> None:
         """
         Deletes the queue
         """
         raise NotImplementedError
 
-    def delete_topic(self, topic: Topic) -> None:
+    def delete_topic(self, topic: TopicWrapper) -> None:
         """
         Deletes the topic
         """

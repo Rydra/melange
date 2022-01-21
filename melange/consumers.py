@@ -1,27 +1,46 @@
 import logging
-from typing import Any, Callable, List, Optional
+from typing import Any, Callable, Optional
 
-from funcy import lmap
 from methoddispatch import SingleDispatch, singledispatch
 
 logger = logging.getLogger(__name__)
 
 
 class Consumer:
+    """
+    A consumer is responsible to process a message and do
+    whatever is needed by the application.
+
+    You could use is as is and supply a `on_message` callable to process your messages.
+    Though commonly you would inherit this class, create your own consumer and
+    override the `process` and `accepts` methods.
+    """
+
     def __init__(self, on_message: Optional[Callable[[Any], None]] = None) -> None:
         self._on_message = on_message
 
     def process(self, message: Any, **kwargs: Any) -> None:
+        """
+        Processes a message
+        Args:
+            message: the message data to process, already deserialied
+            **kwargs: any other parameters the dispatcher sends upon processing
+        """
         if self._on_message:
             self._on_message(message)
 
-    def accepts(self, manifest: Optional[str]) -> bool:
+    def accepts(self, manifest: Any) -> bool:
+        """
+        Determines whether it is able to handle a message or not
+        """
         return True
 
 
 class SingleDispatchConsumer(Consumer, SingleDispatch):
     """
     This class can consume events from a queue and pass them to a processor
+    through the means of method overloading. Provides a default implementation as well for
+    the accepts method
     """
 
     def process(self, message: Any, **kwargs: Any) -> None:
@@ -32,17 +51,9 @@ class SingleDispatchConsumer(Consumer, SingleDispatch):
         """Event should be an instance of DomainEvent"""
         pass
 
-    def listens_to(self) -> List[str]:
-        accepted_events = filter(lambda t: t is not object, self._process.registry)
-        return lmap(lambda ev_type: ev_type.__name__, accepted_events)
-
-    def accepts(self, manifest: Optional[str]) -> bool:
-        """
-        Default implementation. You can override this if you want, for example,
-        to accept any manifest and not only the type of classes you listen
-        (useful to override in the face of subclasses)
-        """
-        return not self.listens_to() or manifest in self.listens_to()
+    def accepts(self, message: Any) -> bool:
+        accepted_types = filter(lambda t: t is not object, self._process.registry)
+        return any(isinstance(message, t) for t in accepted_types)
 
 
 consumer = SingleDispatchConsumer._process.register

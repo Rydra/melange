@@ -4,7 +4,7 @@ from melange.backends.sqs.elasticmq import ElasticMQBackend
 from melange.examples.saga_pattern.consumer import SagaConsumer
 from melange.examples.saga_pattern.publisher import SagaPublisher
 from melange.examples.saga_pattern.repository import SagaRepository
-from melange.message_dispatcher import SimpleConsumerHandler
+from melange.message_dispatcher import SimpleMessageDispatcher
 from melange.publishers import QueuePublisher
 from melange.serializers.pickle import PickleSerializer
 
@@ -20,7 +20,7 @@ if __name__ == "__main__":
     )
 
     print("Consuming...")
-    consumer_handler = SimpleConsumerHandler(
+    consumer_handler = SimpleMessageDispatcher(
         payment_consumer,
         message_serializer=PickleSerializer(),
         backend=backend,

@@ -1,33 +1,69 @@
-from typing import Any, Optional
+from typing import Any, Optional, Protocol
 
 from redis_cache import SimpleCache, logging
-from singleton import Singleton
-
-from melange import settings
 
 logger = logging.getLogger(__name__)
 
 
-class DedupCache:
+class DeduplicationCache(Protocol):
     def store(self, key: str, value: Any, expire: Optional[int] = None) -> None:
+        """
+        Stores a key into the cache
+        Args:
+            key:
+            value:
+            expire: expiration time in seconds
+        """
         raise NotImplementedError
 
     def get(self, key: str) -> Any:
+        """
+        Retrieves the value stored under a key
+        Args:
+            key: the key to fetch in the cache
+
+        Returns:
+            The value stored under that key, or None
+        """
         raise NotImplementedError
 
     def __contains__(self, key: str) -> bool:
+        """
+        Checks whether a certain key is present in the store
+
+        Args:
+            key: the key to check
+
+        Returns:
+            `True` if the value is present, `False` otherwise.
+        """
         raise NotImplementedError
 
 
-class Cache(DedupCache, metaclass=Singleton):
-    def __init__(self) -> None:
+class NullCache:
+    """
+    A cache that does nothing. Follows the Null Object Pattern.
+    """
+
+    def store(self, key: str, value: Any, expire: Optional[int] = None) -> None:
+        pass
+
+    def get(self, key: str) -> Any:
+        return None
+
+    def __contains__(self, key: str) -> bool:
+        return False
+
+
+class RedisCache:
+    def __init__(self, **kwargs: Any) -> None:
         self.cache = SimpleCache(
-            expire=3600,
-            host=settings.CACHE_REDIS_HOST,
-            port=settings.CACHE_REDIS_PORT,
-            db=settings.CACHE_REDIS_DB,
-            password=settings.CACHE_REDIS_PASSWORD,
-            namespace=settings.CACHE_NAMESPACE,
+            expire=kwargs.get("expire", 3600),
+            host=kwargs.get("host", 3600),
+            port=kwargs.get("port", 3600),
+            db=kwargs.get("db", 3600),
+            password=kwargs.get("password", 3600),
+            namespace=kwargs.get("namespace", 3600),
         )
 
         if not self.cache.connection:

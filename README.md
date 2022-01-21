@@ -11,7 +11,7 @@ your preferred messaging infrastructure mechanism.
 
 Out of the box Melange supports the following message brokers as backend infrastructure:
 
-* Amazon's AWS SNS (Simple Notification Service) + SQS (Simple Queue Service).
+* Amazon's AWS SNS (Simple Notification Service) + SQS (Simple QueueWrapper Service).
 * RabbitMQ
 
 In addition, Melange supports event driven architectures in single-process, non-distributed, memory-based applications (Console applications, background workers)

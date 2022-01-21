@@ -6,6 +6,7 @@ from melange.examples.payment_service.service import PaymentService
 
 class PaymentConsumer(SingleDispatchConsumer):
     def __init__(self, payment_service: PaymentService):
+        super().__init__()
         self.payment_service = payment_service
 
     @consumer

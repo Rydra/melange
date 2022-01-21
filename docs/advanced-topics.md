@@ -10,7 +10,7 @@ As an alternative, you could use the singleton `BackendManager` and register
 a backend for global usage in your initialization code:
 
 ``` py
-BackendManager().use_backend(SQSBackend())
+BackendManager().use_backend(AWSBackend())
 ```
 
 From that point forward, any instantiation of a Publisher or Consumer
@@ -65,19 +65,17 @@ However, sometimes writing idempotent code is just not possible. You require **m
 account for this and ensure that a message won't be sent twice. You could use Amazon SQS FIFO Queues which
 they say they provide this message deduplication, though not only FIFO queues are more expensive than
 standard ones, [but exactly-once delivery is just impossible](https://dzone.com/articles/fifo-exactly-once-and-other-costs).
-In Melange we have accounted for this with a *Redis cache* that will control that no message is delivered twice.
+In Melange we have accounted for this with a *cache interface* that you can supply
+to the `ConsumerHandler` (like a *Redis cache*) that will control that no message is delivered twice to the same consumer.
 
-In order for this to work you have to provide the following environment variables as configuration
-so that Melange can connect to your Redis database:
+In Melange we provide a `RedisCache` class that you could use to perform this message deduplication. However
+we do not want to tie the library to any specific technology, so as long as you comply
+with the `DeduplicationCache` interface it will work just fine.
 
-ENVIRONMENT VARIABLE NAME | Default | Description
---- | --- | ---
-CACHE_REDIS_HOST | localhost| The host of your Redis
-CACHE_REDIS_PORT | 6379 | The port of your Redis
-CACHE_REDIS_DB | 0 | The DB to use for your Redis
-CACHE_REDIS_PASSWORD | | The password of your Redis
-CACHE_NAMESPACE | SimpleCache | You can provide a namespace so that values created by Melange do not collide with each other
+> The cache for message deduplication is completely optional, but on a production environment having some
+kind of cache to handle deduplication is encouraged.
 
-If Melange is unable to connect to your Redis it will function normally but you won't enjoy the
-benefits of ensuring message deduplication, which may lead your distributed application in an inconsitent
-state. You're warned :).
+This is the `DeduplicationCache` specification:
+
+::: melange.infrastructure.cache.DeduplicationCache
+

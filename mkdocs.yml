@@ -45,15 +45,17 @@ nav:
     - Building blocks:
         - Messaging Backends: components/messaging-backends.md
         - Serializers: components/serializers.md
-        - Consumers: components/consumers.md
+        - Message Dispatcher and Consumers: components/consumers.md
         - Publishers: components/publishers.md
         - Factory: factory.md
-    - Advanced topics: advanced-topics.md
+    - Advanced topics:
+        - Advanced topics: advanced-topics.md
+        - Behind the scenes: behind-scenes.md
     - Examples:
         - Payment service: examples/payment-service.md
         - Saga choreography: examples/saga.md
-    - Principles: principles.md
     - Testing: testing.md
     - Roadmap: roadmap.md
+    - Mixed bag of ideas: mixed-bag.md
     - Code Reference:
         - API reference: api-reference.md

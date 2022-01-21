@@ -13,3 +13,7 @@ clean-pyc:
 
 flake8:
 	docker run --rm --volume $(CURRENTDIR):/melange alpine/flake8 $(or $(files), /melange)
+
+
+build-dev:
+	docker-compose -f docker-compose.yml build --parallel --force-rm --compress --build-arg POETRY_ENV=dev

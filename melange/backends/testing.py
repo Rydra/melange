@@ -1,9 +1,13 @@
-from typing import List
-from uuid import uuid4
+from typing import Any, Callable, Dict, List, Optional, Tuple
 
-from melange.backends.interfaces import Message, MessagingBackend
+from melange.backends.interfaces import (
+    Message,
+    MessagingBackend,
+    QueueWrapper,
+    TopicWrapper,
+)
 from melange.consumers import Consumer
-from melange.message_dispatcher import ConsumerDispatcher
+from melange.message_dispatcher import MessageDispatcher
 from melange.serializers.interfaces import MessageSerializer
 
 
@@ -13,68 +17,80 @@ def link_synchronously(
     serializer: MessageSerializer,
     backend: "InMemoryMessagingBackend",
 ) -> None:
-    consumer_dispatcher = ConsumerDispatcher(serializer, backend=backend)
+    consumer_dispatcher = MessageDispatcher(serializer, backend=backend)
     for consumer in consumers:
-        consumer_dispatcher.subscribe(consumer)
+        consumer_dispatcher.attach_consumer(consumer)
 
     backend.set_callback(queue_name, consumer_dispatcher.consume_event)
 
 
-class DumbQueue:
-    def __init__(self, name):
+class DumbQueue(QueueWrapper):
+    def __init__(self, name: str) -> None:
         self.name = name
-        self.attributes = {}
+        self.attributes: Dict = {}
 
 
 class InMemoryMessagingBackend(MessagingBackend):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
-        self._messages = []
-        self.callbacks = {}
+        self._messages: List[Message] = []
+        self.callbacks: Dict = {}
 
-    def set_callback(self, queue_name, callback):
+    def set_callback(self, queue_name: str, callback: Callable[[str], None]) -> None:
         self.callbacks[queue_name] = callback
 
-    def declare_topic(self, topic_name):
-        return None
+    def declare_topic(self, topic_name: str) -> TopicWrapper:
+        raise NotImplementedError
 
-    def get_queue(self, queue_name):
+    def get_queue(self, queue_name: str) -> QueueWrapper:
         return DumbQueue(queue_name)
 
     def declare_queue(
-        self, queue_name, *topics_to_bind, dead_letter_queue_name=None, **kwargs
-    ):
-        return DumbQueue(queue_name), None
+        self,
+        queue_name: str,
+        *topics_to_bind: TopicWrapper,
+        dead_letter_queue_name: Optional[str] = None,
+        **kwargs: Any
+    ) -> Tuple[QueueWrapper, Optional[QueueWrapper]]:
+        return QueueWrapper(DumbQueue(queue_name)), None
 
-    def retrieve_messages(self, queue, attempt_id=None):
+    def retrieve_messages(self, queue: QueueWrapper, **kwargs: Any) -> List[Message]:
         messages = self._messages
         self._messages = []
         return messages
 
-    def publish(self, content, topic, event_type_name, extra_attributes=None):
-        if topic.name in self.callbacks:
-            message = Message(str(uuid4()), content, None, manifest=event_type_name)
+    def publish_to_topic(
+        self,
+        message: Message,
+        topic: TopicWrapper,
+        extra_attributes: Optional[Dict] = None,
+    ) -> None:
+        if topic.unwrapped_obj.name in self.callbacks:
             # Append the message internally to simulate "the queue",
             # then call the
             self._messages.append(message)
 
-            self.callbacks[topic.name](topic.name)
+            self.callbacks[topic.unwrapped_obj.name](topic.unwrapped_obj.name)
 
-    def queue_publish(
+    def publish_to_queue(
         self,
-        content,
-        queue,
-        event_type_name,
-        message_group_id=None,
-        message_deduplication_id=None,
-    ):
-        self.publish(content, queue, event_type_name)
+        message: Message,
+        queue: QueueWrapper,
+        message_group_id: Optional[str] = None,
+        message_deduplication_id: Optional[str] = None,
+    ) -> None:
+        if queue.unwrapped_obj.name in self.callbacks:
+            # Append the message internally to simulate "the queue",
+            # then call the
+            self._messages.append(message)
 
-    def acknowledge(self, message):
+            self.callbacks[queue.unwrapped_obj.name](queue.unwrapped_obj.name)
+
+    def acknowledge(self, message: Message) -> None:
         return None
 
-    def delete_queue(self, queue):
+    def delete_queue(self, queue: QueueWrapper) -> None:
         return None
 
-    def delete_topic(self, topic):
+    def delete_topic(self, topic: TopicWrapper) -> None:
         return None

@@ -118,7 +118,7 @@ def test_send_messages_through_a_fifo_queue_and_make_sure_they_are_always_ordere
 
     for i in range(100):
         message_dedup_id = str(uuid.uuid4())
-        backend.queue_publish(
+        backend.publish_to_queue(
             f"my-message-{i}",
             queue,
             "my-event-type",
@@ -155,7 +155,7 @@ def test_not_acknowledging_any_of_the_messages_on_a_fifo_queue_will_delay_the_de
 
     for i in range(20):
         message_dedup_id = str(uuid.uuid4())
-        backend.queue_publish(
+        backend.publish_to_queue(
             f"my-message-{i}",
             queue,
             "my-event-type",
@@ -193,7 +193,7 @@ def test_send_messages_through_a_non_fifo_queue_does_not_guarantee_order(
     queue, _ = backend.declare_queue(queue_name)
 
     for i in range(100):
-        backend.queue_publish(f"my-message-{i}", queue, "my-event-type")
+        backend.publish_to_queue(f"my-message-{i}", queue, "my-event-type")
 
     received_messages = []
     retrieved_messages = backend.retrieve_messages(queue)
@@ -224,12 +224,12 @@ def test_backend_declare_a_queue_for_a_topic_filtering_the_events_it_sends_to_ce
         )
         queue_3, _ = backend.declare_queue("dev-queue-{}".format(uuid.uuid4()), topic)
 
-        backend.publish(
+        backend.publish_to_topic(
             json.dumps({"event_type_name": "MyBananaEvent", "value": 3}),
             topic,
             event_type_name="MyBananaEvent",
         )
-        backend.publish(
+        backend.publish_to_topic(
             json.dumps({"event_type_name": "MyNonBananaEvent", "value": 5}),
             topic,
             event_type_name="MyNonBananaEvent",

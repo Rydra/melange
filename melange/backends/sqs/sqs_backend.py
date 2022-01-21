@@ -1,44 +1,46 @@
-# type: ignore
-
 import json
+import logging
 import uuid
 from json import JSONDecodeError
-from typing import Dict, List, Tuple
+from typing import Any, Dict, Iterable, List, Optional, Tuple
 
 import boto3
 
-from melange.backends.interfaces import Message, MessagingBackend, Queue, Topic
+from melange.backends.interfaces import (
+    Message,
+    MessagingBackend,
+    QueueWrapper,
+    TopicWrapper,
+)
+
+logger = logging.getLogger(__name__)
 
 
-class SQSBackend(MessagingBackend):
-    def __init__(self, **kwargs):
+class BaseSQSBackend(MessagingBackend):
+    """
+    Base class for SQS Backends
+    """
+
+    def __init__(self, **kwargs: Any) -> None:
         super().__init__()
         self.max_number_of_messages = kwargs.get("max_number_of_messages", 10)
         self.visibility_timeout = kwargs.get("visibility_timeout", 100)
         self.wait_time_seconds = kwargs.get("wait_time_seconds", 10)
 
-    def declare_topic(self, topic_name) -> Topic:
+        self.extra_settings = kwargs.get("extra_settings", {})
+
+    def declare_topic(self, topic_name: str) -> TopicWrapper:
         sns = boto3.resource("sns")
         topic = sns.create_topic(Name=topic_name)
-        return topic
+        return TopicWrapper(topic)
 
-    def get_queue(self, queue_name) -> Queue:
-        sqs_res = boto3.resource("sqs")
+    def get_queue(self, queue_name: str) -> QueueWrapper:
+        sqs_res = boto3.resource("sqs", **self.extra_settings)
+        return QueueWrapper(sqs_res.get_queue_by_name(QueueName=queue_name))
 
-        return sqs_res.get_queue_by_name(QueueName=queue_name)
-
-    def declare_queue(
-        self,
-        queue_name: str,
-        *topics_to_bind: Topic,
-        dead_letter_queue_name: str = None,
-        **kwargs
-    ) -> Tuple[Queue, Queue]:
-        try:
-            queue = self.get_queue(queue_name)
-        except Exception:
-            queue = self._create_queue(queue_name, content_based_deduplication="true")
-
+    def _subscribe_to_topics(
+        self, queue: QueueWrapper, topics_to_bind: Iterable[TopicWrapper], **kwargs: Any
+    ) -> None:
         if topics_to_bind:
             statements = []
             for topic in topics_to_bind:
@@ -46,21 +48,21 @@ class SQSBackend(MessagingBackend):
                     "Sid": "Sid{}".format(uuid.uuid4()),
                     "Effect": "Allow",
                     "Principal": "*",
-                    "Resource": queue.attributes["QueueArn"],
+                    "Resource": queue.unwrapped_obj.attributes["QueueArn"],
                     "Action": "sqs:SendMessage",
-                    "Condition": {"ArnEquals": {"aws:SourceArn": topic.arn}},
+                    "Condition": {"ArnEquals": {"aws:SourceArn": topic.unwrapped_obj.arn}},  # type: ignore
                 }
 
                 statements.append(statement)
-                subscription = topic.subscribe(
+                subscription = topic.unwrapped_obj.subscribe(
                     Protocol="sqs",
-                    Endpoint=queue.attributes[
+                    Endpoint=queue.unwrapped_obj.attributes[
                         "QueueArn"
                     ],  # , Attributes={"RawMessageDelivery": "true"}
                 )
 
                 if kwargs.get("filter_events"):
-                    filter_policy = {"event_type": kwargs["filter_events"]}
+                    filter_policy = {"manifest": kwargs["filter_events"]}
                 else:
                     filter_policy = {}
 
@@ -75,9 +77,26 @@ class SQSBackend(MessagingBackend):
                 "Statement": statements,
             }
 
-            queue.set_attributes(Attributes={"Policy": json.dumps(policy)})
+            queue.unwrapped_obj.set_attributes(
+                Attributes={"Policy": json.dumps(policy)}
+            )
 
-        dead_letter_queue = None
+    def declare_queue(
+        self,
+        queue_name: str,
+        *topics_to_bind: TopicWrapper,
+        dead_letter_queue_name: Optional[str] = None,
+        **kwargs: Any,
+    ) -> Tuple[QueueWrapper, Optional[QueueWrapper]]:
+        try:
+            queue = self.get_queue(queue_name)
+        except Exception as e:
+            logger.exception(e)
+            queue = self._create_queue(queue_name, content_based_deduplication="true")
+
+        self._subscribe_to_topics(queue, topics_to_bind, **kwargs)
+
+        dead_letter_queue: Optional[QueueWrapper] = None
         if dead_letter_queue_name:
             try:
                 dead_letter_queue = self.get_queue(dead_letter_queue_name)
@@ -87,18 +106,20 @@ class SQSBackend(MessagingBackend):
                 )
 
             redrive_policy = {
-                "deadLetterTargetArn": dead_letter_queue.attributes["QueueArn"],
+                "deadLetterTargetArn": dead_letter_queue.unwrapped_obj.attributes[
+                    "QueueArn"
+                ],
                 "maxReceiveCount": "4",
             }
 
-            queue.set_attributes(
+            queue.unwrapped_obj.set_attributes(
                 Attributes={"RedrivePolicy": json.dumps(redrive_policy)}
             )
 
         return queue, dead_letter_queue
 
-    def _create_queue(self, queue_name: str, **kwargs) -> Queue:
-        sqs_res = boto3.resource("sqs")
+    def _create_queue(self, queue_name: str, **kwargs: Any) -> QueueWrapper:
+        sqs_res = boto3.resource("sqs", **self.extra_settings)
         fifo = queue_name.endswith(".fifo")
         attributes = {}
         if fifo:
@@ -109,7 +130,7 @@ class SQSBackend(MessagingBackend):
         queue = sqs_res.create_queue(QueueName=queue_name, Attributes=attributes)
         return queue
 
-    def retrieve_messages(self, queue: Queue, attempt_id=None) -> List[Message]:
+    def retrieve_messages(self, queue: QueueWrapper, **kwargs: Any) -> List[Message]:
         kwargs = dict(
             MaxNumberOfMessages=self.max_number_of_messages,
             VisibilityTimeout=self.visibility_timeout,
@@ -118,28 +139,27 @@ class SQSBackend(MessagingBackend):
             AttributeNames=["All"],
         )
 
-        if attempt_id:
-            kwargs["ReceiveRequestAttemptId"] = attempt_id
+        if "attempt_id" in kwargs:
+            kwargs["ReceiveRequestAttemptId"] = kwargs["attempt_id"]
 
-        messages = queue.receive_messages(**kwargs)
+        messages = queue.unwrapped_obj.receive_messages(**kwargs)
 
         # We need to differentiate here whether the message came from SNS or SQS
 
         return [self._construct_message(message) for message in messages]
 
-    def queue_publish(
+    def publish_to_queue(
         self,
-        content: str,
-        queue,
-        event_type_name: str = None,
-        message_group_id: str = None,
-        message_deduplication_id: str = None,
-    ):
-        kwargs = dict(MessageBody=json.dumps({"Message": content}))
+        message: Message,
+        queue: QueueWrapper,
+        message_group_id: Optional[str] = None,
+        message_deduplication_id: Optional[str] = None,
+    ) -> None:
+        kwargs: Dict = dict(MessageBody=json.dumps({"Message": message.content}))
 
-        if event_type_name:
+        if message.manifest:
             kwargs["MessageAttributes"] = {
-                "event_type": {"DataType": "String", "StringValue": event_type_name}
+                "manifest": {"DataType": "String", "StringValue": message.manifest}
             }
 
         if message_group_id:
@@ -148,19 +168,18 @@ class SQSBackend(MessagingBackend):
         if message_deduplication_id:
             kwargs["MessageDeduplicationId"] = message_deduplication_id
 
-        queue.send_message(**kwargs)
+        queue.unwrapped_obj.send_message(**kwargs)
 
-    def publish(
+    def publish_to_topic(
         self,
-        content: str,
-        topic: Topic,
-        event_type_name: str,
-        extra_attributes: Dict = None,
-    ):
-        args = dict(
-            Message=content,
+        message: Message,
+        topic: TopicWrapper,
+        extra_attributes: Optional[Dict] = None,
+    ) -> None:
+        args: Dict = dict(
+            Message=message.content,
             MessageAttributes={
-                "event_type": {"DataType": "String", "StringValue": event_type_name}
+                "manifest": {"DataType": "String", "StringValue": message.manifest}
             },
         )
 
@@ -174,7 +193,7 @@ class SQSBackend(MessagingBackend):
             if "message_structure" in extra_attributes:
                 args["MessageStructure"] = extra_attributes["message_structure"]
 
-        response = topic.publish(**args)
+        response = topic.unwrapped_obj.publish(**args)
 
         if "MessageId" not in response:
             raise ConnectionError("Could not send the event to the SNS TOPIC")
@@ -185,15 +204,15 @@ class SQSBackend(MessagingBackend):
     def close_connection(self) -> None:
         pass
 
-    def delete_queue(self, queue: Queue) -> None:
-        queue.delete()
+    def delete_queue(self, queue: QueueWrapper) -> None:
+        queue.unwrapped_obj.delete()
 
-    def delete_topic(self, topic: Topic) -> None:
-        topic.delete()
+    def delete_topic(self, topic: TopicWrapper) -> None:
+        topic.unwrapped_obj.delete()
 
-    def _construct_message(self, message) -> Message:
+    def _construct_message(self, message: Any) -> Message:
         body = message.body
-        manifest = ""
+        manifest: Optional[str] = None
         try:
             message_content = json.loads(body)
             if "Message" in message_content:
@@ -203,7 +222,7 @@ class SQSBackend(MessagingBackend):
                 if "MessageAttributes" in message_content:
                     manifest = (
                         message_content["MessageAttributes"]
-                        .get("event_type", {})
+                        .get("manifest", {})
                         .get("Value")
                         or ""
                     )
@@ -212,10 +231,20 @@ class SQSBackend(MessagingBackend):
         except JSONDecodeError:
             content = body
 
-        manifest = (
-            manifest
-            or message.message_attributes.get("event_type", {}).get("StringValue")
-            or ""
-        )
+        try:
+            manifest = manifest or message.message_attributes.get("manifest", {}).get(
+                "StringValue"
+            )
+        except Exception:
+            manifest = None
 
         return Message(message.message_id, content, message, manifest)
+
+
+class AWSBackend(BaseSQSBackend):
+    """
+    backend to use with elasticMQ
+    """
+
+    def __init__(self, **kwargs: Any) -> None:
+        super().__init__(**kwargs)

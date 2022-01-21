@@ -20,10 +20,10 @@ payment service. You could invoke the factory as follows:
 
 
 ``` py
-from melange.backends.sqs.sqs_backend import SQSBackend
+from melange.backends.sqs.sqs_backend import AWSBackend
 from melange.backends.factory import MessagingBackendFactory
 
-backend = SQSBackend()
+backend = AWSBackend()
 factory = MessagingBackendFactory(backend)
 factory.init_queue("payment-updates.fifo")
 ```
@@ -36,10 +36,10 @@ You could also define a dead letter queue for messages that could not
 be delivered successfully:
 
 ``` py
-from melange.backends.sqs.sqs_backend import SQSBackend
+from melange.backends.sqs.sqs_backend import AWSBackend
 from melange.backends.factory import MessagingBackendFactory
 
-backend = SQSBackend()
+backend = AWSBackend()
 factory = MessagingBackendFactory(backend)
 factory.init_queue("payment-updates.fifo", dead_letter_queue_name="payment-updates.fifo")
 ```
@@ -52,15 +52,15 @@ so that they don't need to know who they are sending their messages to. With
 the factory you could create a topic like this:
 
 ``` py
-from melange.backends.sqs.sqs_backend import SQSBackend
+from melange.backends.sqs.sqs_backend import AWSBackend
 from melange.backends.factory import MessagingBackendFactory
 
-backend = SQSBackend()
+backend = AWSBackend()
 factory = MessagingBackendFactory(backend)
 factory.init_topic("my-topic")
 ```
 
-For the `SQSBackend` this will create an SNS topic.
+For the `AWSBackend` this will create an SNS topic.
 
 
 ## Creating a queue and subscribing it to several topics
@@ -68,10 +68,10 @@ For the `SQSBackend` this will create an SNS topic.
 You could create a queue and immediately subscribe it to a number of topics:
 
 ``` py
-from melange.backends.sqs.sqs_backend import SQSBackend
+from melange.backends.sqs.sqs_backend import AWSBackend
 from melange.backends.factory import MessagingBackendFactory
 
-backend = SQSBackend()
+backend = AWSBackend()
 factory = MessagingBackendFactory(backend)
 factory.init_queue(
     "payment-updates.fifo", 

@@ -34,7 +34,7 @@ class RabbitMQBackend(MessagingBackend):
         )
         return [message]
 
-    def publish(self, content, topic, event_type_name):
+    def publish_to_topic(self, content, topic, event_type_name):
         result = self.channel.basic_publish(
             exchange=topic,
             routing_key="",

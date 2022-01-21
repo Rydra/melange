@@ -5,6 +5,10 @@ from melange.serializers.interfaces import MessageSerializer
 
 
 class JsonSerializer(MessageSerializer[Dict]):
+    """
+    Serializes and deserializes python dictionaries in json format
+    """
+
     def manifest(self, data: Dict) -> str:
         return "json"
 

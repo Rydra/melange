@@ -16,3 +16,9 @@ The akka framework implements a [similar concept](https://doc.akka.io/docs/akka/
 Maybe The Messaging Backends could be entirely replaced with Kombu, since kombu already
 offers an abstraction layer over several messaging brokers. Undergo some
 kind of proof of concept to see if such a thing is possible and how.
+
+# Kafka integration
+
+Kafka is a powerful messaging broker technology that covers lots
+of features and functionalities that could provide some ideas
+to the current features that melange provides.

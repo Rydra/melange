@@ -12,5 +12,7 @@ if __name__ == "__main__":
         backend=backend,
     )
     factory.init_queue("payment-updates")
+    factory.init_queue("order-updates")
+    factory.init_queue("saga-updates")
 
     print("Queues created.")

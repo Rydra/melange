@@ -57,4 +57,3 @@ sending the message, they send the manifest as well as the serialized message
 to provide the consumers with this valuable information. The manifest
 could be sent through the means of metadata (if your messaging infrastructure
 supports it) or through any other means that could be retrieved by the consumer.
-
