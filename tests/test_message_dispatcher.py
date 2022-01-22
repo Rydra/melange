@@ -1,6 +1,7 @@
 from typing import List, cast
 
-from doubles import InstanceDouble, allow, expect
+from doublex import ANY_ARG, ProxySpy, Spy, called, never
+from hamcrest import *
 
 from melange.backends.interfaces import MessagingBackend
 from melange.message_dispatcher import SimpleMessageDispatcher
@@ -15,13 +16,13 @@ from tests.fixtures import (
 
 
 def a_backend_with_messages(messages: List[Message]) -> MessagingBackend:
-    backend = cast(
-        MessagingBackend, InstanceDouble("melange.backends.interfaces.MessagingBackend")
-    )
-    allow(backend).get_queue.and_return({})
-    allow(backend).retrieve_messages.and_return(messages)
+    backend = Spy(MessagingBackend)
 
-    return backend
+    with backend:
+        backend.get_queue(ANY_ARG).returns({})
+        backend.retrieve_messages(ANY_ARG).returns(messages)
+
+    return cast(MessagingBackend, backend)
 
 
 class TestMessageDispatcher:
@@ -32,14 +33,15 @@ class TestMessageDispatcher:
         messages = [Message.create(serialized_event) for _ in range(2)]
         backend = a_backend_with_messages(messages)
 
-        consumer = BananaConsumer()
-        expect(consumer).process.twice()
-        expect(backend).acknowledge.twice()
+        consumer = ProxySpy(BananaConsumer())
 
         sut = SimpleMessageDispatcher(
             consumer, message_serializer=serializer, backend=backend
         )
         sut.consume_event("queue")
+
+        assert_that(consumer.process, called().times(2))
+        assert_that(backend.acknowledge, called().times(2))
 
     def test_consume_on_queue_but_no_consumer_interested_in_the_messages(self):
         serializer = MessageSerializerStub()
@@ -48,14 +50,15 @@ class TestMessageDispatcher:
         messages = [Message.create(serialized_event) for _ in range(2)]
         backend = a_backend_with_messages(messages)
 
-        consumer = NoBananaConsumer()
-        expect(consumer).process.never()
-        expect(backend).acknowledge.twice()
+        consumer = ProxySpy(NoBananaConsumer())
 
         sut = SimpleMessageDispatcher(
             consumer, message_serializer=serializer, backend=backend
         )
         sut.consume_event("queue")
+
+        assert_that(consumer.process, never(called()))
+        assert_that(backend.acknowledge, called().times(2))
 
     def test_if_a_consumer_raises_an_exception_the_message_is_not_acknowledged(self):
         serializer = MessageSerializerStub()
@@ -65,9 +68,9 @@ class TestMessageDispatcher:
         backend = a_backend_with_messages(messages)
 
         consumer = ExceptionaleConsumer()
-        expect(backend).acknowledge.never()
 
         sut = SimpleMessageDispatcher(
             consumer, message_serializer=serializer, backend=backend
         )
         sut.consume_event("queue")
+        assert_that(backend.acknowledge, never(called()))

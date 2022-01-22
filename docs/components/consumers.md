@@ -48,9 +48,11 @@ This is the specification of the `MessageDispatcher` class:
 
 ::: melange.message_dispatcher.MessageDispatcher
 
-> NOTE: Unless the `always_ack` is set to `True`, a message will only be acknowleged if
-> it's been correcly processed by all consumers that accept the message. 
-> Unless [message deduplication](link) is in place, if a consumers fails the same
-> message is going to be reprocessed again by all the consumers, which can lead to issues.
-> Either use only one consumer per `MessageDispatcher`, make your consumers idempotent,
-> or set a `DeduplicationCache` when instantiating the `MessageDispatcher`.
+!!! note
+
+    Unless the `always_ack` is set to `True`, a message will only be acknowleged if
+    it's been correcly processed by all consumers that accept the message. 
+    Unless [message deduplication](link) is in place, if a consumers fails the same
+    message is going to be reprocessed again by all the consumers, which can lead to issues.
+    Either use only one consumer per `MessageDispatcher`, make your consumers idempotent,
+    or set a `DeduplicationCache` when instantiating the `MessageDispatcher`.

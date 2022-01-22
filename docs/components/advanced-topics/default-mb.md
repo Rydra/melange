@@ -24,7 +24,9 @@ Notice that we are not passing the backend now as a parameter
 when creating the `QueuePublisher` object, since it will retrieve
 it from the BackendManager.
 
-> NOTE: Use the BackendManager with caution though.
-> Singletons are [regarded sometimes as an antipattern](https://stackoverflow.com/questions/12755539/why-is-singleton-considered-an-anti-pattern)
-depending on the situation, and dependency injection is usually regarded
-as a cleaner solution to construct objects.
+!!! warning
+
+    Use the BackendManager with caution though.
+    Singletons are [regarded sometimes as an antipattern](https://stackoverflow.com/questions/12755539/why-is-singleton-considered-an-anti-pattern)
+    depending on the situation, and dependency injection is usually regarded
+    as a cleaner solution to construct objects.

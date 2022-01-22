@@ -21,8 +21,10 @@ In Melange we provide a `RedisCache` class that you could use to perform this me
 we do not want to tie the library to any specific technology, so as long as you comply
 with the `DeduplicationCache` interface it will work just fine.
 
-> The cache for message deduplication is completely optional, but on a production environment having some
-kind of cache to handle deduplication is encouraged.
+!!! info 
+
+    The cache for message deduplication is completely optional, but on a production environment having some
+    kind of cache to handle deduplication is encouraged.
 
 This is the `DeduplicationCache` specification:
 

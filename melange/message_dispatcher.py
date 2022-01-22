@@ -28,7 +28,7 @@ class MessageDispatcher:
         backend: Optional[MessagingBackend] = None,
         always_ack: bool = False,
     ) -> None:
-        self._exchange_listeners: List[Consumer] = []
+        self._consumers: List[Consumer] = []
         self.message_serializer = message_serializer
         self._backend = backend or BackendManager().get_default_backend()
         self.cache: DeduplicationCache = cache or NullCache()
@@ -40,8 +40,8 @@ class MessageDispatcher:
         Args:
             consumer: the consumer to attach
         """
-        if consumer not in self._exchange_listeners:
-            self._exchange_listeners.append(consumer)
+        if consumer not in self._consumers:
+            self._consumers.append(consumer)
 
     def unattach_consumer(self, consumer: Consumer) -> None:
         """
@@ -49,8 +49,8 @@ class MessageDispatcher:
         Args:
             consumer: the consumer to unattach
         """
-        if consumer in self._exchange_listeners:
-            self._exchange_listeners.remove(consumer)
+        if consumer in self._consumers:
+            self._consumers.remove(consumer)
 
     def consume_loop(
         self,
@@ -96,9 +96,7 @@ class MessageDispatcher:
 
     def _get_consumers(self, message_data: Any) -> List[Consumer]:
         return [
-            listener
-            for listener in self._exchange_listeners
-            if listener.accepts(message_data)
+            consumer for consumer in self._consumers if consumer.accepts(message_data)
         ]
 
     def _dispatch_message(self, message: Message) -> None:

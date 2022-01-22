@@ -105,17 +105,6 @@ tomli = {version = "*", optional = true, markers = "extra == \"toml\""}
 toml = ["tomli"]
 
 [[package]]
-name = "doubles"
-version = "1.5.3"
-description = "Test doubles for Python."
-category = "dev"
-optional = false
-python-versions = "*"
-
-[package.dependencies]
-six = "*"
-
-[[package]]
 name = "doublex"
 version = "1.9.3"
 description = "Python test doubles"
@@ -718,7 +707,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8.0"
-content-hash = "ab2d030b19f6ce7eaa124db8f22b52258cf11a67020e45f453ee37c5b70921a8"
+content-hash = "80e107699886bd2ff9ef064817d0321f2c6cd2822d7b3482c614b1b49938df19"
 
 [metadata.files]
 astunparse = [
@@ -801,9 +790,6 @@ coverage = [
     {file = "coverage-6.2-cp39-cp39-win_amd64.whl", hash = "sha256:86f2e78b1eff847609b1ca8050c9e1fa3bd44ce755b2ec30e70f2d3ba3844644"},
     {file = "coverage-6.2-pp36.pp37.pp38-none-any.whl", hash = "sha256:5829192582c0ec8ca4a2532407bc14c2f338d9878a10442f5d03804a95fac9de"},
     {file = "coverage-6.2.tar.gz", hash = "sha256:e2cad8093172b7d1595b4ad66f24270808658e11acf43a8f95b41276162eb5b8"},
-]
-doubles = [
-    {file = "doubles-1.5.3.tar.gz", hash = "sha256:3332349ea9683dc65f5866362f9f27b25cd35b1ad239db3c9d83ca5473665eba"},
 ]
 doublex = [
     {file = "doublex-1.9.3.tar.gz", hash = "sha256:cf2f45582f706b49643700809f748b5e904e75f35a2b049e9edad92fcb41b6b0"},

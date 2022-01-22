@@ -26,7 +26,6 @@ mkdocs = "^1.2.3"
 mkdocstrings = "^0.17.0"
 mkdocs-material = "^8.1.7"
 polling = "^0.3.2"
-doubles = "^1.5.3"
 doublex = "^1.9.3"
 pytest-cov = "^3.0.0"
 

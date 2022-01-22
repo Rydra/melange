@@ -40,9 +40,11 @@ it in this test.
 However the arrangement is complex. It's a trade-off between completeness and complexity that you have to embrace
 if you want to follow this route.
 
-> TIP: Try to abstract away all this arrangement code from the main body of the test
-> to keep it clean and clear, avoiding pollution. Testing frameworks have different
-> techniques to abstract away arrangements (like pytest fixtures).
+!!! tip
+
+    Try to abstract away all this arrangement code from the main body of the test
+    to keep it clean and clear, avoiding pollution. Testing frameworks have different
+    techniques to abstract away arrangements (like pytest fixtures).
 
 ## Synchronous testing with the `InMemoryMessagingBackend`
 

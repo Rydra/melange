@@ -27,13 +27,6 @@ pip install melange
 
 Full documentation is available at [https://rydra.github.io/melange/](https://rydra.github.io/melange/)
 
-## Examples
-
-The code base features several full-fledged examples that covers some complex use cases:
-
-* Saga choreography in action
-* Payment service
-
 ## Why the name 'Melange'
 
 The name "Melange" is a reference to the drug-spice from the sci-fi book saga "Dune", a spice which is only 
