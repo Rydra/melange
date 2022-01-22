@@ -5,7 +5,7 @@ from doubles import InstanceDouble, allow, expect
 
 from melange.backends.interfaces import MessagingBackend
 from melange.publishers import QueuePublisher
-from tests.fixtures import TestMessageSerializer
+from tests.fixtures import MessageSerializerStub
 
 
 def a_backend() -> MessagingBackend:
@@ -20,7 +20,7 @@ def a_backend() -> MessagingBackend:
 class TestMessagePublisher:
     def test_publish_a_message_to_a_queue(self):
         backend = a_backend()
-        serializer = TestMessageSerializer()
+        serializer = MessageSerializerStub()
         expect(backend).publish_to_queue.once()
 
         sut = QueuePublisher(backend=backend, message_serializer=serializer)

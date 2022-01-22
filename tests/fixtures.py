@@ -32,7 +32,7 @@ class NoBananaConsumer(SingleDispatchConsumer):
         pass
 
 
-class TestMessageSerializer(MessageSerializer):
+class MessageSerializerStub(MessageSerializer):
     def manifest(self, data: Any) -> str:
         return "BananaEvent"
 

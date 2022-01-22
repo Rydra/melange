@@ -1,3 +1,0 @@
-# Payment Service
-
-TODO

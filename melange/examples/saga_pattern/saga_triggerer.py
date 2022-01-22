@@ -1,7 +1,7 @@
 import os
 import uuid
 
-from melange.backends.sqs.elasticmq import LocalSQSBackend
+from melange.backends.sqs.localsqs import LocalSQSBackend
 from melange.examples.payment_service.events import OrderResponse
 from melange.publishers import QueuePublisher
 from melange.serializers.pickle import PickleSerializer

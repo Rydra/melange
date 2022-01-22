@@ -51,9 +51,7 @@ nav:
     - Advanced topics:
         - Advanced topics: advanced-topics.md
         - Behind the scenes: behind-scenes.md
-    - Examples:
-        - Payment service: examples/payment-service.md
-        - Saga choreography: examples/saga.md
+    - Examples: examples.md
     - Testing: testing.md
     - Roadmap: roadmap.md
     - Mixed bag of ideas: mixed-bag.md

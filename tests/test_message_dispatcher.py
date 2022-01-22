@@ -9,8 +9,8 @@ from tests.fixtures import (
     BananaConsumer,
     BananaHappened,
     ExceptionaleConsumer,
+    MessageSerializerStub,
     NoBananaConsumer,
-    TestMessageSerializer,
 )
 
 
@@ -26,7 +26,7 @@ def a_backend_with_messages(messages: List[Message]) -> MessagingBackend:
 
 class TestMessageDispatcher:
     def test_consume_on_queue_with_messages(self):
-        serializer = TestMessageSerializer()
+        serializer = MessageSerializerStub()
 
         serialized_event = serializer.serialize(BananaHappened("apple"))
         messages = [Message.create(serialized_event) for _ in range(2)]
@@ -42,7 +42,7 @@ class TestMessageDispatcher:
         sut.consume_event("queue")
 
     def test_consume_on_queue_but_no_consumer_interested_in_the_messages(self):
-        serializer = TestMessageSerializer()
+        serializer = MessageSerializerStub()
 
         serialized_event = serializer.serialize(BananaHappened("apple"))
         messages = [Message.create(serialized_event) for _ in range(2)]
@@ -58,7 +58,7 @@ class TestMessageDispatcher:
         sut.consume_event("queue")
 
     def test_if_a_consumer_raises_an_exception_the_message_is_not_acknowledged(self):
-        serializer = TestMessageSerializer()
+        serializer = MessageSerializerStub()
 
         serialized_event = serializer.serialize(BananaHappened("apple"))
         messages = [Message.create(serialized_event) for _ in range(2)]

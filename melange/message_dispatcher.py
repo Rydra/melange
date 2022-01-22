@@ -66,9 +66,6 @@ class MessageDispatcher:
                 will be passed to this callback
             after_consume: After consuming a batch of events,
                 invoke this callback
-
-        Returns:
-
         """
         while True:
             try:

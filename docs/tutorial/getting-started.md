@@ -36,7 +36,7 @@ Before using a queue you need to create it. Put the following code snippet into 
 file called `create_queue.py` and execute it to create the queue:
 
 ``` py
-from melange.backends.sqs.elasticmq import LocalSQSBackend
+from melange.backends.sqs.localsqs import LocalSQSBackend
 from melange.backends.factory import MessagingBackendFactory
 
 backend = LocalSQSBackend(host="localhost", port=9324)

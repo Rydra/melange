@@ -17,3 +17,20 @@ flake8:
 
 build-dev:
 	docker-compose -f docker-compose.yml build --parallel --force-rm --compress --build-arg POETRY_ENV=dev
+
+
+run-tests:
+	docker-compose run --rm app pytest
+
+
+run-coverage:
+	docker-compose run --rm app pytest --cov=melange --cov-report html:cov_html
+
+
+run-example-app:
+	docker-compose run --rm app python melange/examples/payment_service/init_queues.py
+	docker-compose run --rm app python melange/examples/payment_service/app.py
+
+
+run-example-triggerer:
+	docker-compose run --rm app python melange/examples/payment_service/triggerer.py $(reference)

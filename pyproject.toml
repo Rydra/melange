@@ -28,6 +28,7 @@ mkdocs-material = "^8.1.7"
 polling = "^0.3.2"
 doubles = "^1.5.3"
 doublex = "^1.9.3"
+pytest-cov = "^3.0.0"
 
 [tool.commitizen]
 name = "cz_conventional_commits"
@@ -56,8 +57,6 @@ exclude = '''
 '''
 
 [tool.pytest.ini_options]
-python_files = "test_* *_tests.py *_utests.py"
-python_classes = "Test* *Tests"
 
 markers = [
     "acceptancetest: marks a test as an acceptance test",
@@ -65,6 +64,13 @@ markers = [
     "integrationtest"
 ]
 norecursedirs = ".cache dumps *.egg-info .git appdir .tox"
+
+[tool.coverage.run]
+omit = [
+    "melange/examples/*",
+    "melange/__version__.py",
+    "melange/backends/rabbitmq/*"
+]
 
 [build-system]
 requires = ["poetry_core>=1.0.0"]

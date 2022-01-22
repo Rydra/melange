@@ -1,6 +1,6 @@
 import os
 
-from melange.backends.sqs.elasticmq import LocalSQSBackend
+from melange.backends.sqs.localsqs import LocalSQSBackend
 from melange.examples.payment_service.consumer import PaymentConsumer
 from melange.examples.payment_service.publisher import PaymentPublisher
 from melange.examples.payment_service.repository import PaymentRepository

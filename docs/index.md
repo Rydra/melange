@@ -10,7 +10,7 @@
 required to implement a messaging infrastructure (commonly used to create distributed architectures 
 and interact with microservices architectures).
 
-Out of the box Melange supports Amazon SQS, SNS and RabbitMQ, though the library is designed to be extensible, so that you
+Out of the box Melange supports Amazon SQS + SNS, though the library is designed to be extensible, so that you
 can use it with your own messaging infrastructure, should you choose so.
 
 The interface this library offers is very clean and tries to tightly follow the best practices from Vaughn Vernon's book
@@ -44,10 +44,6 @@ He who controls the spice, controls the universe.
 The spice must flow.
 
 The analogy can be very well made on Events in a distributed architecture :)
-
-## Contributing
-
-We're open to contributions and opinions!
 
 ## Project Links
 

@@ -90,8 +90,7 @@ class BaseSQSBackend(MessagingBackend):
     ) -> Tuple[QueueWrapper, Optional[QueueWrapper]]:
         try:
             queue = self.get_queue(queue_name)
-        except Exception as e:
-            logger.exception(e)
+        except Exception:
             queue = self._create_queue(queue_name, content_based_deduplication="true")
 
         self._subscribe_to_topics(queue, topics_to_bind, **kwargs)

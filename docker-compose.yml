@@ -11,6 +11,7 @@ services:
       - SQSPORT=4566
       - SNSHOST=http://localstack
       - SNSPORT=4566
+      - PYTHONPATH=/app
     volumes:
       - .:/app
     links:

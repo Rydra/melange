@@ -6,7 +6,7 @@ import uuid
 import pytest
 from hamcrest import *
 
-from melange.backends.sqs.elasticmq import LocalSQSBackend
+from melange.backends.sqs.localsqs import LocalSQSBackend
 from melange.models import Message
 
 
@@ -143,6 +143,7 @@ def test_send_messages_through_a_fifo_queue_and_make_sure_they_are_always_ordere
     assert_that(received_messages, contains_exactly(*expected_array))
 
 
+@pytest.mark.skip(reason="slow")
 def test_not_acknowledging_any_of_the_messages_on_a_fifo_queue_will_delay_the_delivery_of_the_rest(
     backend, request
 ):
