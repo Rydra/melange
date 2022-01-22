@@ -383,7 +383,7 @@
   
     <li class="md-nav__item">
       <a href="../../components/consumers/" class="md-nav__link">
-        Consumers
+        Message Dispatcher and Consumers
       </a>
     </li>
   
@@ -556,21 +556,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../../principles/" class="md-nav__link">
-        Principles
-      </a>
-    </li>
-  
-
-    
-      
-      
-      
-
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../../testing/" class="md-nav__link">
         Testing
       </a>
@@ -588,6 +573,21 @@
     <li class="md-nav__item">
       <a href="../../roadmap/" class="md-nav__link">
         Roadmap
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../mixed-bag/" class="md-nav__link">
+        Mixed bag of ideas
       </a>
     </li>
   
@@ -720,6 +720,9 @@
 
 
 <h1 id="tutorial-getting-started">Tutorial - Getting started</h1>
+<blockquote>
+<p><em>Talk is cheap, show me the code</em></p>
+</blockquote>
 <p>Event-driven architectures work with the Publish/Subscribe pattern to achieve decoupling.
 With this pattern, publishers and subscribers do not know about each other while they can exchange
 information among them. In order to achieve this and communicate effectively a 
@@ -744,10 +747,10 @@ is to launch the docker image:</p>
 <h2 id="creating-a-queue">Creating a queue</h2>
 <p>Before using a queue you need to create it. Put the following code snippet into a
 file called <code>create_queue.py</code> and execute it to create the queue:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span> <span class="nn">melange.backends.sqs.elasticmq</span> <span class="kn">import</span> <span class="n">ElasticMQBackend</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span> <span class="nn">melange.backends.sqs.elasticmq</span> <span class="kn">import</span> <span class="n">LocalSQSBackend</span>
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="kn">from</span> <span class="nn">melange.backends.factory</span> <span class="kn">import</span> <span class="n">MessagingBackendFactory</span>
 <a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="n">backend</span> <span class="o">=</span> <span class="n">ElasticMQBackend</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s2">&quot;localhost&quot;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">9324</span><span class="p">)</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="n">backend</span> <span class="o">=</span> <span class="n">LocalSQSBackend</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s2">&quot;localhost&quot;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">9324</span><span class="p">)</span>
 <a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="n">factory</span> <span class="o">=</span> <span class="n">MessagingBackendFactory</span><span class="p">(</span><span class="n">backend</span><span class="p">)</span>
 <a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="n">factory</span><span class="o">.</span><span class="n">init_queue</span><span class="p">(</span><span class="s2">&quot;melangetutorial-queue&quot;</span><span class="p">)</span>
 </code></pre></div>
@@ -755,7 +758,7 @@ file called <code>create_queue.py</code> and execute it to create the queue:</p>
 <p>Publishing messages to a queue with Melange is easy. Just create an instance of the message
 publisher and <code>publish</code> the message. Put the following code snippet into a file called <code>publish_example.py</code>:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">from</span> <span class="nn">melange.message_publisher</span> <span class="kn">import</span> <span class="n">QueuePublisher</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="kn">from</span> <span class="nn">melange.backends.sqs.elasticmq</span> <span class="kn">import</span> <span class="n">ElasticMQBackend</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="kn">from</span> <span class="nn">melange.backends.sqs.elasticmq</span> <span class="kn">import</span> <span class="n">LocalSQSBackend</span>
 <a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="kn">from</span> <span class="nn">melange.serializers.pickle</span> <span class="kn">import</span> <span class="n">PickleSerializer</span>
 <a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>
 <a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="k">class</span> <span class="nc">MyTestMessage</span><span class="p">:</span>
@@ -763,7 +766,7 @@ publisher and <code>publish</code> the message. Put the following code snippet i
 <a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> <span class="n">message</span>
 <a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>
 <a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>    <span class="n">backend</span> <span class="o">=</span> <span class="n">ElasticMQBackend</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s2">&quot;localhost&quot;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">9324</span><span class="p">)</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>    <span class="n">backend</span> <span class="o">=</span> <span class="n">LocalSQSBackend</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s2">&quot;localhost&quot;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">9324</span><span class="p">)</span>
 <a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>    <span class="n">serializer</span> <span class="o">=</span> <span class="n">PickleSerializer</span><span class="p">()</span>
 <a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>    <span class="n">publisher</span> <span class="o">=</span> <span class="n">QueuePublisher</span><span class="p">(</span><span class="n">serializer</span><span class="p">,</span> <span class="n">backend</span><span class="p">)</span>
 <a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>    <span class="n">message</span> <span class="o">=</span> <span class="n">MyTestMessage</span><span class="p">(</span><span class="s2">&quot;Hello World!&quot;</span><span class="p">)</span>
@@ -785,7 +788,7 @@ only works with python consumers.</p>
 we need a consumer that reads these messages and reacts to them.</p>
 <p>Put the following code snippet in a file called <code>consumer-example.py</code> and run it:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">from</span> <span class="nn">melange.consumers</span> <span class="kn">import</span> <span class="n">Consumer</span><span class="p">,</span> <span class="n">ConsumerHandler</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="kn">from</span> <span class="nn">melange.backends.sqs.elasticmq</span> <span class="kn">import</span> <span class="n">ElasticMQBackend</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="kn">from</span> <span class="nn">melange.backends.sqs.elasticmq</span> <span class="kn">import</span> <span class="n">LocalSQSBackend</span>
 <a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="kn">from</span> <span class="nn">melange.serializers.pickle</span> <span class="kn">import</span> <span class="n">PickleSerializer</span>
 <a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="kn">from</span> <span class="nn">publish_example</span> <span class="kn">import</span> <span class="n">MyTestMessage</span>
 <a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>
@@ -795,10 +798,10 @@ we need a consumer that reads these messages and reacts to them.</p>
 <a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>        <span class="nb">print</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">message</span><span class="p">)</span>
 <a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>
 <a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>    <span class="n">backend</span> <span class="o">=</span> <span class="n">ElasticMQBackend</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s2">&quot;localhost&quot;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">9324</span><span class="p">)</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>    <span class="n">backend</span> <span class="o">=</span> <span class="n">LocalSQSBackend</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s2">&quot;localhost&quot;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">9324</span><span class="p">)</span>
 <a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>    <span class="n">serializer</span> <span class="o">=</span> <span class="n">PickleSerializer</span><span class="p">()</span>
 <a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>    <span class="n">consumer</span> <span class="o">=</span> <span class="n">MyConsumer</span><span class="p">()</span>
-<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>    <span class="n">consumer_handler</span> <span class="o">=</span> <span class="n">SimpleConsumerHandler</span><span class="p">(</span>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>    <span class="n">consumer_handler</span> <span class="o">=</span> <span class="n">SimpleMessageDispatcher</span><span class="p">(</span>
 <a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a>        <span class="n">serializer</span><span class="p">,</span>
 <a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a>        <span class="n">backend</span><span class="o">=</span><span class="n">backend</span><span class="p">,</span>
 <a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a>    <span class="p">)</span>
@@ -816,7 +819,15 @@ the consumer is running.</p>
 own python module (e.g. <code>shared.py</code>)</p>
 </blockquote>
 <h2 id="where-to-go-from-here">Where to go from here</h2>
-<p>Although the exposed example is quite simple, it serves as the foundation to implement a number of
+<p>Now that you grasped the basic idea on how you could use Melange, you could go further and read more
+details about:</p>
+<ul>
+<li><a href="../../components/consumers/">Consumers</a></li>
+<li><a href="../../components/publishers/">Publishers</a></li>
+<li><a href="../../components/messaging-backends/">Messaging Backend</a></li>
+<li><a href="../../components/serializers/">Serializers</a></li>
+</ul>
+<p>To add to that, although the exposed example is quite simple, it serves as the foundation to implement a number of
 use cases and distributed architectures with microservices. With Melange you can:</p>
 <ul>
 <li>Build a CQRS + Event sourcing architecture, where you publish your events to a queue or topic from the Command

@@ -316,7 +316,7 @@
   
     <li class="md-nav__item">
       <a href="../components/consumers/" class="md-nav__link">
-        Consumers
+        Message Dispatcher and Consumers
       </a>
     </li>
   
@@ -544,21 +544,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../principles/" class="md-nav__link">
-        Principles
-      </a>
-    </li>
-  
-
-    
-      
-      
-      
-
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../testing/" class="md-nav__link">
         Testing
       </a>
@@ -576,6 +561,21 @@
     <li class="md-nav__item">
       <a href="../roadmap/" class="md-nav__link">
         Roadmap
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mixed-bag/" class="md-nav__link">
+        Mixed bag of ideas
       </a>
     </li>
   
@@ -707,10 +707,10 @@ might have manually set in your PaaS platform. </p>
 <h2 id="creating-a-queue">Creating a queue</h2>
 <p>Let's say you'd wish to create an Amazon SQS queue to listen to the events for a 
 payment service. You could invoke the factory as follows:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span> <span class="nn">melange.backends.sqs.sqs_backend</span> <span class="kn">import</span> <span class="n">SQSBackend</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span> <span class="nn">melange.backends.sqs.sqs_backend</span> <span class="kn">import</span> <span class="n">AWSBackend</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">from</span> <span class="nn">melange.backends.factory</span> <span class="kn">import</span> <span class="n">MessagingBackendFactory</span>
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="n">backend</span> <span class="o">=</span> <span class="n">SQSBackend</span><span class="p">()</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="n">backend</span> <span class="o">=</span> <span class="n">AWSBackend</span><span class="p">()</span>
 <a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">factory</span> <span class="o">=</span> <span class="n">MessagingBackendFactory</span><span class="p">(</span><span class="n">backend</span><span class="p">)</span>
 <a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="n">factory</span><span class="o">.</span><span class="n">init_queue</span><span class="p">(</span><span class="s2">&quot;payment-updates.fifo&quot;</span><span class="p">)</span>
 </code></pre></div>
@@ -719,10 +719,10 @@ appropriately set the AWS variables since the SQS backend uses <code>boto</code>
 scenes).</p>
 <p>You could also define a dead letter queue for messages that could not
 be delivered successfully:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span> <span class="nn">melange.backends.sqs.sqs_backend</span> <span class="kn">import</span> <span class="n">SQSBackend</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span> <span class="nn">melange.backends.sqs.sqs_backend</span> <span class="kn">import</span> <span class="n">AWSBackend</span>
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="kn">from</span> <span class="nn">melange.backends.factory</span> <span class="kn">import</span> <span class="n">MessagingBackendFactory</span>
 <a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="n">backend</span> <span class="o">=</span> <span class="n">SQSBackend</span><span class="p">()</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="n">backend</span> <span class="o">=</span> <span class="n">AWSBackend</span><span class="p">()</span>
 <a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="n">factory</span> <span class="o">=</span> <span class="n">MessagingBackendFactory</span><span class="p">(</span><span class="n">backend</span><span class="p">)</span>
 <a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="n">factory</span><span class="o">.</span><span class="n">init_queue</span><span class="p">(</span><span class="s2">&quot;payment-updates.fifo&quot;</span><span class="p">,</span> <span class="n">dead_letter_queue_name</span><span class="o">=</span><span class="s2">&quot;payment-updates.fifo&quot;</span><span class="p">)</span>
 </code></pre></div>
@@ -731,20 +731,20 @@ be delivered successfully:</p>
 to them. They are useful to decouple your consumers from your application
 so that they don't need to know who they are sending their messages to. With
 the factory you could create a topic like this:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">from</span> <span class="nn">melange.backends.sqs.sqs_backend</span> <span class="kn">import</span> <span class="n">SQSBackend</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">from</span> <span class="nn">melange.backends.sqs.sqs_backend</span> <span class="kn">import</span> <span class="n">AWSBackend</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="kn">from</span> <span class="nn">melange.backends.factory</span> <span class="kn">import</span> <span class="n">MessagingBackendFactory</span>
 <a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="n">backend</span> <span class="o">=</span> <span class="n">SQSBackend</span><span class="p">()</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="n">backend</span> <span class="o">=</span> <span class="n">AWSBackend</span><span class="p">()</span>
 <a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="n">factory</span> <span class="o">=</span> <span class="n">MessagingBackendFactory</span><span class="p">(</span><span class="n">backend</span><span class="p">)</span>
 <a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="n">factory</span><span class="o">.</span><span class="n">init_topic</span><span class="p">(</span><span class="s2">&quot;my-topic&quot;</span><span class="p">)</span>
 </code></pre></div>
-<p>For the <code>SQSBackend</code> this will create an SNS topic.</p>
+<p>For the <code>AWSBackend</code> this will create an SNS topic.</p>
 <h2 id="creating-a-queue-and-subscribing-it-to-several-topics">Creating a queue and subscribing it to several topics</h2>
 <p>You could create a queue and immediately subscribe it to a number of topics:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">from</span> <span class="nn">melange.backends.sqs.sqs_backend</span> <span class="kn">import</span> <span class="n">SQSBackend</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">from</span> <span class="nn">melange.backends.sqs.sqs_backend</span> <span class="kn">import</span> <span class="n">AWSBackend</span>
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="kn">from</span> <span class="nn">melange.backends.factory</span> <span class="kn">import</span> <span class="n">MessagingBackendFactory</span>
 <a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="n">backend</span> <span class="o">=</span> <span class="n">SQSBackend</span><span class="p">()</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="n">backend</span> <span class="o">=</span> <span class="n">AWSBackend</span><span class="p">()</span>
 <a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="n">factory</span> <span class="o">=</span> <span class="n">MessagingBackendFactory</span><span class="p">(</span><span class="n">backend</span><span class="p">)</span>
 <a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="n">factory</span><span class="o">.</span><span class="n">init_queue</span><span class="p">(</span>
 <a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>    <span class="s2">&quot;payment-updates.fifo&quot;</span><span class="p">,</span> 
