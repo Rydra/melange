@@ -13,7 +13,7 @@
     
     
       
-        <title>Examples - Melange</title>
+        <title>Overview - Melange</title>
       
     
     
@@ -99,7 +99,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Examples
+              Overview
             
           </span>
         </div>
@@ -241,20 +241,6 @@
         
   
   
-    
-  
-
-
-  <li class="md-tabs__item">
-    <a href="./" class="md-tabs__link md-tabs__link--active">
-      Examples
-    </a>
-  </li>
-
-      
-        
-  
-  
 
 
   <li class="md-tabs__item">
@@ -262,6 +248,24 @@
       Testing
     </a>
   </li>
+
+      
+        
+  
+  
+    
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="./" class="md-tabs__link md-tabs__link--active">
+        Examples
+      </a>
+    </li>
+  
 
       
         
@@ -621,6 +625,49 @@
 
   
   
+  
+    <li class="md-nav__item">
+      <a href="../testing/" class="md-nav__link">
+        Testing
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5">
+          Examples
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Examples" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Examples
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
     
   
   
@@ -633,24 +680,44 @@
       
       
       <a href="./" class="md-nav__link md-nav__link--active">
-        Examples
+        Overview
       </a>
       
     </li>
   
 
-    
-      
-      
-      
-
+            
+          
+            
+              
   
   
   
     <li class="md-nav__item">
-      <a href="../testing/" class="md-nav__link">
-        Testing
+      <a href="payment-service/" class="md-nav__link">
+        Payment Service
       </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="saga-choreography/" class="md-nav__link">
+        SAGA choreography
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
     </li>
   
 
@@ -851,7 +918,7 @@
             <article class="md-content__inner md-typeset">
               
                 
-<a href="https://github.com/Rydra/melange/edit/master/docs/examples.md" title="Edit this page" class="md-content__button md-icon">
+<a href="https://github.com/Rydra/melange/edit/master/docs/examples/index.md" title="Edit this page" class="md-content__button md-icon">
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
 </a>
 
@@ -861,41 +928,6 @@
 alongside some explanation. The <code>MessagingBackend</code> used for all the examples is the
 <code>LocalSQSBackend</code>, though you could use your own.</p>
 <p>Personally what I do is to spin up a docker-compose process and then run the examples.</p>
-<h1 id="payment-service">Payment Service</h1>
-<blockquote>
-<p><a href="https://github.com/Rydra/melange/tree/main/melange/examples/payment_service">Example source</a></p>
-</blockquote>
-<p>This is the Melange/python version of the Order/Payment service
-that is being implemented in the video series <a href="https://www.youtube.com/watch?v=WbNJTwKOCuM&amp;t=0s">SAGA Choreography Implementation</a>.</p>
-<p>The example corresponds to a payment service that listens to a queue that receives
-events from an order service (which might come from another external service)
-and then those events are consumed to perform more logic.</p>
-<p>How to run the example:</p>
-<ol>
-<li>Run <code>make run-example-app</code>. This will start the consumer.</li>
-<li>On another terminal, run <code>make run-example-triggerer reference="SOMEREFNUMBER"</code></li>
-</ol>
-<p>Each time you run the triggerer, you should see a message like <code>Order SOMEREFNUMBER paid successfully</code>
-pop, meaning that the message was received successfully.</p>
-<h1 id="saga-choreography">SAGA Choreography</h1>
-<blockquote>
-<p><a href="https://github.com/Rydra/melange/tree/main/melange/examples/saga_pattern">Example source</a></p>
-</blockquote>
-<p>In this example we will see one powerful usage of melange in the form of a mix of saga 
-orchestration/choreography. We will run a SAGA service that will manage the entire order
-processing service, and deliver the messages to the appropriate services to run
-what could be a fully distributed application.</p>
-<p>How to run the example.</p>
-<ol>
-<li>Run <code>make run-example-app</code> to start up the consumer for the payment service.</li>
-<li>Run <code>make run-example-saga</code> to start up the consumer for the saga orchestrator.</li>
-<li>On another terminal, run <code>make run-example-saga-triggerer reference="SOMEREFNUMBER"</code></li>
-</ol>
-<p>What you should see once you run the triggerer is, on the payment service consumer screen,
-the confirmation that the order was paid and immediately afterwards, on the saga orchestrator
-screen, the message that the order was paid and marked as complete.</p>
-<p>Congratulations on running your first web of microservices, connected by a messaging broker with
-passing messages!</p>
 
               
             </article>
@@ -914,7 +946,7 @@ passing messages!</p>
     <nav class="md-footer__inner md-grid" aria-label="Footer">
       
         
-        <a href="../components/advanced-topics/behind-scenes/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Behind the scenes" rel="prev">
+        <a href="../testing/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Testing" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
           </div>
@@ -923,20 +955,20 @@ passing messages!</p>
               <span class="md-footer__direction">
                 Previous
               </span>
-              Behind the scenes
+              Testing
             </div>
           </div>
         </a>
       
       
         
-        <a href="../testing/" class="md-footer__link md-footer__link--next" aria-label="Next: Testing" rel="next">
+        <a href="payment-service/" class="md-footer__link md-footer__link--next" aria-label="Next: Payment Service" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              Testing
+              Payment Service
             </div>
           </div>
           <div class="md-footer__button md-icon">
