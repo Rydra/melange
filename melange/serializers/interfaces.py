@@ -1,12 +1,18 @@
+from abc import ABC, abstractmethod
 from typing import Generic, Optional
 
 from melange.helpers.typing import T
 
 
-class MessageSerializer(Generic[T]):
+class MessageSerializer(ABC, Generic[T]):
     """
     Base interface to inherit for all the serializers
     """
+
+    @property
+    @abstractmethod
+    def identifier(self) -> int:
+        raise NotImplementedError
 
     def manifest(self, data: T) -> Optional[str]:
         """

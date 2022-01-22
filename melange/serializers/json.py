@@ -9,6 +9,10 @@ class JsonSerializer(MessageSerializer[Dict]):
     Serializes and deserializes python dictionaries in json format
     """
 
+    @property
+    def identifier(self) -> int:
+        return 1
+
     def manifest(self, data: Dict) -> str:
         return "json"
 

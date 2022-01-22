@@ -33,7 +33,7 @@ class TopicPublisher:
         manifest = self.message_serializer.manifest(data)
 
         self._backend.publish_to_topic(
-            Message.create(content, manifest),
+            Message.create(content, manifest, self.message_serializer.identifier),
             topic,
             extra_attributes=extra_attributes,
         )
@@ -63,5 +63,7 @@ class QueuePublisher:
         queue = self._backend.get_queue(queue_name)
 
         self._backend.publish_to_queue(
-            Message.create(content, manifest), queue, **kwargs
+            Message.create(content, manifest, self.message_serializer.identifier),
+            queue,
+            **kwargs
         )

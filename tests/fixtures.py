@@ -5,12 +5,20 @@ from melange.consumers import SingleDispatchConsumer, consumer
 from melange.serializers.interfaces import MessageSerializer
 
 
-class BananaHappened:
+class BaseMessage:
+    pass
+
+
+class MessageStubInterface(BaseMessage):
+    pass
+
+
+class BananaHappened(MessageStubInterface):
     def __init__(self, somevalue: Any) -> None:
         self.somevalue = somevalue
 
 
-class NotBananaHappened:
+class NotBananaHappened(MessageStubInterface):
     pass
 
 
@@ -33,6 +41,10 @@ class NoBananaConsumer(SingleDispatchConsumer):
 
 
 class MessageSerializerStub(MessageSerializer):
+    @property
+    def identifier(self) -> int:
+        return 40
+
     def manifest(self, data: Any) -> str:
         return "BananaEvent"
 

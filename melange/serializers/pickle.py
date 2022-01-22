@@ -12,6 +12,10 @@ class PickleSerializer(MessageSerializer[DomainEvent]):
     Serializes DomainEvents with pickle.
     """
 
+    @property
+    def identifier(self) -> int:
+        return 2
+
     def manifest(self, data: DomainEvent) -> str:
         return data.__class__.__qualname__
 

@@ -30,7 +30,10 @@ class TestMessageDispatcher:
         serializer = MessageSerializerStub()
 
         serialized_event = serializer.serialize(BananaHappened("apple"))
-        messages = [Message.create(serialized_event) for _ in range(2)]
+        messages = [
+            Message.create(serialized_event, None, serializer.identifier)
+            for _ in range(2)
+        ]
         backend = a_backend_with_messages(messages)
 
         consumer = ProxySpy(BananaConsumer())
@@ -47,7 +50,10 @@ class TestMessageDispatcher:
         serializer = MessageSerializerStub()
 
         serialized_event = serializer.serialize(BananaHappened("apple"))
-        messages = [Message.create(serialized_event) for _ in range(2)]
+        messages = [
+            Message.create(serialized_event, None, serializer.identifier)
+            for _ in range(2)
+        ]
         backend = a_backend_with_messages(messages)
 
         consumer = ProxySpy(NoBananaConsumer())
@@ -64,7 +70,10 @@ class TestMessageDispatcher:
         serializer = MessageSerializerStub()
 
         serialized_event = serializer.serialize(BananaHappened("apple"))
-        messages = [Message.create(serialized_event) for _ in range(2)]
+        messages = [
+            Message.create(serialized_event, None, serializer.identifier)
+            for _ in range(2)
+        ]
         backend = a_backend_with_messages(messages)
 
         consumer = ExceptionaleConsumer()

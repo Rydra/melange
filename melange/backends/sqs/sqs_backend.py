@@ -161,7 +161,11 @@ class BaseSQSBackend(MessagingBackend):
 
         if message.manifest:
             message_args["MessageAttributes"] = {
-                "manifest": {"DataType": "String", "StringValue": message.manifest}
+                "manifest": {"DataType": "String", "StringValue": message.manifest},
+                "serializer_id": {
+                    "DataType": "Number",
+                    "StringValue": str(message.serializer_id),
+                },
             }
 
         if kwargs.get("message_group_id"):
@@ -184,7 +188,11 @@ class BaseSQSBackend(MessagingBackend):
                 "manifest": {
                     "DataType": "String",
                     "StringValue": message.manifest or "",
-                }
+                },
+                "serializer_id": {
+                    "DataType": "Number",
+                    "StringValue": str(message.serializer_id),
+                },
             },
         )
 
@@ -218,6 +226,7 @@ class BaseSQSBackend(MessagingBackend):
     def _construct_message(self, message: Any) -> Message:
         body = message.body
         manifest: Optional[str] = None
+        serializer_id: Optional[int] = None
         try:
             message_content = json.loads(body)
             if "Message" in message_content:
@@ -225,11 +234,17 @@ class BaseSQSBackend(MessagingBackend):
                 # Does the content have more attributes? If so, it is very likely that the message came from a non-raw
                 # SNS redirection
                 if "MessageAttributes" in message_content:
+
                     manifest = (
                         message_content["MessageAttributes"]
                         .get("manifest", {})
                         .get("Value")
                         or ""
+                    )
+                    serializer_id = (
+                        message_content["MessageAttributes"]
+                        .get("serializer_id", {})
+                        .get("Value")
                     )
             else:
                 content = message_content
@@ -240,10 +255,17 @@ class BaseSQSBackend(MessagingBackend):
             manifest = manifest or message.message_attributes.get("manifest", {}).get(
                 "StringValue"
             )
+            serializer_id = int(
+                serializer_id
+                or message.message_attributes.get("serializer_id", {}).get(
+                    "StringValue"
+                )
+            )
         except Exception:
             manifest = None
+            serializer_id = None
 
-        return Message(message.message_id, content, message, manifest)
+        return Message(message.message_id, content, message, serializer_id, manifest)
 
 
 class AWSBackend(BaseSQSBackend):

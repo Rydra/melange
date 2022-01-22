@@ -41,18 +41,20 @@ class Message:
         message_id: Optional[str],
         content: str,
         metadata: Any,
+        serializer_id: Optional[int],
         manifest: Optional[str] = None,
     ) -> None:
         self.message_id = message_id
         self.content = content
         self.metadata = metadata
+        self.serializer_id = serializer_id
         self.manifest = manifest
 
     @staticmethod
     def create(
-        content: str, manifest: Optional[str] = None, metadata: Any = None
+        content: str, manifest: Optional[str], serializer_id: int, metadata: Any = None
     ) -> "Message":
-        return Message(None, content, metadata, manifest)
+        return Message(None, content, metadata, serializer_id, manifest)
 
     def get_message_manifest(self) -> Optional[str]:
         return self.manifest
