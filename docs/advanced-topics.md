@@ -10,7 +10,7 @@ As an alternative, you could use the singleton `BackendManager` and register
 a backend for global usage in your initialization code:
 
 ``` py
-BackendManager().use_backend(AWSBackend())
+BackendManager().set_default_backend(AWSBackend())
 ```
 
 From that point forward, any instantiation of a Publisher or Consumer
@@ -18,25 +18,8 @@ does not need a backend as an argument anymore. Revisiting one of the
 recurring examples of this documentation, we could use the `BackendManager`
 like this.
 
-``` py
-from melange.message_publisher import QueuePublisher
-from melange.backends.sqs.elasticmq import LocalSQSBackend
-from melange.backends.sqs.backend_manager import BackendManager
-from melange.serializers.pickle import PickleSerializer
-
-class MyTestMessage:
-    def __init__(self, message: str) -> None:
-        self.message = message
-
-if __name__ == "__main__":
-    backend = LocalSQSBackend(host="localhost", port=9324)
-    serializer = PickleSerializer()
-    BackendManager().use_backend(backend)
-    
-    publisher = QueuePublisher(serializer)
-    message = MyTestMessage("Hello World!")
-    publisher.publish("melangetutorial-queue", message)
-    print("Message sent successfully!")
+``` py title="Usage of the backend manager"
+--8<-- "melange/examples/doc_examples/backend_manager.py"
 ```
 
 Notice that we are not passing the backend now as a parameter
@@ -78,4 +61,3 @@ kind of cache to handle deduplication is encouraged.
 This is the `DeduplicationCache` specification:
 
 ::: melange.infrastructure.cache.DeduplicationCache
-

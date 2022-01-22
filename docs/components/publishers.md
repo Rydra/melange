@@ -14,21 +14,7 @@ To do that, build an instance of the `QueuePublisher` class and
 call the `publish` method with your message:
 
 ``` py
-from melange.message_publisher import QueuePublisher
-from melange.backends.sqs.elasticmq import LocalSQSBackend
-from melange.serializers.pickle import PickleSerializer
-
-class MyTestMessage:
-    def __init__(self, message: str) -> None:
-        self.message = message
-
-if __name__ == "__main__":
-    backend = LocalSQSBackend(host="localhost", port=9324)
-    serializer = PickleSerializer()
-    publisher = QueuePublisher(serializer, backend)
-    message = MyTestMessage("Hello World!")
-    publisher.publish("melangetutorial-queue", message)
-    print("Message sent successfully!")
+--8<-- "melange/examples/doc_examples/tutorial/publish.py"
 ```
 
 The `QueuePublisher` requires a [backend](messaging-backends.md) and a 
@@ -49,21 +35,7 @@ To do that, build an instance of the `TopicPublisher` class and
 call the `publish` method with your message:
 
 ``` py
-from melange.message_publisher import TopicPublisher
-from melange.backends.sqs.elasticmq import LocalSQSBackend
-from melange.serializers.pickle import PickleSerializer
-
-class MyTestMessage:
-    def __init__(self, message: str) -> None:
-        self.message = message
-
-if __name__ == "__main__":
-    backend = LocalSQSBackend(host="localhost", port=9324)
-    serializer = PickleSerializer()
-    publisher = TopicPublisher(serializer, backend)
-    message = MyTestMessage("Hello World!")
-    publisher.publish("melangetutorial-topic", message)
-    print("Message sent successfully!")
+--8<-- "melange/examples/doc_examples/topic_publish.py"
 ```
 
 As you can appreciate it works exactly the same way as publishing to a queue,

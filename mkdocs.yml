@@ -56,4 +56,8 @@ nav:
     - Roadmap: roadmap.md
     - Mixed bag of ideas: mixed-bag.md
     - Code Reference:
-        - API reference: api-reference.md
+        - Publishers: api-reference/publishers.md
+        - Consumers: api-reference/consumers.md
+        - Serializers: api-reference/serializers.md
+        - Messaging Backends: api-reference/messaging-backends.md
+        - Factory: api-reference/factory.md

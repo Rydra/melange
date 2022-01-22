@@ -28,9 +28,22 @@ run-coverage:
 
 
 run-example-app:
-	docker-compose run --rm app python melange/examples/payment_service/init_queues.py
+	docker-compose run --rm app python melange/examples/init_queues.py
 	docker-compose run --rm app python melange/examples/payment_service/app.py
 
 
 run-example-triggerer:
 	docker-compose run --rm app python melange/examples/payment_service/triggerer.py $(reference)
+
+
+run-example-saga:
+	docker-compose run --rm app python melange/examples/init_queues.py
+	docker-compose run --rm app python melange/examples/saga_pattern/app.py
+
+
+run-example-saga-triggerer:
+	docker-compose run --rm app python melange/examples/saga_pattern/saga_triggerer.py $(reference)
+
+
+deploy-docs:
+	poetry run mkdocs gh-deploy

@@ -15,27 +15,7 @@ and implement the `process` method, and, optionally, the `accepts` method.
 Example (from `examples/payment_service/consumer_draft.py`):
 
 ``` py
-from typing import Any, Optional
-
-from melange.consumers import Consumer
-from melange.examples.common.commands import DoPayment
-from melange.examples.payment_service.events import OrderResponse
-from melange.examples.payment_service.service import PaymentService
-
-
-class PaymentConsumer(Consumer):
-    def __init__(self, payment_service: PaymentService):
-        super().__init__()
-        self.payment_service = payment_service
-
-    def process(self, message: Any, **kwargs: Any) -> None:
-        if isinstance(message, OrderResponse):
-            self.payment_service.process(message)
-        elif isinstance(message, DoPayment):
-            self.payment_service.do_payment(message)
-    
-    def accepts(self, manifest: Optional[str]) -> bool:
-        return manifest in ["OrderResponse", "DoPayment"]
+--8<-- "melange/examples/payment_service/consumer_draft.py"
 ```
 
 There is a variation of the `Consumer`, the `SingleDispatchConsumer` consumer. It relies
@@ -47,24 +27,7 @@ The same `PaymentConsumer` as above, but implemented by subclassing `SingleDispa
 (from `examples/payment_service/consumer.py`):
 
 ``` py
-from melange.consumers import SingleDispatchConsumer, consumer
-from melange.examples.common.commands import DoPayment
-from melange.examples.payment_service.events import OrderResponse
-from melange.examples.payment_service.service import PaymentService
-
-
-class PaymentConsumer(SingleDispatchConsumer):
-    def __init__(self, payment_service: PaymentService):
-        super().__init__()
-        self.payment_service = payment_service
-
-    @consumer
-    def consume_order_response(self, event: OrderResponse) -> None:
-        self.payment_service.process(event)
-
-    @consumer
-    def consume_do_payment(self, command: DoPayment) -> None:
-        self.payment_service.do_payment(command)
+--8<-- "melange/examples/payment_service/consumer.py"
 ```
 
 For a consumer to be able to receive messages it requires to be attached to a `MessageDispatcher`

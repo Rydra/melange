@@ -20,7 +20,7 @@ services:
   localstack:
     image: localstack/localstack
     ports:
-      - "${PORT_WEB_UI-8080}:${PORT_WEB_UI-8080}"
+      - "4566:4566"
     expose:
       - "4510-4530"
       - "4566"

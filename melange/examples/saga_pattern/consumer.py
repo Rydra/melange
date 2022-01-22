@@ -37,10 +37,10 @@ class SagaConsumer(SingleDispatchConsumer):
     @consumer
     def on_order_status(self, event: OrderStatus) -> None:
         print(f"Order received with status: {event.status}")
-        print(f"Marking saga {event.correlation_id} as COMPLETED")
         saga = self.saga_repository.get(event.correlation_id)
         if not saga:
             return
 
+        print(f"Marking saga {event.correlation_id} as COMPLETED")
         saga.complete()
         self.saga_repository.save(saga)

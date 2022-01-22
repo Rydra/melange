@@ -17,18 +17,18 @@ going to spin up local infrastructure to serve as a messaging broker.
 ## Choosing a Messaging Backend
 
 A messaging backend is the infrastructure where your messages are going to be published
-and consumed. In this tutorial we are going to use [ElasticMQ](https://github.com/softwaremill/elasticmq)
+and consumed. In this tutorial we are going to use [LocalStack](https://github.com/localstack/localstack)
 as our messaging backend. Basically spinning up an ElasticMQ (for example with `docker-compose`) 
-in your machine will provide you with an SQS-like infrastructure to use with boto, which
+in your machine will provide you with a local SQS+SNS for development with boto, which
 makes it ideal for testing and for the sake of this tutorial. You could follow the instructions
-in the ElasticMQ project to install it to your local machine. Though the quickest route
-is to launch the docker image:
+in the LocalStack project to install it to your local machine. Though the quickest route
+is to launch the docker image with melange:
 
 ```
-docker run -p 9324:9324 -p 9325:9325 softwaremill/elasticmq-native
+docker-compose up
 ```
 
-This will start ElasticMQ in the port `9324` in `localhost`, ready to be used.
+This will start LocalStack in the port `4566` in `localhost`, ready to be used.
 
 ## Creating a queue
 
@@ -36,12 +36,7 @@ Before using a queue you need to create it. Put the following code snippet into 
 file called `create_queue.py` and execute it to create the queue:
 
 ``` py
-from melange.backends.sqs.localsqs import LocalSQSBackend
-from melange.backends.factory import MessagingBackendFactory
-
-backend = LocalSQSBackend(host="localhost", port=9324)
-factory = MessagingBackendFactory(backend)
-factory.init_queue("melangetutorial-queue")
+--8<-- "melange/examples/doc_examples/tutorial/create_queue.py"
 ```
 
 ## Publishing messages
@@ -50,21 +45,7 @@ Publishing messages to a queue with Melange is easy. Just create an instance of 
 publisher and `publish` the message. Put the following code snippet into a file called `publish_example.py`:
 
 ``` py
-from melange.message_publisher import QueuePublisher
-from melange.backends.sqs.elasticmq import LocalSQSBackend
-from melange.serializers.pickle import PickleSerializer
-
-class MyTestMessage:
-    def __init__(self, message: str) -> None:
-        self.message = message
-
-if __name__ == "__main__":
-    backend = LocalSQSBackend(host="localhost", port=9324)
-    serializer = PickleSerializer()
-    publisher = QueuePublisher(serializer, backend)
-    message = MyTestMessage("Hello World!")
-    publisher.publish("melangetutorial-queue", message)
-    print("Message sent successfully!")
+--8<-- "melange/examples/doc_examples/tutorial/publish.py"
 ```
 
 Once you run this code it will publish a message `MyTestMessage` with the contents `Hello World` in
@@ -86,26 +67,7 @@ we need a consumer that reads these messages and reacts to them.
 Put the following code snippet in a file called `consumer-example.py` and run it:
 
 ``` py
-from melange.consumers import Consumer, ConsumerHandler
-from melange.backends.sqs.elasticmq import LocalSQSBackend
-from melange.serializers.pickle import PickleSerializer
-from publish_example import MyTestMessage
-
-class MyConsumer(SingleDispatchConsumer):
-    @listener
-    def on_my_test_message_received(self, event: MyTestMessage) -> None:
-        print(event.message)
-        
-if __name__ == "__main__":
-    backend = LocalSQSBackend(host="localhost", port=9324)
-    serializer = PickleSerializer()
-    consumer = MyConsumer()
-    consumer_handler = SimpleMessageDispatcher(
-        serializer,
-        backend=backend,
-    )
-    print("Consuming...")
-    payment_consumer.consume_loop("melangetutorial-queue")
+--8<-- "melange/examples/doc_examples/tutorial/consume.py"
 ```
 
 Upon hitting the `consume_loop` method, the process will start polling the queue for new

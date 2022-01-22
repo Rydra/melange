@@ -1,3 +1,4 @@
+import argparse
 import os
 import uuid
 
@@ -7,7 +8,13 @@ from melange.publishers import QueuePublisher
 from melange.serializers.pickle import PickleSerializer
 
 if __name__ == "__main__":
-    order_reponse = OrderResponse(id=str(uuid.uuid4()), reference="MYREF888888")
+    parser = argparse.ArgumentParser(
+        description="Triggers an order event for the payment service to collect"
+    )
+    parser.add_argument("reference", type=str, help="The reference number of the order")
+    args = parser.parse_args()
+
+    order_reponse = OrderResponse(id=str(uuid.uuid4()), reference=args.reference)
     serializer = PickleSerializer()
     backend = LocalSQSBackend(
         host=os.environ.get("SQSHOST"), port=os.environ.get("SQSPORT")
@@ -15,4 +22,4 @@ if __name__ == "__main__":
 
     QueuePublisher(serializer, backend=backend).publish("saga-updates", order_reponse)
 
-    print("Message sent.")
+    print(f"Order with reference {args.reference} sent.")

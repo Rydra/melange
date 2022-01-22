@@ -20,12 +20,7 @@ payment service. You could invoke the factory as follows:
 
 
 ``` py
-from melange.backends.sqs.sqs_backend import AWSBackend
-from melange.backends.factory import MessagingBackendFactory
-
-backend = AWSBackend()
-factory = MessagingBackendFactory(backend)
-factory.init_queue("payment-updates.fifo")
+--8<-- "melange/examples/doc_examples/factory_queue.py"
 ```
 
 This will create a FIFO queue `payment-updates` in your AWS account (remember to
@@ -36,11 +31,6 @@ You could also define a dead letter queue for messages that could not
 be delivered successfully:
 
 ``` py
-from melange.backends.sqs.sqs_backend import AWSBackend
-from melange.backends.factory import MessagingBackendFactory
-
-backend = AWSBackend()
-factory = MessagingBackendFactory(backend)
 factory.init_queue("payment-updates.fifo", dead_letter_queue_name="payment-updates.fifo")
 ```
 
@@ -52,15 +42,8 @@ so that they don't need to know who they are sending their messages to. With
 the factory you could create a topic like this:
 
 ``` py
-from melange.backends.sqs.sqs_backend import AWSBackend
-from melange.backends.factory import MessagingBackendFactory
-
-backend = AWSBackend()
-factory = MessagingBackendFactory(backend)
-factory.init_topic("my-topic")
+--8<-- "melange/examples/doc_examples/factory_topic.py"
 ```
-
-For the `AWSBackend` this will create an SNS topic.
 
 
 ## Creating a queue and subscribing it to several topics
@@ -68,17 +51,7 @@ For the `AWSBackend` this will create an SNS topic.
 You could create a queue and immediately subscribe it to a number of topics:
 
 ``` py
-from melange.backends.sqs.sqs_backend import AWSBackend
-from melange.backends.factory import MessagingBackendFactory
-
-backend = AWSBackend()
-factory = MessagingBackendFactory(backend)
-factory.init_queue(
-    "payment-updates.fifo", 
-    "my-topic-1",
-    "my-topic-2",
-    "my-topic-3",
-    dead_letter_queue_name="payment-updates.fifo")
+--8<-- "melange/examples/doc_examples/factory_complete.py"
 ```
 
 This will create the topics `my-topic-1`, `my-topic-2` and `my-topic-3`,
