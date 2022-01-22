@@ -2,10 +2,17 @@ site_name: Melange
 repo_name: Rydra/melange
 repo_url: https://github.com/Rydra/melange
 
+# Config file inspired by:
+# - https://github.com/mkdocstrings/mkdocstrings/blob/master/mkdocs.yml
+# - https://github.com/squidfunk/mkdocs-material/blob/master/mkdocs.yml
+# - https://github.com/tiangolo/fastapi/blob/master/docs/en/mkdocs.yml
+
 theme:
   name: material
   features:
     - content.code.annotate
+    - navigation.tabs
+    - navigation.top
   palette:
     - scheme: default
       primary: deep orange
@@ -22,6 +29,7 @@ theme:
 
 
 markdown_extensions:
+  - admonition
   - pymdownx.highlight:
       anchor_linenums: true
   - pymdownx.inlinehilite
@@ -38,23 +46,33 @@ plugins:
           rendering:
             show_source: true
 
+extra_css:
+- css/mkdocstrings.css
 
 nav:
-    - Melange: index.md
-    - Tutorial - Getting started: tutorial/getting-started.md
+    - Home:
+      - Overview: index.md
+    - Getting started:
+      - Tutorial: tutorial/getting-started.md
     - Building blocks:
         - Messaging Backends: components/messaging-backends.md
         - Serializers: components/serializers.md
         - Message Dispatcher and Consumers: components/consumers.md
         - Publishers: components/publishers.md
         - Factory: factory.md
-    - Advanced topics:
-        - Advanced topics: advanced-topics.md
-        - Behind the scenes: behind-scenes.md
-    - Examples: examples.md
-    - Testing: testing.md
-    - Roadmap: roadmap.md
-    - Mixed bag of ideas: mixed-bag.md
+        - Advanced topics:
+            - Default messaging backend: components/advanced-topics/default-mb.md
+            - Message Deduplication: components/advanced-topics/message-dedup.md
+            - Behind the scenes: components/advanced-topics/behind-scenes.md
+    - Testing:
+      - Testing with Melange: testing.md
+    - Examples:
+      - Overview: examples/index.md
+      - Payment Service: examples/payment-service.md
+      - SAGA choreography: examples/saga-choreography.md
+    - Roadmap:
+      - Roadmap: roadmap.md
+      - External links: mixed-bag.md
     - Code Reference:
         - Publishers: api-reference/publishers.md
         - Consumers: api-reference/consumers.md

@@ -17,7 +17,7 @@ Maybe The Messaging Backends could be entirely replaced with Kombu, since kombu 
 offers an abstraction layer over several messaging brokers. Undergo some
 kind of proof of concept to see if such a thing is possible and how.
 
-# Kafka integration
+## Kafka integration
 
 Kafka is a powerful messaging broker technology that covers lots
 of features and functionalities that could provide some ideas
