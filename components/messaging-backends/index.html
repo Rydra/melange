@@ -834,11 +834,16 @@
 <h1 id="messaging-backends">Messaging backends</h1>
 <p>A <strong>messaging backend</strong> is a wrapper over your message broker. It exposes 
 several methods that abstract the broker functionality, making it simpler to work with.</p>
-<p>Out of the box Melange provides you with three messaging backends: The <code>AWSBackend</code>,
-the <code>RabbitMQBackend</code> and the <code>LocalSQSBackend</code>.</p>
+<p>Out of the box Melange provides you with three messaging backends: The <code>AWSBackend</code> and 
+the <code>LocalSQSBackend</code>. The <code>RabbitMQBackend</code> is present in the source code, but not actively
+maintained. Looking for contributors!</p>
 <h2 id="writing-your-own-messaging-backend">Writing your own Messaging Backend</h2>
 <p>Subclass the <code>MessagingBackend</code> interface and implement all the methods of that
-class. Here is the documentation of the interface class and all its methods:</p>
+class. Here is the documentation of the interface class and all its methods. You need
+to take in mind, when implementing the methods that return a <code>QueueWrapper</code> or a <code>TopicWrapper</code>,
+to wrap inside them the real object that represents your queue or topic (in your chosen
+messaging technology) and unwrap it inside the messaging backend when requiring to perform
+specific operations. Look at the <code>AWSBackend</code> as a template/example of this wrapping/unwrapping.</p>
 
 
   <div class="doc doc-object doc-module">
