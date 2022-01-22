@@ -243,11 +243,15 @@
   
 
 
-  <li class="md-tabs__item">
-    <a href="../testing/" class="md-tabs__link">
-      Testing
-    </a>
-  </li>
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../testing/" class="md-tabs__link">
+        Testing
+      </a>
+    </li>
+  
 
       
         
@@ -626,10 +630,43 @@
   
   
   
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4">
+          Testing
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Testing" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Testing
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
     <li class="md-nav__item">
       <a href="../testing/" class="md-nav__link">
-        Testing
+        Testing with Melange
       </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
     </li>
   
 
@@ -789,6 +826,13 @@
         <li class="md-nav__item">
   <a href="#kombu-integration" class="md-nav__link">
     Kombu integration
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#kafka-integration" class="md-nav__link">
+    Kafka integration
   </a>
   
 </li>
@@ -966,6 +1010,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#kafka-integration" class="md-nav__link">
+    Kafka integration
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -996,7 +1047,7 @@ serializer versioning (e.g. have different versions of the same serializer)</p>
 <p>Maybe The Messaging Backends could be entirely replaced with Kombu, since kombu already
 offers an abstraction layer over several messaging brokers. Undergo some
 kind of proof of concept to see if such a thing is possible and how.</p>
-<h1 id="kafka-integration">Kafka integration</h1>
+<h2 id="kafka-integration">Kafka integration</h2>
 <p>Kafka is a powerful messaging broker technology that covers lots
 of features and functionalities that could provide some ideas
 to the current features that melange provides.</p>
