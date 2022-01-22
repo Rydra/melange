@@ -1068,10 +1068,11 @@ to the <code>ConsumerHandler</code> (like a <em>Redis cache</em>) that will cont
 <p>In Melange we provide a <code>RedisCache</code> class that you could use to perform this message deduplication. However
 we do not want to tie the library to any specific technology, so as long as you comply
 with the <code>DeduplicationCache</code> interface it will work just fine.</p>
-<blockquote>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
 <p>The cache for message deduplication is completely optional, but on a production environment having some
 kind of cache to handle deduplication is encouraged.</p>
-</blockquote>
+</div>
 <p>This is the <code>DeduplicationCache</code> specification:</p>
 
 

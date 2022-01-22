@@ -998,12 +998,13 @@ like this.</p>
 <p>Notice that we are not passing the backend now as a parameter
 when creating the <code>QueuePublisher</code> object, since it will retrieve
 it from the BackendManager.</p>
-<blockquote>
-<p>NOTE: Use the BackendManager with caution though.
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Use the BackendManager with caution though.
 Singletons are <a href="https://stackoverflow.com/questions/12755539/why-is-singleton-considered-an-anti-pattern">regarded sometimes as an antipattern</a>
 depending on the situation, and dependency injection is usually regarded
 as a cleaner solution to construct objects.</p>
-</blockquote>
+</div>
 
               
             </article>
