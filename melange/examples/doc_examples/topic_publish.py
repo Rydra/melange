@@ -1,7 +1,7 @@
-from melange.backends.sqs.localsqs import LocalSQSBackend
+from melange import TopicPublisher
+from melange.backends import LocalSQSBackend
 from melange.examples.shared import serializer_registry
-from melange.publishers import TopicPublisher
-from melange.serializers.pickle import PickleSerializer
+from melange.serializers import PickleSerializer
 
 
 class MyTestMessage:

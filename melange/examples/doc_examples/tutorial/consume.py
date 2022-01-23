@@ -1,11 +1,9 @@
 from simple_cqrs.domain_event import DomainEvent
 
-from melange.backends.sqs.localsqs import LocalSQSBackend
-from melange.consumers import SingleDispatchConsumer, consumer
+from melange import SimpleMessageDispatcher, SingleDispatchConsumer, consumer
+from melange.backends import LocalSQSBackend
 from melange.examples.doc_examples.tutorial.publish import MyTestMessage
-from melange.message_dispatcher import SimpleMessageDispatcher
-from melange.serializers.pickle import PickleSerializer
-from melange.serializers.registry import SerializerRegistry
+from melange.serializers import PickleSerializer, SerializerRegistry
 
 
 class MyConsumer(SingleDispatchConsumer):

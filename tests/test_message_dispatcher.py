@@ -3,12 +3,10 @@ from typing import Dict, List, cast
 from doublex import ANY_ARG, ProxySpy, Spy, called, never
 from hamcrest import *
 
-from melange.backends.interfaces import MessagingBackend
-from melange.message_dispatcher import SimpleMessageDispatcher
+from melange import SimpleMessageDispatcher
+from melange.backends import MessagingBackend
 from melange.models import Message
-from melange.serializers.json import JsonSerializer
-from melange.serializers.pickle import PickleSerializer
-from melange.serializers.registry import SerializerRegistry
+from melange.serializers import JsonSerializer, PickleSerializer, SerializerRegistry
 from tests.fixtures import (
     BananaConsumer,
     BananaHappened,

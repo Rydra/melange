@@ -1,5 +1,5 @@
+from melange import QueuePublisher
 from melange.examples.payment_service.events import OrderStatus
-from melange.publishers import QueuePublisher
 
 
 class PaymentPublisher:

@@ -1,8 +1,6 @@
-from melange.backends.testing import InMemoryMessagingBackend, link_synchronously
-from melange.consumers import Consumer
-from melange.publishers import QueuePublisher
-from melange.serializers.pickle import PickleSerializer
-from melange.serializers.registry import SerializerRegistry
+from melange import Consumer, QueuePublisher
+from melange.backends import InMemoryMessagingBackend, link_synchronously
+from melange.serializers import PickleSerializer, SerializerRegistry
 
 serializer_settings = {
     "serializers": {

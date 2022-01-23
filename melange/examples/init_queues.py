@@ -1,7 +1,7 @@
 import os
 
-from melange.backends.factory import MessagingBackendFactory
-from melange.backends.sqs.localsqs import LocalSQSBackend
+from melange import MessagingBackendFactory
+from melange.backends import LocalSQSBackend
 
 if __name__ == "__main__":
     backend = LocalSQSBackend(

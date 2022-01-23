@@ -1,4 +1,4 @@
-from melange.consumers import SingleDispatchConsumer, consumer
+from melange import SingleDispatchConsumer, consumer
 from melange.examples.common.commands import DoPayment
 from melange.examples.payment_service.events import OrderResponse
 from melange.examples.payment_service.service import PaymentService

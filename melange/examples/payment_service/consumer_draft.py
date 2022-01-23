@@ -1,6 +1,6 @@
 from typing import Any, Optional
 
-from melange.consumers import Consumer
+from melange import Consumer
 from melange.examples.common.commands import DoPayment
 from melange.examples.payment_service.events import OrderResponse
 from melange.examples.payment_service.service import PaymentService

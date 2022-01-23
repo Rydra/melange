@@ -1,8 +1,8 @@
 import json
 from typing import Any, Optional
 
-from melange.consumers import SingleDispatchConsumer, consumer
-from melange.serializers.interfaces import Serializer
+from melange import SingleDispatchConsumer, consumer
+from melange.serializers import Serializer
 
 
 class BaseMessage:

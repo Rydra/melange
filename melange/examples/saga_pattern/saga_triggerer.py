@@ -2,11 +2,11 @@ import argparse
 import os
 import uuid
 
-from melange.backends.sqs.localsqs import LocalSQSBackend
+from melange import QueuePublisher
+from melange.backends import LocalSQSBackend
 from melange.examples.payment_service.events import OrderResponse
 from melange.examples.shared import serializer_registry
-from melange.publishers import QueuePublisher
-from melange.serializers.pickle import PickleSerializer
+from melange.serializers import PickleSerializer
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(

@@ -6,13 +6,14 @@ from typing import Dict, Optional
 import polling
 from hamcrest import *
 
-from melange.backends.factory import MessagingBackendFactory
-from melange.backends.sqs.localsqs import LocalSQSBackend
-from melange.consumers import Consumer
-from melange.message_dispatcher import SimpleMessageDispatcher
-from melange.publishers import QueuePublisher
-from melange.serializers.pickle import PickleSerializer
-from melange.serializers.registry import SerializerRegistry
+from melange import (
+    Consumer,
+    MessagingBackendFactory,
+    QueuePublisher,
+    SimpleMessageDispatcher,
+)
+from melange.backends import LocalSQSBackend
+from melange.serializers import PickleSerializer, SerializerRegistry
 from tests.probe import Probe
 
 

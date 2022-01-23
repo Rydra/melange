@@ -1,7 +1,6 @@
 from simple_cqrs.domain_event import DomainEvent
 
-from melange.serializers.pickle import PickleSerializer
-from melange.serializers.registry import SerializerRegistry
+from melange.serializers import PickleSerializer, SerializerRegistry
 
 serializer_settings = {
     "serializers": {"pickle": PickleSerializer},

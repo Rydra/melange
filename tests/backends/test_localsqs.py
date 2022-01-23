@@ -6,7 +6,7 @@ import uuid
 import pytest
 from hamcrest import *
 
-from melange.backends.sqs.localsqs import LocalSQSBackend
+from melange.backends import LocalSQSBackend
 from melange.models import Message
 
 

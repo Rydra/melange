@@ -3,8 +3,8 @@ import os
 import pytest
 from hamcrest import *
 
-from melange.backends.factory import MessagingBackendFactory
-from melange.backends.sqs.localsqs import LocalSQSBackend
+from melange import MessagingBackendFactory
+from melange.backends import LocalSQSBackend
 
 
 class TestFactory:

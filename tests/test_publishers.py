@@ -3,11 +3,9 @@ from typing import Dict, cast
 from doublex import ANY_ARG, Spy, called
 from hamcrest import *
 
-from melange.backends.interfaces import MessagingBackend
-from melange.publishers import QueuePublisher
-from melange.serializers.json import JsonSerializer
-from melange.serializers.pickle import PickleSerializer
-from melange.serializers.registry import SerializerRegistry
+from melange import QueuePublisher
+from melange.backends import MessagingBackend
+from melange.serializers import JsonSerializer, PickleSerializer, SerializerRegistry
 from tests.fixtures import BaseMessage, MessageStubInterface, SerializerStub
 
 

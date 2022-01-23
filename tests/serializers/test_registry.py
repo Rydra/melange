@@ -2,9 +2,8 @@ from typing import Dict
 
 from hamcrest import *
 
-from melange.serializers.json import JsonSerializer
-from melange.serializers.pickle import PickleSerializer
-from melange.serializers.registry import SerializerRegistry, sort
+from melange.serializers import JsonSerializer, PickleSerializer, SerializerRegistry
+from melange.serializers.registry import sort
 from tests.fixtures import (
     BananaHappened,
     BaseMessage,

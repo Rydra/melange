@@ -1,5 +1,5 @@
+from melange import QueuePublisher
 from melange.examples.common.commands import DoPayment
-from melange.publishers import QueuePublisher
 
 
 class SagaPublisher:

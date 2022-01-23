@@ -1,9 +1,8 @@
 from simple_cqrs.domain_event import DomainEvent
 
-from melange.backends.sqs.localsqs import LocalSQSBackend
-from melange.publishers import QueuePublisher
-from melange.serializers.pickle import PickleSerializer
-from melange.serializers.registry import SerializerRegistry
+from melange import QueuePublisher
+from melange.backends import LocalSQSBackend
+from melange.serializers import PickleSerializer, SerializerRegistry
 
 
 class MyTestMessage:

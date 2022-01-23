@@ -5,7 +5,7 @@ from bunch import Bunch
 
 from melange.exceptions import SerializationError
 from melange.helpers.typing import T
-from melange.serializers.interfaces import Serializer
+from melange.serializers import Serializer
 
 
 class MyOwnSerializer(Serializer):

@@ -1,5 +1,5 @@
-from melange.backends.factory import MessagingBackendFactory
-from melange.backends.sqs.sqs_backend import AWSBackend
+from melange import MessagingBackendFactory
+from melange.backends import AWSBackend
 
 backend = AWSBackend()
 factory = MessagingBackendFactory(backend)
