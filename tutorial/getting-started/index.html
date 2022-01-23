@@ -563,7 +563,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../components/serializers/" class="md-nav__link">
+      <a href="../../components/serialization/" class="md-nav__link">
         Serializers
       </a>
     </li>
@@ -1064,7 +1064,8 @@
 
 <h1 id="tutorial-getting-started">Tutorial - Getting started</h1>
 <blockquote>
-<p><em>Talk is cheap, show me the code</em></p>
+<p>Talk is cheap. show me the code.</p>
+<p><em>- Linus Torvalds -</em></p>
 </blockquote>
 <p>Event-driven architectures work with the Publish/Subscribe pattern to achieve decoupling.
 With this pattern, publishers and subscribers do not know about each other while they can exchange
@@ -1100,62 +1101,84 @@ file called <code>create_queue.py</code> and execute it to create the queue:</p>
 <h2 id="publishing-messages">Publishing messages</h2>
 <p>Publishing messages to a queue with Melange is easy. Just create an instance of the message
 publisher and <code>publish</code> the message. Put the following code snippet into a file called <code>publish_example.py</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">from</span> <span class="nn">melange.backends.sqs.localsqs</span> <span class="kn">import</span> <span class="n">LocalSQSBackend</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="kn">from</span> <span class="nn">melange.publishers</span> <span class="kn">import</span> <span class="n">QueuePublisher</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="kn">from</span> <span class="nn">melange.serializers.pickle</span> <span class="kn">import</span> <span class="n">PickleSerializer</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="k">class</span> <span class="nc">MyTestMessage</span><span class="p">:</span>
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> <span class="n">message</span>
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>
-<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>    <span class="n">backend</span> <span class="o">=</span> <span class="n">LocalSQSBackend</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s2">&quot;localhost&quot;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">9324</span><span class="p">)</span>
-<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>    <span class="n">serializer</span> <span class="o">=</span> <span class="n">PickleSerializer</span><span class="p">()</span>
-<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>    <span class="n">publisher</span> <span class="o">=</span> <span class="n">QueuePublisher</span><span class="p">(</span><span class="n">serializer</span><span class="p">,</span> <span class="n">backend</span><span class="p">)</span>
-<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>    <span class="n">message</span> <span class="o">=</span> <span class="n">MyTestMessage</span><span class="p">(</span><span class="s2">&quot;Hello World!&quot;</span><span class="p">)</span>
-<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>    <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="s2">&quot;melangetutorial-queue&quot;</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
-<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Message sent successfully!&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">from</span> <span class="nn">simple_cqrs.domain_event</span> <span class="kn">import</span> <span class="n">DomainEvent</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="kn">from</span> <span class="nn">melange.backends.sqs.localsqs</span> <span class="kn">import</span> <span class="n">LocalSQSBackend</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="kn">from</span> <span class="nn">melange.publishers</span> <span class="kn">import</span> <span class="n">QueuePublisher</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="kn">from</span> <span class="nn">melange.serializers.pickle</span> <span class="kn">import</span> <span class="n">PickleSerializer</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="kn">from</span> <span class="nn">melange.serializers.registry</span> <span class="kn">import</span> <span class="n">SerializerRegistry</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="k">class</span> <span class="nc">MyTestMessage</span><span class="p">:</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> <span class="n">message</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>    <span class="n">serializer_settings</span> <span class="o">=</span> <span class="p">{</span>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>        <span class="s2">&quot;serializers&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;pickle&quot;</span><span class="p">:</span> <span class="n">PickleSerializer</span><span class="p">},</span>
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>        <span class="s2">&quot;serializer_bindings&quot;</span><span class="p">:</span> <span class="p">{</span><span class="n">DomainEvent</span><span class="p">:</span> <span class="s2">&quot;pickle&quot;</span><span class="p">},</span>
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a>    <span class="p">}</span>
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a>
+<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a>    <span class="n">serializer_registry</span> <span class="o">=</span> <span class="n">SerializerRegistry</span><span class="p">(</span><span class="n">serializer_settings</span><span class="p">)</span>
+<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a>
+<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a>    <span class="n">backend</span> <span class="o">=</span> <span class="n">LocalSQSBackend</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s2">&quot;localhost&quot;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">9324</span><span class="p">)</span>
+<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a>    <span class="n">serializer</span> <span class="o">=</span> <span class="n">PickleSerializer</span><span class="p">()</span>
+<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a>    <span class="n">publisher</span> <span class="o">=</span> <span class="n">QueuePublisher</span><span class="p">(</span><span class="n">serializer_registry</span><span class="p">,</span> <span class="n">backend</span><span class="p">)</span>
+<a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a>    <span class="n">message</span> <span class="o">=</span> <span class="n">MyTestMessage</span><span class="p">(</span><span class="s2">&quot;Hello World!&quot;</span><span class="p">)</span>
+<a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a>    <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="s2">&quot;melangetutorial-queue&quot;</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
+<a id="__codelineno-2-27" name="__codelineno-2-27" href="#__codelineno-2-27"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Message sent successfully!&quot;</span><span class="p">)</span>
 </code></pre></div>
 <p>Once you run this code it will publish a message <code>MyTestMessage</code> with the contents <code>Hello World</code> in
 the queue <code>melangetutorial-queue</code>.
-You can send anything as long as your selected serializer can serialize/deserialize
-the object. Refer <a href="../../components/serializers/">Serializers</a> for further details.</p>
-<blockquote>
-<p>NOTE: For the sake of this tutorial you can use the <code>PickleSerializer</code> to serialize your messages.
-For production applications however you should probably use another type of serializer or create your own,
-since <code>pickle</code> is <a href="https://docs.python.org/3/library/pickle.html">considered unsafe</a> and
-only works with python consumers.</p>
-</blockquote>
+You can send anything as long as the <code>SerializerRegistry</code> can serialize/deserialize
+the object. Refer <a href="../../components/serialization/">Serialization</a> for further details.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For the sake of this tutorial you can use simple config which just uses the <code>PickleSerializer</code> 
+to serialize your messages. For production applications however you should probably use another 
+type of serializer or create your own, since <code>pickle</code> is <a href="https://docs.python.org/3/library/pickle.html">considered unsafe</a> and
+only works with python consumers. Consider creating your own serializer or use the
+<code>JsonSerializer</code> at the very least once you put Melange in production.</p>
+</div>
 <h2 id="consuming-messages">Consuming messages</h2>
 <p>It's good to publish messages, but they are worth nothing if nobody reads them. Therefore,
 we need a consumer that reads these messages and reacts to them.</p>
 <p>Put the following code snippet in a file called <code>consumer-example.py</code> and run it:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">from</span> <span class="nn">melange.backends.sqs.localsqs</span> <span class="kn">import</span> <span class="n">LocalSQSBackend</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="kn">from</span> <span class="nn">melange.consumers</span> <span class="kn">import</span> <span class="n">SingleDispatchConsumer</span><span class="p">,</span> <span class="n">consumer</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="kn">from</span> <span class="nn">melange.examples.doc_examples.tutorial.publish</span> <span class="kn">import</span> <span class="n">MyTestMessage</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="kn">from</span> <span class="nn">melange.message_dispatcher</span> <span class="kn">import</span> <span class="n">SimpleMessageDispatcher</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="kn">from</span> <span class="nn">melange.serializers.pickle</span> <span class="kn">import</span> <span class="n">PickleSerializer</span>
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>
-<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>
-<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="k">class</span> <span class="nc">MyConsumer</span><span class="p">(</span><span class="n">SingleDispatchConsumer</span><span class="p">):</span>
-<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>    <span class="nd">@consumer</span>
-<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>    <span class="k">def</span> <span class="nf">on_my_test_message_received</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">MyTestMessage</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>        <span class="nb">print</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">message</span><span class="p">)</span>
-<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>
-<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>
-<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>    <span class="n">backend</span> <span class="o">=</span> <span class="n">LocalSQSBackend</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s2">&quot;localhost&quot;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">9324</span><span class="p">)</span>
-<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a>    <span class="n">serializer</span> <span class="o">=</span> <span class="n">PickleSerializer</span><span class="p">()</span>
-<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a>    <span class="n">consumer</span> <span class="o">=</span> <span class="n">MyConsumer</span><span class="p">()</span>
-<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a>    <span class="n">message_dispatcher</span> <span class="o">=</span> <span class="n">SimpleMessageDispatcher</span><span class="p">(</span>
-<a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a>        <span class="n">consumer</span><span class="p">,</span>
-<a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a>        <span class="n">serializer</span><span class="p">,</span>
-<a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a>        <span class="n">backend</span><span class="o">=</span><span class="n">backend</span><span class="p">,</span>
-<a id="__codelineno-3-22" name="__codelineno-3-22" href="#__codelineno-3-22"></a>    <span class="p">)</span>
-<a id="__codelineno-3-23" name="__codelineno-3-23" href="#__codelineno-3-23"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Consuming...&quot;</span><span class="p">)</span>
-<a id="__codelineno-3-24" name="__codelineno-3-24" href="#__codelineno-3-24"></a>    <span class="n">message_dispatcher</span><span class="o">.</span><span class="n">consume_loop</span><span class="p">(</span><span class="s2">&quot;melangetutorial-queue&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">from</span> <span class="nn">simple_cqrs.domain_event</span> <span class="kn">import</span> <span class="n">DomainEvent</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="kn">from</span> <span class="nn">melange.backends.sqs.localsqs</span> <span class="kn">import</span> <span class="n">LocalSQSBackend</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="kn">from</span> <span class="nn">melange.consumers</span> <span class="kn">import</span> <span class="n">SingleDispatchConsumer</span><span class="p">,</span> <span class="n">consumer</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="kn">from</span> <span class="nn">melange.examples.doc_examples.tutorial.publish</span> <span class="kn">import</span> <span class="n">MyTestMessage</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="kn">from</span> <span class="nn">melange.message_dispatcher</span> <span class="kn">import</span> <span class="n">SimpleMessageDispatcher</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="kn">from</span> <span class="nn">melange.serializers.pickle</span> <span class="kn">import</span> <span class="n">PickleSerializer</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="kn">from</span> <span class="nn">melange.serializers.registry</span> <span class="kn">import</span> <span class="n">SerializerRegistry</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="k">class</span> <span class="nc">MyConsumer</span><span class="p">(</span><span class="n">SingleDispatchConsumer</span><span class="p">):</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>    <span class="nd">@consumer</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>    <span class="k">def</span> <span class="nf">on_my_test_message_received</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">MyTestMessage</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>        <span class="nb">print</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">message</span><span class="p">)</span>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a>
+<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a>    <span class="n">serializer_settings</span> <span class="o">=</span> <span class="p">{</span>
+<a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a>        <span class="s2">&quot;serializers&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;pickle&quot;</span><span class="p">:</span> <span class="n">PickleSerializer</span><span class="p">},</span>
+<a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a>        <span class="s2">&quot;serializer_bindings&quot;</span><span class="p">:</span> <span class="p">{</span><span class="n">DomainEvent</span><span class="p">:</span> <span class="s2">&quot;pickle&quot;</span><span class="p">},</span>
+<a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a>    <span class="p">}</span>
+<a id="__codelineno-3-22" name="__codelineno-3-22" href="#__codelineno-3-22"></a>
+<a id="__codelineno-3-23" name="__codelineno-3-23" href="#__codelineno-3-23"></a>    <span class="n">serializer_registry</span> <span class="o">=</span> <span class="n">SerializerRegistry</span><span class="p">(</span><span class="n">serializer_settings</span><span class="p">)</span>
+<a id="__codelineno-3-24" name="__codelineno-3-24" href="#__codelineno-3-24"></a>
+<a id="__codelineno-3-25" name="__codelineno-3-25" href="#__codelineno-3-25"></a>    <span class="n">backend</span> <span class="o">=</span> <span class="n">LocalSQSBackend</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s2">&quot;localhost&quot;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">9324</span><span class="p">)</span>
+<a id="__codelineno-3-26" name="__codelineno-3-26" href="#__codelineno-3-26"></a>    <span class="n">serializer</span> <span class="o">=</span> <span class="n">PickleSerializer</span><span class="p">()</span>
+<a id="__codelineno-3-27" name="__codelineno-3-27" href="#__codelineno-3-27"></a>    <span class="n">consumer</span> <span class="o">=</span> <span class="n">MyConsumer</span><span class="p">()</span>
+<a id="__codelineno-3-28" name="__codelineno-3-28" href="#__codelineno-3-28"></a>    <span class="n">message_dispatcher</span> <span class="o">=</span> <span class="n">SimpleMessageDispatcher</span><span class="p">(</span>
+<a id="__codelineno-3-29" name="__codelineno-3-29" href="#__codelineno-3-29"></a>        <span class="n">consumer</span><span class="p">,</span>
+<a id="__codelineno-3-30" name="__codelineno-3-30" href="#__codelineno-3-30"></a>        <span class="n">serializer_registry</span><span class="p">,</span>
+<a id="__codelineno-3-31" name="__codelineno-3-31" href="#__codelineno-3-31"></a>        <span class="n">backend</span><span class="o">=</span><span class="n">backend</span><span class="p">,</span>
+<a id="__codelineno-3-32" name="__codelineno-3-32" href="#__codelineno-3-32"></a>    <span class="p">)</span>
+<a id="__codelineno-3-33" name="__codelineno-3-33" href="#__codelineno-3-33"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Consuming...&quot;</span><span class="p">)</span>
+<a id="__codelineno-3-34" name="__codelineno-3-34" href="#__codelineno-3-34"></a>    <span class="n">message_dispatcher</span><span class="o">.</span><span class="n">consume_loop</span><span class="p">(</span><span class="s2">&quot;melangetutorial-queue&quot;</span><span class="p">)</span>
 </code></pre></div>
 <p>Upon hitting the <code>consume_loop</code> method, the process will start polling the queue for new
 messages. Once it receives a message, as long as the message is of type <code>MyTestMessage</code> it will
@@ -1163,10 +1186,11 @@ forward this message to the <code>MyConsumer</code>. If your infrastructure was 
 you run the <code>publish_example.py</code> script you will see a print with the message on the screen where
 the consumer is running.</p>
 <p>Congratulations! You just run your very first example of a Pub/Sub mechanism with Melange!</p>
-<blockquote>
-<p>NOTE: It's a good idea to have shared classes (like the <code>MyTestMessage</code> in the example) in its
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>It's a good idea to have shared classes (like the <code>MyTestMessage</code> in the example) in its
 own python module (e.g. <code>shared.py</code>)</p>
-</blockquote>
+</div>
 <h2 id="where-to-go-from-here">Where to go from here</h2>
 <p>Now that you grasped the basic idea on how you could use Melange, you could go further and read more
 details about:</p>
@@ -1174,7 +1198,7 @@ details about:</p>
 <li><a href="../../components/consumers/">Consumers</a></li>
 <li><a href="../../components/publishers/">Publishers</a></li>
 <li><a href="../../components/messaging-backends/">Messaging Backend</a></li>
-<li><a href="../../components/serializers/">Serializers</a></li>
+<li><a href="../../components/serialization/">Seriatization</a></li>
 </ul>
 <p>To add to that, although the exposed example is quite simple, it serves as the foundation to implement a number of
 use cases and distributed architectures with microservices. With Melange you can:</p>

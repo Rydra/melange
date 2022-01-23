@@ -66,7 +66,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#serializers" class="md-skip">
+        <a href="#serialization" class="md-skip">
           Skip to content
         </a>
       
@@ -528,50 +528,16 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#configuration-for-the-serializerregistry" class="md-nav__link">
+    Configuration for the SerializerRegistry
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#creating-your-own-serializers" class="md-nav__link">
     Creating your own serializers
   </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#melange.serializers.interfaces" class="md-nav__link">
-    melange.serializers.interfaces
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#melange.serializers.interfaces.MessageSerializer" class="md-nav__link">
-    MessageSerializer
-  </a>
-  
-    <nav class="md-nav" aria-label="MessageSerializer">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#melange.serializers.interfaces.MessageSerializer.deserialize" class="md-nav__link">
-    deserialize()
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#melange.serializers.interfaces.MessageSerializer.manifest" class="md-nav__link">
-    manifest()
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#melange.serializers.interfaces.MessageSerializer.serialize" class="md-nav__link">
-    serialize()
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -1024,50 +990,16 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#configuration-for-the-serializerregistry" class="md-nav__link">
+    Configuration for the SerializerRegistry
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#creating-your-own-serializers" class="md-nav__link">
     Creating your own serializers
   </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#melange.serializers.interfaces" class="md-nav__link">
-    melange.serializers.interfaces
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#melange.serializers.interfaces.MessageSerializer" class="md-nav__link">
-    MessageSerializer
-  </a>
-  
-    <nav class="md-nav" aria-label="MessageSerializer">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#melange.serializers.interfaces.MessageSerializer.deserialize" class="md-nav__link">
-    deserialize()
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#melange.serializers.interfaces.MessageSerializer.manifest" class="md-nav__link">
-    manifest()
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#melange.serializers.interfaces.MessageSerializer.serialize" class="md-nav__link">
-    serialize()
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -1083,356 +1015,94 @@
             <article class="md-content__inner md-typeset">
               
                 
-<a href="https://github.com/Rydra/melange/edit/master/docs/components/serializers.md" title="Edit this page" class="md-content__button md-icon">
+<a href="https://github.com/Rydra/melange/edit/master/docs/components/serialization.md" title="Edit this page" class="md-content__button md-icon">
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
 </a>
 
 
-<h1 id="serializers">Serializers</h1>
-<p>Serializers are the component that translates (serializes) your python objects into a
+<h1 id="serialization">Serialization</h1>
+<p>Serializers are the component that translate (serialize) your python objects into a
 string that can be sent through the messaging infrastructure, and then
-translates it (deserializes) that string back to the python object.</p>
-<p>Melange is bundled with two serializers: a <code>JSONSerializer</code> to
+translate that string back (deserialize) to the python object.</p>
+<p>Melange is bundled with two serializers:  a <code>JSONSerializer</code> to
 serialize python dictionaries and a <code>PickleSerializer</code> that will
 serialize any python object, but will only be deserializable from
 another python process and it's generally regarded as unsafe).</p>
-<p>When instantiating a publisher or a consumer you need to pass a list
-of serializers. Melange, upon sending or receiving messages, will
-select the serializer that best matches the one that can serialize and
-deserialize it.</p>
-<p>TODO: Implement the serializer selector from a list</p>
+<p>When instantiating a publisher or a consumer you need to pass it 
+the <code>SerializerRegistry</code>. Melange, upon sending or receiving messages, will
+select the serializer that matches your message and serialize and
+deserialize it with the help of the registry.</p>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>Much of the serialization implementation has been ported/inspired from the
+<a href="https://doc.akka.io/docs/akka/current/serialization.html">Akka framework</a>.
+It's really smart, so no need to rethink/redesign it too much!</p>
+</div>
+<h2 id="configuration-for-the-serializerregistry">Configuration for the <code>SerializerRegistry</code></h2>
+<p>For Melange to know which Serializer to use when publishing or consuming
+messages, you need to supply to the <code>SerializerRegistry</code> a configuration:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">registry_config</span> <span class="o">=</span> <span class="p">{</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="s2">&quot;serializers&quot;</span><span class="p">:</span> <span class="p">{</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>        <span class="s2">&quot;json&quot;</span><span class="p">:</span> <span class="n">JsonSerializer</span><span class="p">,</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>        <span class="s2">&quot;pickle&quot;</span><span class="p">:</span> <span class="n">PickleSerializer</span><span class="p">,</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>        <span class="s2">&quot;yourown&quot;</span><span class="p">:</span> <span class="n">YourOwnSerializer</span><span class="p">,</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    <span class="p">},</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    <span class="s2">&quot;serializer_bindings&quot;</span><span class="p">:</span> <span class="p">{</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>        <span class="n">Dict</span><span class="p">:</span> <span class="s2">&quot;json&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>        <span class="n">YourOwnMessage</span><span class="p">:</span> <span class="s2">&quot;yourown&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    <span class="p">},</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>    <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;pickle&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="p">}</span>
+</code></pre></div>
+<p>This config has three sections:</p>
+<ol>
+<li>
+<p><code>serializers</code>: This is where you specify what serializers are available in the registry,
+      and by what names are they bound to.</p>
+</li>
+<li>
+<p><code>serializer_bindings</code>: This is where you wire which classes should be serialized using
+     which <code>Serializer</code>. You only need to specify the name of the abstract class of the messages.
+     In the case of multiple serializers matching your message, the most specific configured
+     class will be used. </p>
+</li>
+<li>
+<p><code>default</code>: Optional. The default serializer to use if none matches your <code>serializer_bindings</code> mapping.</p>
+</li>
+</ol>
+<p>With this config in place, you can then instantiate the <code>SerializerRegistry</code>
+and pass it to your publishers and consumer dispatchers:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">registry_config</span> <span class="o">=</span> <span class="p">{</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>    <span class="s2">&quot;serializers&quot;</span><span class="p">:</span> <span class="p">{</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>        <span class="s2">&quot;json&quot;</span><span class="p">:</span> <span class="n">JsonSerializer</span><span class="p">,</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>        <span class="s2">&quot;pickle&quot;</span><span class="p">:</span> <span class="n">PickleSerializer</span><span class="p">,</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>        <span class="s2">&quot;yourown&quot;</span><span class="p">:</span> <span class="n">YourOwnSerializer</span><span class="p">,</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>    <span class="p">},</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>    <span class="s2">&quot;serializer_bindings&quot;</span><span class="p">:</span> <span class="p">{</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>        <span class="n">Dict</span><span class="p">:</span> <span class="s2">&quot;json&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>        <span class="n">YourOwnMessage</span><span class="p">:</span> <span class="s2">&quot;yourown&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>    <span class="p">},</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>    <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;pickle&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="p">}</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="n">registry</span> <span class="o">=</span> <span class="n">SerializerRegistry</span><span class="p">(</span><span class="n">registry_config</span><span class="p">)</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="c1"># The backend should be passed as well, ignored in this snippet</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="n">publisher</span> <span class="o">=</span> <span class="n">QueuePublisher</span><span class="p">(</span><span class="n">registry</span><span class="p">,</span> <span class="n">backend</span><span class="p">)</span>
+</code></pre></div>
 <h2 id="creating-your-own-serializers">Creating your own serializers</h2>
-<p>To create your own serializer, you need to inherit the class
-<code>MessageSerializer</code> and implement the methods <code>manifest</code>, <code>deserialize</code>
+<p>To create your own serializer, you need to inherit
+<code>Serializer</code> and implement the methods <code>identify</code>, <code>manifest</code>, <code>deserialize</code>
 and <code>serialize</code>.</p>
-<p>This is the <code>MessageSerializer</code> interface:</p>
-
-
-  <div class="doc doc-object doc-module">
-
-<a id="melange.serializers.interfaces"></a>
-    <div class="doc doc-contents first">
-
-
-
-
-  <div class="doc doc-children">
-
-
-
-
-
-
-
-  <div class="doc doc-object doc-class">
-
-
-
-<h2 id="melange.serializers.interfaces.MessageSerializer" class="doc doc-heading">
-        <code>
-MessageSerializer            (<span title="typing.Generic">Generic</span>)
-        </code>
-
-
-
-</h2>
-
-    <div class="doc doc-contents ">
-
-      <p>Base interface to inherit for all the serializers</p>
-
-        <details class="quote">
-          <summary>Source code in <code>melange/serializers/interfaces.py</code></summary>
-          <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">class</span> <span class="nc">MessageSerializer</span><span class="p">(</span><span class="n">Generic</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="sd">&quot;&quot;&quot;</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="sd">    Base interface to inherit for all the serializers</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="sd">    &quot;&quot;&quot;</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    <span class="k">def</span> <span class="nf">manifest</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>        <span class="sd">&quot;&quot;&quot;</span>
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="sd">        Given an object which represents some data, return the</span>
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="sd">        manifest of that object (if any)</span>
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="sd">        Args:</span>
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="sd">            data:</span>
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="sd">        Returns:</span>
-<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="sd">            The manifest of the object</span>
-<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="sd">        &quot;&quot;&quot;</span>
-<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>        <span class="k">return</span> <span class="kc">None</span>
-<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>
-<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>    <span class="k">def</span> <span class="nf">deserialize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">manifest</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>        <span class="sd">&quot;&quot;&quot;</span>
-<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="sd">        Deserializes a data string. The manifest helps the serializer by</span>
-<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="sd">        providing information on how this object must be deserialized.</span>
-<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="sd">        Args:</span>
-<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="sd">            data: the data string to deserialize</span>
-<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a><span class="sd">            manifest: the manifest that corresponds to the serialized string</span>
-<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>
-<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a><span class="sd">        Returns:</span>
-<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a><span class="sd">            The data object</span>
-<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a><span class="sd">        &quot;&quot;&quot;</span>
-<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>        <span class="k">pass</span>
-<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>
-<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>    <span class="k">def</span> <span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>        <span class="sd">&quot;&quot;&quot;</span>
-<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a><span class="sd">        Serializes and object to a string representation</span>
-<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a><span class="sd">        Args:</span>
-<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a><span class="sd">            data: the data object to serialize</span>
-<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>
-<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a><span class="sd">        Returns:</span>
-<a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a><span class="sd">            A string representation of the `data` object made with this serializer</span>
-<a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a><span class="sd">        &quot;&quot;&quot;</span>
-<a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>        <span class="k">pass</span>
+<p>Example:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>
 </code></pre></div>
-        </details>
-
-
-
-  <div class="doc doc-children">
-
-
-
-
-
-
-
-
-
-  <div class="doc doc-object doc-method">
-
-
-
-<h3 id="melange.serializers.interfaces.MessageSerializer.deserialize" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">deserialize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">manifest</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
-
-
-</h3>
-
-    <div class="doc doc-contents ">
-
-      <p>Deserializes a data string. The manifest helps the serializer by
-providing information on how this object must be deserialized.</p>
-
-<p><strong>Parameters:</strong></p>
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Type</th>
-      <th>Description</th>
-      <th>Default</th>
-    </tr>
-  </thead>
-  <tbody>
-      <tr>
-        <td><code>data</code></td>
-        <td><code>str</code></td>
-        <td><p>the data string to deserialize</p></td>
-        <td><em>required</em></td>
-      </tr>
-      <tr>
-        <td><code>manifest</code></td>
-        <td><code>Optional[str]</code></td>
-        <td><p>the manifest that corresponds to the serialized string</p></td>
-        <td><code>None</code></td>
-      </tr>
-  </tbody>
-</table>
-<p><strong>Returns:</strong></p>
-<table>
-  <thead>
-    <tr>
-      <th>Type</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>~T</code></td>
-      <td><p>The data object</p></td>
-    </tr>
-  </tbody>
-</table>
-        <details class="quote">
-          <summary>Source code in <code>melange/serializers/interfaces.py</code></summary>
-          <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">def</span> <span class="nf">deserialize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">manifest</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="sd">&quot;&quot;&quot;</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="sd">    Deserializes a data string. The manifest helps the serializer by</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="sd">    providing information on how this object must be deserialized.</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="sd">    Args:</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="sd">        data: the data string to deserialize</span>
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="sd">        manifest: the manifest that corresponds to the serialized string</span>
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="sd">    Returns:</span>
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="sd">        The data object</span>
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="sd">    &quot;&quot;&quot;</span>
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>    <span class="k">pass</span>
-</code></pre></div>
-        </details>
-    </div>
-
-  </div>
-
-
-
-  <div class="doc doc-object doc-method">
-
-
-
-<h3 id="melange.serializers.interfaces.MessageSerializer.manifest" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">manifest</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span></code>
-
-
-</h3>
-
-    <div class="doc doc-contents ">
-
-      <p>Given an object which represents some data, return the
-manifest of that object (if any)</p>
-
-<p><strong>Parameters:</strong></p>
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Type</th>
-      <th>Description</th>
-      <th>Default</th>
-    </tr>
-  </thead>
-  <tbody>
-      <tr>
-        <td><code>data</code></td>
-        <td><code>~T</code></td>
-        <td></td>
-        <td><em>required</em></td>
-      </tr>
-  </tbody>
-</table>
-<p><strong>Returns:</strong></p>
-<table>
-  <thead>
-    <tr>
-      <th>Type</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>Optional[str]</code></td>
-      <td><p>The manifest of the object</p></td>
-    </tr>
-  </tbody>
-</table>
-        <details class="quote">
-          <summary>Source code in <code>melange/serializers/interfaces.py</code></summary>
-          <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">def</span> <span class="nf">manifest</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="sd">&quot;&quot;&quot;</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="sd">    Given an object which represents some data, return the</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="sd">    manifest of that object (if any)</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="sd">    Args:</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="sd">        data:</span>
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="sd">    Returns:</span>
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="sd">        The manifest of the object</span>
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="sd">    &quot;&quot;&quot;</span>
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>    <span class="k">return</span> <span class="kc">None</span>
-</code></pre></div>
-        </details>
-    </div>
-
-  </div>
-
-
-
-  <div class="doc doc-object doc-method">
-
-
-
-<h3 id="melange.serializers.interfaces.MessageSerializer.serialize" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span></code>
-
-
-</h3>
-
-    <div class="doc doc-contents ">
-
-      <p>Serializes and object to a string representation</p>
-
-<p><strong>Parameters:</strong></p>
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Type</th>
-      <th>Description</th>
-      <th>Default</th>
-    </tr>
-  </thead>
-  <tbody>
-      <tr>
-        <td><code>data</code></td>
-        <td><code>~T</code></td>
-        <td><p>the data object to serialize</p></td>
-        <td><em>required</em></td>
-      </tr>
-  </tbody>
-</table>
-<p><strong>Returns:</strong></p>
-<table>
-  <thead>
-    <tr>
-      <th>Type</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>str</code></td>
-      <td><p>A string representation of the <code>data</code> object made with this serializer</p></td>
-    </tr>
-  </tbody>
-</table>
-        <details class="quote">
-          <summary>Source code in <code>melange/serializers/interfaces.py</code></summary>
-          <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">def</span> <span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="sd">&quot;&quot;&quot;</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="sd">    Serializes and object to a string representation</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="sd">    Args:</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="sd">        data: the data object to serialize</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="sd">    Returns:</span>
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="sd">        A string representation of the `data` object made with this serializer</span>
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="sd">    &quot;&quot;&quot;</span>
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    <span class="k">pass</span>
-</code></pre></div>
-        </details>
-    </div>
-
-  </div>
-
-
-
-
-
-  </div>
-
-    </div>
-
-  </div>
-
-
-
-
-
-
-
-  </div>
-
-    </div>
-
-  </div>
-
+<p>Constraints:</p>
+<ul>
+<li>The <code>identifier</code> must be unique, since it is used to select the serializer
+that must be used for deserialization (each message that is sent through the
+  <code>MessagingBackend</code> embeds this identifier, together with the content and the manifest)</li>
+</ul>
 <p>Some ideas of custom serializers:</p>
 <ul>
 <li>A protocol buffer serializer: Protocol Buffers (or protobuf for short)
