@@ -1,5 +1,6 @@
 from melange.backends.backend_manager import BackendManager
 from melange.backends.sqs.localsqs import LocalSQSBackend
+from melange.examples.shared import serializer_registry
 from melange.publishers import QueuePublisher
 from melange.serializers.pickle import PickleSerializer
 
@@ -14,7 +15,7 @@ if __name__ == "__main__":
     serializer = PickleSerializer()
     BackendManager().set_default_backend(backend)
 
-    publisher = QueuePublisher(serializer)
+    publisher = QueuePublisher(serializer_registry)
     message = MyTestMessage("Hello World!")
     publisher.publish("melangetutorial-queue", message)
     print("Message sent successfully!")

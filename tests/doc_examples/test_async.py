@@ -12,6 +12,7 @@ from melange.consumers import Consumer
 from melange.message_dispatcher import SimpleMessageDispatcher
 from melange.publishers import QueuePublisher
 from melange.serializers.pickle import PickleSerializer
+from melange.serializers.registry import SerializerRegistry
 from tests.probe import Probe
 
 
@@ -38,9 +39,16 @@ class State:
     value_set: Optional[int] = None
 
 
-def test_async_consumer(request):
-    serializer = PickleSerializer()
+serializer_settings = {
+    "serializers": {
+        "pickle": PickleSerializer,
+    },
+    "serializer_bindings": {},
+    "default": "pickle",
+}
 
+
+def test_async_consumer(request):
     # We'll use the ElasticMQ as backend since it works like a real SQS queue
     backend = LocalSQSBackend(
         host=os.environ.get("SQSHOST"), port=os.environ.get("SQSPORT")
@@ -65,14 +73,15 @@ def test_async_consumer(request):
         state.value_set = message["value"]
 
     consumer = Consumer(on_message=set_state)
-    handler = SimpleMessageDispatcher(consumer, serializer, backend=backend)
+    registry = SerializerRegistry(serializer_settings)
+    handler = SimpleMessageDispatcher(consumer, registry, backend=backend)
     # Start the consumer loop thread to run the consumer loop in the background
     threading.Thread(
         target=lambda: handler.consume_loop(queue_name), daemon=True
     ).start()
 
     # Publish a message and...
-    publisher = QueuePublisher(serializer, backend)
+    publisher = QueuePublisher(registry, backend)
     publisher.publish(queue_name, {"value": 1})
 
     # ...wait until the value is set

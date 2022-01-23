@@ -5,6 +5,7 @@ from melange.examples.payment_service.consumer import PaymentConsumer
 from melange.examples.payment_service.publisher import PaymentPublisher
 from melange.examples.payment_service.repository import PaymentRepository
 from melange.examples.payment_service.service import PaymentService
+from melange.examples.shared import serializer_registry
 from melange.message_dispatcher import SimpleMessageDispatcher
 from melange.publishers import QueuePublisher
 from melange.serializers.pickle import PickleSerializer
@@ -19,10 +20,10 @@ if __name__ == "__main__":
         PaymentConsumer(
             PaymentService(
                 PaymentRepository(),
-                PaymentPublisher(QueuePublisher(serializer, backend=backend)),
+                PaymentPublisher(QueuePublisher(serializer_registry, backend=backend)),
             )
         ),
-        PickleSerializer(),
+        serializer_registry,
         backend=backend,
     )
 

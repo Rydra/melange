@@ -2,7 +2,7 @@ import json
 from typing import Any, Optional
 
 from melange.consumers import SingleDispatchConsumer, consumer
-from melange.serializers.interfaces import MessageSerializer
+from melange.serializers.interfaces import Serializer
 
 
 class BaseMessage:
@@ -40,9 +40,9 @@ class NoBananaConsumer(SingleDispatchConsumer):
         pass
 
 
-class MessageSerializerStub(MessageSerializer):
-    @property
-    def identifier(self) -> int:
+class SerializerStub(Serializer):
+    @staticmethod
+    def identifier() -> int:
         return 40
 
     def manifest(self, data: Any) -> str:

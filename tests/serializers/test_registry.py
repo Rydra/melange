@@ -8,16 +8,16 @@ from melange.serializers.registry import SerializerRegistry, sort
 from tests.fixtures import (
     BananaHappened,
     BaseMessage,
-    MessageSerializerStub,
     MessageStubInterface,
+    SerializerStub,
 )
 
 
 class TestSerializerRegistry:
     def test_sort(self):
         list_serializers = [
-            (BaseMessage, MessageSerializerStub),
-            (MessageStubInterface, MessageSerializerStub),
+            (BaseMessage, SerializerStub),
+            (MessageStubInterface, SerializerStub),
         ]
 
         result = sort(list_serializers)
@@ -28,7 +28,7 @@ class TestSerializerRegistry:
             "serializers": {
                 "json": JsonSerializer,
                 "pickle": PickleSerializer,
-                "test": MessageSerializerStub,
+                "test": SerializerStub,
             },
             "serializer_bindings": {
                 Dict: "json",
@@ -41,4 +41,4 @@ class TestSerializerRegistry:
         serializer_reg = SerializerRegistry(test_settings)
 
         message_serializer = serializer_reg.find_serializer_for(BananaHappened(1))
-        assert_that(message_serializer, is_(MessageSerializerStub))
+        assert_that(message_serializer, is_(SerializerStub))

@@ -4,14 +4,14 @@ from typing import Generic, Optional
 from melange.helpers.typing import T
 
 
-class MessageSerializer(ABC, Generic[T]):
+class Serializer(ABC, Generic[T]):
     """
     Base interface to inherit for all the serializers
     """
 
-    @property
+    @staticmethod
     @abstractmethod
-    def identifier(self) -> int:
+    def identifier() -> int:
         raise NotImplementedError
 
     def manifest(self, data: T) -> Optional[str]:

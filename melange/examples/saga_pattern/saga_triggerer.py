@@ -4,6 +4,7 @@ import uuid
 
 from melange.backends.sqs.localsqs import LocalSQSBackend
 from melange.examples.payment_service.events import OrderResponse
+from melange.examples.shared import serializer_registry
 from melange.publishers import QueuePublisher
 from melange.serializers.pickle import PickleSerializer
 
@@ -20,6 +21,8 @@ if __name__ == "__main__":
         host=os.environ.get("SQSHOST"), port=os.environ.get("SQSPORT")
     )
 
-    QueuePublisher(serializer, backend=backend).publish("saga-updates", order_reponse)
+    QueuePublisher(serializer_registry, backend=backend).publish(
+        "saga-updates", order_reponse
+    )
 
     print(f"Order with reference {args.reference} sent.")

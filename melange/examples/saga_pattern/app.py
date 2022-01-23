@@ -4,6 +4,7 @@ from melange.backends.sqs.localsqs import LocalSQSBackend
 from melange.examples.saga_pattern.consumer import SagaConsumer
 from melange.examples.saga_pattern.publisher import SagaPublisher
 from melange.examples.saga_pattern.repository import SagaRepository
+from melange.examples.shared import serializer_registry
 from melange.message_dispatcher import SimpleMessageDispatcher
 from melange.publishers import QueuePublisher
 from melange.serializers.pickle import PickleSerializer
@@ -16,13 +17,13 @@ if __name__ == "__main__":
 
     payment_consumer = SagaConsumer(
         SagaRepository(),
-        SagaPublisher(QueuePublisher(serializer, backend)),
+        SagaPublisher(QueuePublisher(serializer_registry, backend)),
     )
 
     print("Consuming...")
     consumer_handler = SimpleMessageDispatcher(
         payment_consumer,
-        message_serializer=PickleSerializer(),
+        serializer_registry,
         backend=backend,
         always_ack=True,
     )

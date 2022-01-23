@@ -4,9 +4,10 @@ from typing import Any, Callable, List, Optional
 from melange.backends.backend_manager import BackendManager
 from melange.backends.interfaces import MessagingBackend
 from melange.consumers import Consumer
+from melange.exceptions import SerializationError
 from melange.infrastructure.cache import DeduplicationCache, NullCache
 from melange.models import Message
-from melange.serializers.interfaces import MessageSerializer
+from melange.serializers.registry import SerializerRegistry
 from melange.utils import get_fully_qualified_name
 
 # TODO: Clear code duplication between the dispatcher and the handler. Fix.
@@ -23,13 +24,13 @@ class MessageDispatcher:
 
     def __init__(
         self,
-        message_serializer: MessageSerializer,
+        serializer_registry: SerializerRegistry,
         cache: Optional[DeduplicationCache] = None,
         backend: Optional[MessagingBackend] = None,
         always_ack: bool = False,
     ) -> None:
         self._consumers: List[Consumer] = []
-        self.message_serializer = message_serializer
+        self.serializer_registry = serializer_registry
         self._backend = backend or BackendManager().get_default_backend()
         self.cache: DeduplicationCache = cache or NullCache()
         self.always_ack = always_ack
@@ -68,21 +69,16 @@ class MessageDispatcher:
                 invoke this callback
         """
         while True:
-            try:
-                self.consume_event(queue_name)
-            except Exception as e:
-                logger.exception(e)
-                if on_exception:
-                    on_exception(e)
-            finally:
-                if after_consume:
-                    after_consume()
+            self.consume_event(queue_name, on_exception, after_consume)
 
-    def consume_event(self, queue_name: str) -> None:
+    def consume_event(
+        self,
+        queue_name: str,
+        on_exception: Optional[Callable[[Exception], None]] = None,
+        after_consume: Optional[Callable[[], None]] = None,
+    ) -> None:
         """
         Consumes one event on the queue `queue_name`
-        Args:
-            queue_name: The queue to consume from
         """
         event_queue = self._backend.get_queue(queue_name)
 
@@ -93,6 +89,11 @@ class MessageDispatcher:
                 self._dispatch_message(message)
             except Exception as e:
                 logger.exception(e)
+                if on_exception:
+                    on_exception(e)
+            finally:
+                if after_consume:
+                    after_consume()
 
     def _get_consumers(self, message_data: Any) -> List[Consumer]:
         return [
@@ -101,9 +102,26 @@ class MessageDispatcher:
 
     def _dispatch_message(self, message: Message) -> None:
         manifest = message.get_message_manifest()
-        message_data = self.message_serializer.deserialize(
-            message.content, manifest=manifest
-        )
+
+        # If the message cannot be deserialized, just ignore it.
+        # ACK it anyway to avoid hanging on the same message over an over again
+        try:
+            if message.serializer_id is not None:
+                message_data = self.serializer_registry.deserialize_with_serializerid(
+                    message.content, message.serializer_id, manifest=manifest
+                )
+            else:
+                # TODO: If no serializerid is supplied, at least we need to grab some
+                # clue in the message to know which serializer must be used.
+                # for now, rely on the default.
+                message_data = self.serializer_registry.deserialize_with_class(
+                    message.content, object, manifest=manifest
+                )
+        except SerializationError as e:
+            logger.error(e)
+            self._backend.acknowledge(message)
+            return
+
         consumers = self._get_consumers(message_data)
 
         successful = 0
@@ -137,10 +155,10 @@ class SimpleMessageDispatcher(MessageDispatcher):
     def __init__(
         self,
         consumer: Consumer,
-        message_serializer: MessageSerializer,
+        serializer_registry: SerializerRegistry,
         cache: Optional[DeduplicationCache] = None,
         backend: Optional[MessagingBackend] = None,
         always_ack: bool = False,
     ):
-        super().__init__(message_serializer, cache, backend, always_ack)
+        super().__init__(serializer_registry, cache, backend, always_ack)
         self.attach_consumer(consumer)

@@ -56,7 +56,7 @@ nav:
       - Tutorial: tutorial/getting-started.md
     - Building blocks:
         - Messaging Backends: components/messaging-backends.md
-        - Serializers: components/serializers.md
+        - Serializers: components/serialization.md
         - Message Dispatcher and Consumers: components/consumers.md
         - Publishers: components/publishers.md
         - Factory: factory.md
