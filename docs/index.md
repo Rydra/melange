@@ -8,16 +8,15 @@
 
 **Melange** is a python library/framework that abstracts a lot of the boilerplate that is usually 
 required to implement a messaging infrastructure (commonly used to create distributed architectures 
-and interact with microservices architectures).
+and interact with microservices architectures). In a nutshell, it allows you to easily send and receive
+messages through a message broker with the help of serializers so that you can communicate your services
+through the network.
 
-Out of the box Melange supports Amazon SQS + SNS, though the library is designed to be extensible, so that you
-can use it with your own messaging infrastructure, should you choose so.
+Out of the box Melange supports Amazon SQS + SNS as messaging backend. Kafka is in the roadmap for
+next releases. However the interfaces of this library are designed to extensible and clean should you choose to implement
+your own messaging backends and serializers to integrate with Melange.
 
-The interface this library offers is very clean and tries to tightly follow the best practices from Vaughn Vernon's book
-[Implementing Domain-Driven Design](https://www.amazon.es/Implementing-Domain-Driven-Design-Vaughn-Vernon/dp/0321834577)
-as well as the recommended design patterns when dealing with messaging on distributed architectures.
-
-## Installing ##
+## Installing
 
 ```
 pip install melange

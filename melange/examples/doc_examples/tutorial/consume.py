@@ -23,7 +23,6 @@ if __name__ == "__main__":
     serializer_registry = SerializerRegistry(serializer_settings)
 
     backend = LocalSQSBackend(host="localhost", port=9324)
-    serializer = PickleSerializer()
     consumer = MyConsumer()
     message_dispatcher = SimpleMessageDispatcher(
         consumer,

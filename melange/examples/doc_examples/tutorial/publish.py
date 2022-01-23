@@ -20,7 +20,6 @@ if __name__ == "__main__":
     serializer_registry = SerializerRegistry(serializer_settings)
 
     backend = LocalSQSBackend(host="localhost", port=9324)
-    serializer = PickleSerializer()
     publisher = QueuePublisher(serializer_registry, backend)
     message = MyTestMessage("Hello World!")
     publisher.publish("melangetutorial-queue", message)
