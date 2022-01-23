@@ -146,6 +146,21 @@ class BaseSQSBackend(MessagingBackend):
         # We need to differentiate here whether the message came from SNS or SQS
         return [self._construct_message(message) for message in messages]
 
+    def yield_messages(self, queue: QueueWrapper, **kwargs: Any) -> Iterable[Message]:
+        args = dict(
+            MaxNumberOfMessages=self.max_number_of_messages,
+            VisibilityTimeout=self.visibility_timeout,
+            WaitTimeSeconds=self.wait_time_seconds,
+            MessageAttributeNames=["All"],
+            AttributeNames=["All"],
+        )
+
+        messages = queue.unwrapped_obj.receive_messages(**args)
+
+        for message_content in messages:
+            message = self._construct_message(message_content)
+            yield message
+
     def publish_to_queue(
         self, message: Message, queue: QueueWrapper, **kwargs: Any
     ) -> None:
