@@ -4,16 +4,16 @@ from typing import Optional
 
 from simple_cqrs.domain_event import DomainEvent
 
-from melange.serializers.interfaces import MessageSerializer
+from melange.serializers.interfaces import Serializer
 
 
-class PickleSerializer(MessageSerializer[DomainEvent]):
+class PickleSerializer(Serializer[DomainEvent]):
     """
     Serializes DomainEvents with pickle.
     """
 
-    @property
-    def identifier(self) -> int:
+    @staticmethod
+    def identifier() -> int:
         return 2
 
     def manifest(self, data: DomainEvent) -> str:

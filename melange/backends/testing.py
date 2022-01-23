@@ -4,16 +4,16 @@ from melange.backends.interfaces import MessagingBackend
 from melange.consumers import Consumer
 from melange.message_dispatcher import MessageDispatcher
 from melange.models import Message, QueueWrapper, TopicWrapper
-from melange.serializers.interfaces import MessageSerializer
+from melange.serializers.registry import SerializerRegistry
 
 
 def link_synchronously(
     queue_name: str,
     consumers: List[Consumer],
-    serializer: MessageSerializer,
+    serializer_registry: SerializerRegistry,
     backend: "InMemoryMessagingBackend",
 ) -> None:
-    consumer_dispatcher = MessageDispatcher(serializer, backend=backend)
+    consumer_dispatcher = MessageDispatcher(serializer_registry, backend=backend)
     for consumer in consumers:
         consumer_dispatcher.attach_consumer(consumer)
 

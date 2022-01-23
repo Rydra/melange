@@ -1,6 +1,8 @@
 # Tutorial - Getting started
 
-> *Talk is cheap, show me the code*
+> Talk is cheap. show me the code.
+> 
+> *- Linus Torvalds -*
 
 Event-driven architectures work with the Publish/Subscribe pattern to achieve decoupling.
 With this pattern, publishers and subscribers do not know about each other while they can exchange
@@ -50,13 +52,16 @@ publisher and `publish` the message. Put the following code snippet into a file 
 
 Once you run this code it will publish a message `MyTestMessage` with the contents `Hello World` in
 the queue `melangetutorial-queue`.
-You can send anything as long as your selected serializer can serialize/deserialize
-the object. Refer [Serializers](../components/serializers.md) for further details.
+You can send anything as long as the `SerializerRegistry` can serialize/deserialize
+the object. Refer [Serialization](../components/serialization.md) for further details.
 
-> NOTE: For the sake of this tutorial you can use the `PickleSerializer` to serialize your messages.
-For production applications however you should probably use another type of serializer or create your own,
-since `pickle` is [considered unsafe](https://docs.python.org/3/library/pickle.html) and
-only works with python consumers.
+!!! note
+
+    For the sake of this tutorial you can use simple config which just uses the `PickleSerializer` 
+    to serialize your messages. For production applications however you should probably use another 
+    type of serializer or create your own, since `pickle` is [considered unsafe](https://docs.python.org/3/library/pickle.html) and
+    only works with python consumers. Consider creating your own serializer or use the
+    `JsonSerializer` at the very least once you put Melange in production.
 
 
 ## Consuming messages
@@ -78,8 +83,10 @@ the consumer is running.
 
 Congratulations! You just run your very first example of a Pub/Sub mechanism with Melange!
 
-> NOTE: It's a good idea to have shared classes (like the `MyTestMessage` in the example) in its
-> own python module (e.g. `shared.py`)
+!!! note
+
+    It's a good idea to have shared classes (like the `MyTestMessage` in the example) in its
+    own python module (e.g. `shared.py`)
 
 ## Where to go from here
 
@@ -89,7 +96,7 @@ details about:
 * [Consumers](../components/consumers.md)
 * [Publishers](../components/publishers.md)
 * [Messaging Backend](../components/messaging-backends.md)
-* [Serializers](../components/serializers.md)
+* [Seriatization](../components/serialization.md)
 
 To add to that, although the exposed example is quite simple, it serves as the foundation to implement a number of
 use cases and distributed architectures with microservices. With Melange you can:

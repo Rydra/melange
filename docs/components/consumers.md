@@ -37,7 +37,7 @@ For a consumer to be able to receive messages it requires to be attached to a `M
 As summarized on top of this article, the `MessageDispatcher` component/class is the responsible to:
 
 1. Start the polling loop to get new messages through the `MessagingBackend`.
-2. Deserialize the message with the appropriate `MessageSerializer`.
+2. Deserialize the message with the appropriate `Serializer`.
 3. Pass the message to the consumers that accept it for further processing.
 4. Acknowledge the message.
 

@@ -17,13 +17,15 @@ call the `publish` method with your message:
 --8<-- "melange/examples/doc_examples/tutorial/publish.py"
 ```
 
-The `QueuePublisher` requires a [backend](messaging-backends.md) and a 
-[serializer](serializers.md) as constructor parameters. The serializer
-is necessary to properly serialize and send the message to the messaging backend.
+The `QueuePublisher` requires a [backend](messaging-backends.md) and the 
+[serializer registry](serialization.md) as constructor parameters. The serializer
+registry is necessary to properly serialize and send the message to the messaging backend.
 
-> TIP: In a production project where you would have a proper 
-> dependency injection framework in place (e.g. [pinject](https://github.com/google/pinject)), you could instantiate
-> the Publisher once and provide that instance through your application
+::: tip
+
+    TIP: In a production project where you would have a proper 
+    dependency injection framework in place (e.g. [pinject](https://github.com/google/pinject)), you could instantiate
+    the Publisher once and provide that instance through your application
 
 
 ## Publishing to a topic

@@ -1,16 +1,16 @@
 import json
 from typing import Dict, Optional
 
-from melange.serializers.interfaces import MessageSerializer
+from melange.serializers.interfaces import Serializer
 
 
-class JsonSerializer(MessageSerializer[Dict]):
+class JsonSerializer(Serializer[Dict]):
     """
     Serializes and deserializes python dictionaries in json format
     """
 
-    @property
-    def identifier(self) -> int:
+    @staticmethod
+    def identifier() -> int:
         return 1
 
     def manifest(self, data: Dict) -> str:
