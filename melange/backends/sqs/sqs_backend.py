@@ -155,11 +155,11 @@ class BaseSQSBackend(MessagingBackend):
             AttributeNames=["All"],
         )
 
-        messages = queue.unwrapped_obj.receive_messages(**args)
-
-        for message_content in messages:
-            message = self._construct_message(message_content)
-            yield message
+        while True:
+            messages = queue.unwrapped_obj.receive_messages(**args)
+            for message_content in messages:
+                message = self._construct_message(message_content)
+                yield message
 
     def publish_to_queue(
         self, message: Message, queue: QueueWrapper, **kwargs: Any

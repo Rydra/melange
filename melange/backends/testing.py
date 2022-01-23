@@ -1,4 +1,4 @@
-from typing import Any, Callable, Dict, List, Optional, Tuple
+from typing import Any, Callable, Dict, Iterable, List, Optional, Tuple
 
 from melange.backends.interfaces import MessagingBackend
 from melange.consumers import Consumer
@@ -53,6 +53,10 @@ class InMemoryMessagingBackend(MessagingBackend):
         messages = self._messages
         self._messages = []
         return messages
+
+    def yield_messages(self, queue: QueueWrapper, **kwargs: Any) -> Iterable[Message]:
+        for message in self._messages:
+            yield message
 
     def publish_to_topic(
         self,

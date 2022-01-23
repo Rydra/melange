@@ -26,6 +26,7 @@ def a_backend_with_messages(messages: List[Message]) -> MessagingBackend:
     with backend:
         backend.get_queue(ANY_ARG).returns({})
         backend.retrieve_messages(ANY_ARG).returns(messages)
+        backend.yield_messages(ANY_ARG).returns(messages)
 
     return cast(MessagingBackend, backend)
 

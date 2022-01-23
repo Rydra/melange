@@ -1,5 +1,5 @@
 import weakref
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, Iterable, List, Optional, Tuple
 
 from melange.models import Message, QueueWrapper, TopicWrapper
 
@@ -69,6 +69,19 @@ class MessagingBackend:
 
         Returns:
             A list of available messages from the queue
+        """
+        raise NotImplementedError
+
+    def yield_messages(self, queue: QueueWrapper, **kwargs: Any) -> Iterable[Message]:
+        """
+        Yields available messages from the queue.
+
+        Args:
+            queue: the queue object
+            **kwargs: Other parameters/options required by the backend
+
+        Returns:
+            An iterable which will poll the queue upon requesting more messages
         """
         raise NotImplementedError
 

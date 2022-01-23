@@ -68,8 +68,7 @@ class MessageDispatcher:
             after_consume: After consuming a batch of events,
                 invoke this callback
         """
-        while True:
-            self.consume_event(queue_name, on_exception, after_consume)
+        self.consume_event(queue_name, on_exception, after_consume)
 
     def consume_event(
         self,
@@ -78,12 +77,11 @@ class MessageDispatcher:
         after_consume: Optional[Callable[[], None]] = None,
     ) -> None:
         """
-        Consumes one event on the queue `queue_name`
+        Consumes events on the queue `queue_name`
         """
         event_queue = self._backend.get_queue(queue_name)
 
-        messages = self._backend.retrieve_messages(event_queue)
-
+        messages = self._backend.yield_messages(event_queue)
         for message in messages:
             try:
                 self._dispatch_message(message)
