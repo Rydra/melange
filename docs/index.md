@@ -13,7 +13,7 @@ messages through a message broker with the help of serializers so that you can c
 through the network.
 
 Out of the box Melange supports Amazon SQS + SNS as messaging backend. Kafka is in the roadmap for
-next releases. However the interfaces of this library are designed to extensible and clean should you choose to implement
+next releases. However the interfaces of this library are designed to be extensible and clean should you choose to implement
 your own messaging backends and serializers to integrate with Melange.
 
 ## Installing
