@@ -7,7 +7,7 @@ from typing import Any, Dict, Iterable, List, Optional, Tuple
 import boto3
 
 from melange.backends.interfaces import MessagingBackend
-from melange.models import Message, QueueWrapper, TopicWrapper
+from melange.models import Message, MessageDto, QueueWrapper, TopicWrapper
 
 logger = logging.getLogger(__name__)
 
@@ -190,6 +190,43 @@ class BaseSQSBackend(MessagingBackend):
             message_args["MessageDeduplicationId"] = message_deduplication_id
 
         queue.unwrapped_obj.send_message(**message_args)
+
+    def publish_to_queue_batch(
+        self, message_dtos: List[MessageDto], queue: QueueWrapper
+    ) -> None:
+        entries: List[Dict[str, Any]] = []
+
+        for message_dto in message_dtos:
+            message = message_dto.message
+            entry: Dict = {}
+            entry["MessageBody"] = json.dumps({"Message": message.content})
+
+            is_fifo = queue.unwrapped_obj.attributes.get("FifoQueue") == "true"
+            message_deduplication_id = (
+                None
+                if not is_fifo
+                else (message_dto.message_deduplication_id or str(uuid.uuid4()))
+            )
+
+            if message.manifest:
+                entry["MessageAttributes"] = {
+                    "manifest": {"DataType": "String", "StringValue": message.manifest},
+                    "serializer_id": {
+                        "DataType": "Number",
+                        "StringValue": str(message.serializer_id),
+                    },
+                }
+
+            if message_dto.message_group_id:
+                entry["MessageGroupId"] = message_dto.message_group_id
+
+            if message_deduplication_id:
+                entry["MessageDeduplicationId"] = message_deduplication_id
+
+            entry["Id"] = str(uuid.uuid4())
+            entries.append(entry)
+
+        queue.unwrapped_obj.send_messages(Entries=entries)
 
     def publish_to_topic(
         self,

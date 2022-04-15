@@ -3,7 +3,7 @@ from typing import Any, Callable, Dict, Iterable, List, Optional, Tuple
 from melange.backends.interfaces import MessagingBackend
 from melange.consumers import Consumer
 from melange.message_dispatcher import MessageDispatcher
-from melange.models import Message, QueueWrapper, TopicWrapper
+from melange.models import Message, MessageDto, QueueWrapper, TopicWrapper
 from melange.serializers.registry import SerializerRegistry
 
 
@@ -70,6 +70,7 @@ class InMemoryMessagingBackend(MessagingBackend):
             self._messages.append(message)
 
             self.callbacks[topic.unwrapped_obj.name](topic.unwrapped_obj.name)
+            self._messages.clear()
 
     def publish_to_queue(
         self, message: Message, queue: QueueWrapper, **kwargs: Any
@@ -80,6 +81,13 @@ class InMemoryMessagingBackend(MessagingBackend):
             self._messages.append(message)
 
             self.callbacks[queue.unwrapped_obj.name](queue.unwrapped_obj.name)
+            self._messages.clear()
+
+    def publish_to_queue_batch(
+        self, message_dtos: List[MessageDto], queue: QueueWrapper
+    ) -> None:
+        for message in message_dtos:
+            self.publish_to_queue(message.message, queue)
 
     def acknowledge(self, message: Message) -> None:
         return None

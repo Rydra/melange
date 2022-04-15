@@ -28,12 +28,25 @@ class MessageDispatcher:
         cache: Optional[DeduplicationCache] = None,
         backend: Optional[MessagingBackend] = None,
         always_ack: bool = False,
+        early_ack: bool = False,
     ) -> None:
+        """
+
+        Args:
+            serializer_registry:
+            cache:
+            backend:
+            always_ack:
+            early_ack: Whether the incoming message should be acknowledged immediately
+            upon receiving. Overrides `always_ack`. Useful when the message
+            processing is long and you need to skip the visibility timeout of SQS
+        """
         self._consumers: List[Consumer] = []
         self.serializer_registry = serializer_registry
         self._backend = backend or BackendManager().get_default_backend()
         self.cache: DeduplicationCache = cache or NullCache()
         self.always_ack = always_ack
+        self.early_ack = early_ack
 
     def attach_consumer(self, consumer: Consumer) -> None:
         """
@@ -84,6 +97,9 @@ class MessageDispatcher:
         messages = self._backend.yield_messages(event_queue)
         for message in messages:
             try:
+                if self.early_ack:
+                    self._backend.acknowledge(message)
+
                 self._dispatch_message(message)
             except Exception as e:
                 logger.exception(e)
@@ -139,7 +155,7 @@ class MessageDispatcher:
             except Exception as e:
                 logger.exception(e)
 
-        if self.always_ack or successful == len(consumers):
+        if not self.early_ack and (self.always_ack or successful == len(consumers)):
             self._backend.acknowledge(message)
 
 
@@ -157,6 +173,7 @@ class SimpleMessageDispatcher(MessageDispatcher):
         cache: Optional[DeduplicationCache] = None,
         backend: Optional[MessagingBackend] = None,
         always_ack: bool = False,
+        early_ack: bool = False,
     ):
-        super().__init__(serializer_registry, cache, backend, always_ack)
+        super().__init__(serializer_registry, cache, backend, always_ack, early_ack)
         self.attach_consumer(consumer)
