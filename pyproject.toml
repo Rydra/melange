@@ -16,6 +16,7 @@ funcy = "^1.14"
 methoddispatch = "^3.0.2"
 singleton-py3 = "^0.2.1"
 toolz = "^0.11.2"
+aioboto3 = "^9.5.0"
 
 [tool.poetry.dev-dependencies]
 pytest-tools = {git = "https://github.com/Rydra/pytest-tools"}
@@ -29,6 +30,7 @@ mkdocs-material = "^8.1.7"
 polling = "^0.3.2"
 doublex = "^1.9.3"
 pytest-cov = "^3.0.0"
+anyio = "^3.5.0"
 
 [tool.commitizen]
 name = "cz_conventional_commits"
