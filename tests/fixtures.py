@@ -2,6 +2,7 @@ import json
 from typing import Any, Optional
 
 from melange import SingleDispatchConsumer, consumer
+from melange.consumers import AsyncConsumer
 from melange.serializers import Serializer
 
 
@@ -32,6 +33,10 @@ class BananaConsumer(SingleDispatchConsumer):
     @consumer
     def on_banana_event(self, event: BananaHappened) -> None:
         pass
+
+
+class AsyncBananaConsumer(AsyncConsumer):
+    pass
 
 
 class NoBananaConsumer(SingleDispatchConsumer):

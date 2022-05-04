@@ -14,11 +14,6 @@ from melange.models import Message, MessageDto
 
 
 @pytest.fixture
-def anyio_backend():
-    return "asyncio"
-
-
-@pytest.fixture
 def backend():
     return AsyncLocalSQSBackend(
         wait_time_seconds=1,
