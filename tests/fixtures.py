@@ -1,8 +1,8 @@
 import json
-from typing import Any, Optional
+from typing import Any, Dict, Optional
 
 from melange import SingleDispatchConsumer, consumer
-from melange.consumers import AsyncConsumer
+from melange.consumers import AsyncConsumer, AsyncSingleDispatchConsumer, async_consumer
 from melange.serializers import Serializer
 
 
@@ -29,6 +29,12 @@ class ExceptionaleConsumer(SingleDispatchConsumer):
         raise Exception("Sorry mate, I'm banana king")
 
 
+class AsyncExceptionaleConsumer(AsyncSingleDispatchConsumer):
+    @async_consumer
+    async def on_banana_event(self, event: BananaHappened) -> None:
+        raise Exception("Sorry mate, I'm banana king")
+
+
 class BananaConsumer(SingleDispatchConsumer):
     @consumer
     def on_banana_event(self, event: BananaHappened) -> None:
@@ -43,6 +49,15 @@ class NoBananaConsumer(SingleDispatchConsumer):
     @consumer
     def on_banana_event(self, event: NotBananaHappened) -> None:
         pass
+
+
+class AsyncNoBananaConsumer(AsyncSingleDispatchConsumer):
+    def __init__(self, call_registry: Dict) -> None:
+        self.call_registry = call_registry
+
+    @async_consumer
+    async def on_banana_event(self, event: NotBananaHappened) -> None:
+        self.call_registry["banana_event"] = 1
 
 
 class SerializerStub(Serializer):

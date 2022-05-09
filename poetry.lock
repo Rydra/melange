@@ -217,6 +217,20 @@ tomli = {version = "*", optional = true, markers = "extra == \"toml\""}
 toml = ["tomli"]
 
 [[package]]
+name = "deprecated"
+version = "1.2.13"
+description = "Python @deprecated decorator to deprecate old python classes, functions or methods."
+category = "main"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+
+[package.dependencies]
+wrapt = ">=1.10,<2"
+
+[package.extras]
+dev = ["tox", "bump2version (<1)", "sphinx (<2)", "importlib-metadata (<3)", "importlib-resources (<4)", "configparser (<5)", "sphinxcontrib-websupport (<2)", "zipp (<2)", "PyTest (<5)", "PyTest-Cov (<2.6)", "pytest", "pytest-cov"]
+
+[[package]]
 name = "doublex"
 version = "1.9.3"
 description = "Python test doubles"
@@ -503,14 +517,6 @@ optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
 [[package]]
-name = "pycrypto"
-version = "2.6.1"
-description = "Cryptographic modules for Python."
-category = "main"
-optional = false
-python-versions = "*"
-
-[[package]]
 name = "pygments"
 version = "2.12.0"
 description = "Pygments is a syntax highlighting package written in Python."
@@ -634,20 +640,6 @@ python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,>=2.7"
 six = ">=1.5"
 
 [[package]]
-name = "python-redis-lock"
-version = "3.7.0"
-description = "Lock context manager implemented via redis SETNX/BLPOP."
-category = "main"
-optional = false
-python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
-
-[package.dependencies]
-redis = ">=2.10.0"
-
-[package.extras]
-django = ["django-redis (>=3.8.0)"]
-
-[[package]]
 name = "pytkdocs"
 version = "0.16.1"
 description = "Load Python objects documentation."
@@ -690,50 +682,20 @@ pyyaml = "*"
 
 [[package]]
 name = "redis"
-version = "3.5.3"
-description = "Python client for Redis key-value store"
-category = "main"
-optional = false
-python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
-
-[package.extras]
-hiredis = ["hiredis (>=0.1.3)"]
-
-[[package]]
-name = "redis-cache"
-version = "0.1.5"
-description = "A data caching implemention based on Redis and redis_structures."
-category = "main"
-optional = false
-python-versions = "*"
-
-[package.dependencies]
-python-redis-lock = "*"
-redis_structures = "*"
-vital-tools = "*"
-
-[[package]]
-name = "redis-simple-cache-py3"
-version = "0.0.7"
-description = "redis-simple-cache is a pythonic interface for creating a cache over redis. It provides simple decorators that can be added to any function to cache its return values."
+version = "4.2.2"
+description = "Python client for Redis database and key-value store"
 category = "main"
 optional = false
 python-versions = ">=3.6"
 
 [package.dependencies]
-redis = ">=3.3.11,<4.0.0"
-redis_cache = ">=0.1.5,<0.2.0"
+async-timeout = ">=4.0.2"
+deprecated = ">=1.2.3"
+packaging = ">=20.4"
 
-[[package]]
-name = "redis-structures"
-version = "0.1.7"
-description = "Redis data structures wrapped with Python 3."
-category = "main"
-optional = false
-python-versions = "*"
-
-[package.dependencies]
-redis = "*"
+[package.extras]
+hiredis = ["hiredis (>=1.0.0)"]
+ocsp = ["cryptography (>=36.0.1)", "pyopenssl (==20.0.1)", "requests (>=2.26.0)"]
 
 [[package]]
 name = "s3transfer"
@@ -826,17 +788,6 @@ secure = ["pyOpenSSL (>=0.14)", "cryptography (>=1.3.4)", "idna (>=2.0.0)", "cer
 socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 
 [[package]]
-name = "vital-tools"
-version = "0.1.13"
-description = "Vital tools for writing Python 3.4+ packages."
-category = "main"
-optional = false
-python-versions = "*"
-
-[package.dependencies]
-pycrypto = "*"
-
-[[package]]
 name = "watchdog"
 version = "2.1.7"
 description = "Filesystem events monitoring"
@@ -890,7 +841,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8.0"
-content-hash = "6a3b8c9e28ca6e7cb3b60ef751a3ce572323dbbca1ffdc4e1beb7758d868954f"
+content-hash = "58db590a563e8d099e475c6bcf18021fa334473a4cc085585e45b460e42cdc7b"
 
 [metadata.files]
 aioboto3 = [
@@ -1068,6 +1019,10 @@ coverage = [
     {file = "coverage-6.3.2-cp39-cp39-win_amd64.whl", hash = "sha256:9548f10d8be799551eb3a9c74bbf2b4934ddb330e08a73320123c07f95cc2d92"},
     {file = "coverage-6.3.2-pp36.pp37.pp38-none-any.whl", hash = "sha256:18d520c6860515a771708937d2f78f63cc47ab3b80cb78e86573b0a760161faf"},
     {file = "coverage-6.3.2.tar.gz", hash = "sha256:03e2a7826086b91ef345ff18742ee9fc47a6839ccd517061ef8fa1976e652ce9"},
+]
+deprecated = [
+    {file = "Deprecated-1.2.13-py2.py3-none-any.whl", hash = "sha256:64756e3e14c8c5eea9795d93c524551432a0be75629f8f29e67ab8caf076c76d"},
+    {file = "Deprecated-1.2.13.tar.gz", hash = "sha256:43ac5335da90c31c24ba028af536a91d41d53f9e6901ddb021bcc572ce44e38d"},
 ]
 doublex = [
     {file = "doublex-1.9.3.tar.gz", hash = "sha256:cf2f45582f706b49643700809f748b5e904e75f35a2b049e9edad92fcb41b6b0"},
@@ -1319,9 +1274,6 @@ py = [
     {file = "py-1.11.0-py2.py3-none-any.whl", hash = "sha256:607c53218732647dff4acdfcd50cb62615cedf612e72d1724fb1a0cc6405b378"},
     {file = "py-1.11.0.tar.gz", hash = "sha256:51c75c4126074b472f746a24399ad32f6053d1b34b68d2fa41e558e6f4a98719"},
 ]
-pycrypto = [
-    {file = "pycrypto-2.6.1.tar.gz", hash = "sha256:f2ce1e989b272cfcb677616763e0a2e7ec659effa67a88aa92b3a65528f60a3c"},
-]
 pygments = [
     {file = "Pygments-2.12.0-py3-none-any.whl", hash = "sha256:dc9c10fb40944260f6ed4c688ece0cd2048414940f1cea51b8b226318411c519"},
     {file = "Pygments-2.12.0.tar.gz", hash = "sha256:5eb116118f9612ff1ee89ac96437bb6b49e8f04d8a13b514ba26f620208e26eb"},
@@ -1354,10 +1306,6 @@ pytest-tools = []
 python-dateutil = [
     {file = "python-dateutil-2.8.2.tar.gz", hash = "sha256:0123cacc1627ae19ddf3c27a5de5bd67ee4586fbdd6440d9748f8abb483d3e86"},
     {file = "python_dateutil-2.8.2-py2.py3-none-any.whl", hash = "sha256:961d03dc3453ebbc59dbdea9e4e11c5651520a876d0f4db161e8674aae935da9"},
-]
-python-redis-lock = [
-    {file = "python-redis-lock-3.7.0.tar.gz", hash = "sha256:4265a476e39d476a8acf5c2766485c44c75f3a1bd6cf73bb195f3079153b8374"},
-    {file = "python_redis_lock-3.7.0-py2.py3-none-any.whl", hash = "sha256:0101c9033bd38e2a7b99989e0c6111451c40551b08d19d281047bf6630337574"},
 ]
 pytkdocs = [
     {file = "pytkdocs-0.16.1-py3-none-any.whl", hash = "sha256:a8c3f46ecef0b92864cc598e9101e9c4cf832ebbf228f50c84aa5dd850aac379"},
@@ -1407,18 +1355,8 @@ pyyaml-env-tag = [
     {file = "pyyaml_env_tag-0.1.tar.gz", hash = "sha256:70092675bda14fdec33b31ba77e7543de9ddc88f2e5b99160396572d11525bdb"},
 ]
 redis = [
-    {file = "redis-3.5.3-py2.py3-none-any.whl", hash = "sha256:432b788c4530cfe16d8d943a09d40ca6c16149727e4afe8c2c9d5580c59d9f24"},
-    {file = "redis-3.5.3.tar.gz", hash = "sha256:0e7e0cfca8660dea8b7d5cd8c4f6c5e29e11f31158c0b0ae91a397f00e5a05a2"},
-]
-redis-cache = [
-    {file = "redis-cache-0.1.5.tar.gz", hash = "sha256:cd138557d61f3cc04c3cffabc114b0b1d5fef0349c0838aa19cc984e51c9a5d5"},
-]
-redis-simple-cache-py3 = [
-    {file = "redis-simple-cache-py3-0.0.7.tar.gz", hash = "sha256:55de250abb6a76c16ce061349ebf8319419f868f6106fb581a94750b830af81e"},
-    {file = "redis_simple_cache_py3-0.0.7-py3-none-any.whl", hash = "sha256:5351ea70a8105216a0bcdc11a12cf8f144ad4db51bb4bb68dd159bdc77669aef"},
-]
-redis-structures = [
-    {file = "redis_structures-0.1.7.tar.gz", hash = "sha256:0771324fe348583ffdf7025e4034d8da939435e62bac3a1016216fb89b8e25ff"},
+    {file = "redis-4.2.2-py3-none-any.whl", hash = "sha256:4e95f4ec5f49e636efcf20061a5a9110c20852f607cfca6865c07aaa8a739ee2"},
+    {file = "redis-4.2.2.tar.gz", hash = "sha256:0107dc8e98a4f1d1d4aa00100e044287f77121a1e6d2085545c4b7fa94a7a27f"},
 ]
 s3transfer = [
     {file = "s3transfer-0.5.2-py3-none-any.whl", hash = "sha256:7a6f4c4d1fdb9a2b640244008e142cbc2cd3ae34b386584ef044dd0f27101971"},
@@ -1455,9 +1393,6 @@ typing-extensions = [
 urllib3 = [
     {file = "urllib3-1.26.9-py2.py3-none-any.whl", hash = "sha256:44ece4d53fb1706f667c9bd1c648f5469a2ec925fcf3a776667042d645472c14"},
     {file = "urllib3-1.26.9.tar.gz", hash = "sha256:aabaf16477806a5e1dd19aa41f8c2b7950dd3c746362d7e3223dbe6de6ac448e"},
-]
-vital-tools = [
-    {file = "vital-tools-0.1.13.tar.gz", hash = "sha256:72d0fbcc5a16e5c7b1971d7020ed4326144a9a34a37d69bbc2ddc945eaf9cc6d"},
 ]
 watchdog = [
     {file = "watchdog-2.1.7-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:177bae28ca723bc00846466016d34f8c1d6a621383b6caca86745918d55c7383"},

@@ -1,20 +1,19 @@
+from collections import defaultdict
 from typing import AsyncIterable, Dict, List
 
-from doublex import ProxySpy, called, never
 from hamcrest import *
 
-from melange import SimpleMessageDispatcher
 from melange.backends.interfaces import AsyncMessagingBackend
 from melange.message_dispatcher import AsyncSimpleMessageDispatcher
 from melange.models import Message
 from melange.serializers import JsonSerializer, PickleSerializer, SerializerRegistry
 from tests.fixtures import (
     AsyncBananaConsumer,
+    AsyncExceptionaleConsumer,
+    AsyncNoBananaConsumer,
     BananaHappened,
     BaseMessage,
-    ExceptionaleConsumer,
     MessageStubInterface,
-    NoBananaConsumer,
     SerializerStub,
 )
 
@@ -32,6 +31,7 @@ class StubAsyncMessagingBackend(AsyncMessagingBackend):
     def __init__(self, messages: List[Message], *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.messages = messages
+        self.call_count = defaultdict(lambda: 0)
 
     async def get_queue(self, queue_name: str):
         return {}
@@ -45,6 +45,7 @@ class StubAsyncMessagingBackend(AsyncMessagingBackend):
             yield message
 
     async def acknowledge(self, message: Message) -> None:
+        self.call_count["acknowledge"] += 1
         return None
 
 
@@ -94,7 +95,9 @@ class TestAsyncMessageDispatcher:
 
         assert_that(num_calls, is_(2))
 
-    def test_consume_on_queue_but_no_consumer_interested_in_the_messages(self):
+    async def test_consume_on_queue_but_no_consumer_interested_in_the_messages(
+        self, anyio_backend
+    ):
         serializer = SerializerStub()
 
         serialized_event = serializer.serialize(BananaHappened("apple"))
@@ -104,18 +107,21 @@ class TestAsyncMessageDispatcher:
         ]
         backend = a_backend_with_messages(messages)
 
-        consumer = ProxySpy(NoBananaConsumer())
+        call_registry = {}
+        consumer = AsyncNoBananaConsumer(call_registry)
 
         registry = SerializerRegistry(serializer_settings)
-        sut = SimpleMessageDispatcher(
+        sut = AsyncSimpleMessageDispatcher(
             consumer, serializer_registry=registry, backend=backend
         )
-        sut.consume_event("queue")
+        await sut.consume_event("queue")
 
-        assert_that(consumer.process, never(called()))
-        assert_that(backend.acknowledge, called().times(2))
+        assert_that(call_registry, not_(has_key("banana")))
+        assert_that(backend.call_count["acknowledge"], is_(2))
 
-    def test_if_a_consumer_raises_an_exception_the_message_is_not_acknowledged(self):
+    async def test_if_a_consumer_raises_an_exception_the_message_is_not_acknowledged(
+        self, anyio_backend
+    ):
         serializer = SerializerStub()
 
         serialized_event = serializer.serialize(BananaHappened("apple"))
@@ -125,11 +131,11 @@ class TestAsyncMessageDispatcher:
         ]
         backend = a_backend_with_messages(messages)
 
-        consumer = ExceptionaleConsumer()
+        consumer = AsyncExceptionaleConsumer()
 
         registry = SerializerRegistry(serializer_settings)
-        sut = SimpleMessageDispatcher(
+        sut = AsyncSimpleMessageDispatcher(
             consumer, serializer_registry=registry, backend=backend
         )
-        sut.consume_event("queue")
-        assert_that(backend.acknowledge, never(called()))
+        await sut.consume_event("queue")
+        assert_that(backend.call_count["acknowledge"], is_(0))

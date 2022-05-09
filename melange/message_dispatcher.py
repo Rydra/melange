@@ -14,6 +14,7 @@ from melange.backends.backend_manager import BackendManager
 from melange.backends.interfaces import AsyncMessagingBackend, MessagingBackend
 from melange.consumers import AsyncConsumer, Consumer
 from melange.exceptions import SerializationError
+from melange.infrastructure.async_cache import AsyncDeduplicationCache, AsyncNullCache
 from melange.infrastructure.cache import DeduplicationCache, NullCache
 from melange.models import Message, QueueWrapper
 from melange.serializers.registry import SerializerRegistry
@@ -179,7 +180,7 @@ class AsyncMessageDispatcher:
         self,
         serializer_registry: SerializerRegistry,
         backend: AsyncMessagingBackend,
-        cache: Optional[DeduplicationCache] = None,
+        cache: Optional[AsyncDeduplicationCache] = None,
         always_ack: bool = False,
         early_ack: bool = False,
     ) -> None:
@@ -194,14 +195,14 @@ class AsyncMessageDispatcher:
             upon receiving. Overrides `always_ack`. Useful when the message
             processing is long and you need to skip the visibility timeout of SQS
         """
-        self._consumers: List[Consumer] = []
+        self._consumers: List[AsyncConsumer] = []
         self.serializer_registry = serializer_registry
         self._backend = backend
-        self.cache: DeduplicationCache = cache or NullCache()
+        self.cache: AsyncDeduplicationCache = cache or AsyncNullCache()
         self.always_ack = always_ack
         self.early_ack = early_ack
 
-    def attach_consumer(self, consumer: Consumer) -> None:
+    def attach_consumer(self, consumer: AsyncConsumer) -> None:
         """
         Attaches a consumer to the dispatcher, so that it can receive messages
         Args:
@@ -210,7 +211,7 @@ class AsyncMessageDispatcher:
         if consumer not in self._consumers:
             self._consumers.append(consumer)
 
-    def unattach_consumer(self, consumer: Consumer) -> None:
+    def unattach_consumer(self, consumer: AsyncConsumer) -> None:
         """
         Unattaches the consumer from the dispatcher, so that it will not receive messages anymore
         Args:
@@ -398,7 +399,7 @@ class AsyncMessageDispatcher:
                         f"{get_fully_qualified_name(consumer)}.{message.message_id}"
                     )
 
-                    if message_key in self.cache:
+                    if await self.cache.contains(message_key):
                         logger.info("detected a duplicated message, ignoring")
                     else:
                         if isinstance(
@@ -412,7 +413,7 @@ class AsyncMessageDispatcher:
                                 message_data, message_id=message.message_id
                             )
                         successful += 1
-                        self.cache.store(message_key, message_key)
+                        await self.cache.store(message_key, message_key)
                 except Exception as e:
                     logger.exception(e)
 
@@ -449,10 +450,10 @@ class AsyncSimpleMessageDispatcher(AsyncMessageDispatcher):
 
     def __init__(
         self,
-        consumer: Consumer,
+        consumer: AsyncConsumer,
         serializer_registry: SerializerRegistry,
         backend: AsyncMessagingBackend,
-        cache: Optional[DeduplicationCache] = None,
+        cache: Optional[AsyncDeduplicationCache] = None,
         always_ack: bool = False,
         early_ack: bool = False,
     ):
