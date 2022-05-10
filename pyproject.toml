@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "melange"
-version = "7.2.0"
+version = "7.3.0"
 description = "A messaging library for an easy inter-communication in distributed and microservices architectures"
 authors = ["David Jiménez (Rydra)"]
 license = "MIT"
@@ -10,12 +10,14 @@ python = "^3.8.0"
 boto3 = "^1.11.5"
 pika = "^1.1.0"
 marshmallow = "^3.3.0"
-redis-simple-cache-py3 = "^0.0.7"
 pytz = "^2019.3"
 funcy = "^1.14"
 methoddispatch = "^3.0.2"
 singleton-py3 = "^0.2.1"
 toolz = "^0.11.2"
+aioboto3 = "^9.5.0"
+anyio = "^3.5.0"
+redis = "^4.2.2"
 
 [tool.poetry.dev-dependencies]
 pytest-tools = {git = "https://github.com/Rydra/pytest-tools"}
@@ -32,7 +34,7 @@ pytest-cov = "^3.0.0"
 
 [tool.commitizen]
 name = "cz_conventional_commits"
-version = "7.2.0"
+version = "7.3.0"
 tag_format = "$version"
 version_files = [
     "melange/__version__.py",

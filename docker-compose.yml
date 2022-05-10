@@ -3,6 +3,8 @@ version: '3.9'
 services:
   redis:
     image: redis:3.2.6-alpine
+    ports:
+      - 6379:6379
 
   app:
     build: .
@@ -16,6 +18,7 @@ services:
       - .:/app
     links:
       - localstack
+      - redis
 
   localstack:
     image: localstack/localstack

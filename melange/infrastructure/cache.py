@@ -1,6 +1,7 @@
+import logging
 from typing import Any, Optional, Protocol
 
-from redis_cache import SimpleCache, logging
+import redis
 
 logger = logging.getLogger(__name__)
 
@@ -57,31 +58,35 @@ class NullCache:
 
 class RedisCache:
     def __init__(self, **kwargs: Any) -> None:
-        self.cache = SimpleCache(
-            expire=kwargs.get("expire", 3600),
+        self.client = redis.Redis(
             host=kwargs.get("host", 3600),
             port=kwargs.get("port", 3600),
             db=kwargs.get("db", 3600),
             password=kwargs.get("password", 3600),
-            namespace=kwargs.get("namespace", 3600),
+            decode_responses=True,
         )
-
-        if not self.cache.connection:
-            logger.warning(
-                "Could not establish a connection with redis. Message deduplication won't work"
-            )
+        self.expire = kwargs.get("expire", 3600)
 
     def store(self, key: str, value: Any, expire: Optional[int] = None) -> None:
-        if not self.cache.connection:
-            return
-
-        return self.cache.store(key, value, expire)
+        self.client.set(key, value, expire)
 
     def get(self, key: str) -> Any:
-        if not self.cache.connection:
-            return
+        return self.client.get(key)
 
-        return self.cache.get(key)
+    def contains(self, key: str) -> bool:
+        return bool(self.client.exists(key))
 
     def __contains__(self, key: str) -> bool:
-        return self.cache.connection and key in self.cache
+        return self.contains(key)
+
+
+def get_redis_cache(
+    null_if_no_connection: bool = False, **kwargs: Any
+) -> DeduplicationCache:
+    try:
+        cache = RedisCache(**kwargs)
+        if null_if_no_connection:
+            cache.client.ping()
+        return cache
+    except redis.exceptions.ConnectionError:
+        return NullCache()

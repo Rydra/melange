@@ -58,3 +58,15 @@ class Message:
 
     def get_message_manifest(self) -> Optional[str]:
         return self.manifest
+
+
+class MessageDto:
+    def __init__(
+        self,
+        message: Message,
+        message_group_id: Optional[str] = None,
+        message_deduplication_id: Optional[str] = None,
+    ) -> None:
+        self.message = message
+        self.message_group_id = message_group_id
+        self.message_deduplication_id = message_deduplication_id
