@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "melange"
-version = "7.2.0"
+version = "7.3.0"
 description = "A messaging library for an easy inter-communication in distributed and microservices architectures"
 authors = ["David Jiménez (Rydra)"]
 license = "MIT"
@@ -34,7 +34,7 @@ pytest-cov = "^3.0.0"
 
 [tool.commitizen]
 name = "cz_conventional_commits"
-version = "7.2.0"
+version = "7.3.0"
 tag_format = "$version"
 version_files = [
     "melange/__version__.py",
