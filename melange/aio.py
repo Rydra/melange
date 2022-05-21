@@ -1,9 +1,18 @@
+import uuid
+from dataclasses import dataclass
 from types import TracebackType
-from typing import Any, AsyncIterator, Callable, List, Optional, Type
+from typing import Any, AsyncIterator, Callable, Dict, List, Optional, Type
 
 from melange.backends.sqs.sqs_backend_async import AsyncBaseSQSBackend
-from melange.models import Message, QueueWrapper
+from melange.models import Message, MessageDto, QueueWrapper
 from melange.serializers import JsonSerializer
+
+
+@dataclass
+class ValueContainer:
+    value: Any
+    message_group_id: Optional[str] = None
+    message_deduplication_id: Optional[str] = None
 
 
 class AIOSQSProducer:
@@ -27,9 +36,11 @@ class AIOSQSProducer:
         self.value_serializer = value_serializer or JsonSerializer().serialize
         self.queue_name = queue_name
         self.queue: Optional[QueueWrapper] = None
+        self.queue_attributes: Optional[Dict] = None
 
     async def start(self) -> None:
         self.queue = await self._backend.get_queue(self.queue_name)
+        self.queue_attributes = await self._backend.get_queue_attributes(self.queue)
 
     async def send(self, value: Any, **kwargs: Any) -> None:
         """
@@ -52,6 +63,46 @@ class AIOSQSProducer:
             Message.create(content, None, 0), self.queue, **kwargs
         )
 
+    async def send_batch(self, entries: List[ValueContainer]) -> None:
+        """
+        Publishes data to a queue
+
+        Args:
+            entries: The data to send to this queue. It will be serialized before sending to the
+                queue using the serializers.
+            **kwargs: Any extra attributes. They will be passed to the backend upon publish.
+        """
+        if not self.queue:
+            raise Exception(
+                "Initialize first the queue by calling the start() method "
+                "of the consumer or using a context manager"
+            )
+
+        message_dtos: List[MessageDto] = []
+
+        assert self.queue_attributes
+        is_fifo = self.queue_attributes.get("FifoQueue") == "true"
+
+        for entry in entries:
+            content = self.value_serializer(entry.value)
+
+            message_group_id = entry.message_group_id or str(uuid.uuid4())
+            message_deduplication_id = (
+                None
+                if not is_fifo
+                else (entry.message_deduplication_id or str(uuid.uuid4()))
+            )
+
+            message_dtos.append(
+                MessageDto(
+                    Message.create(content, None, 0),
+                    message_group_id,
+                    message_deduplication_id,
+                )
+            )
+
+        await self._backend.publish_to_queue_batch(message_dtos, self.queue)
+
     async def __aenter__(self) -> "AIOSQSProducer":
         await self.start()
         return self
@@ -63,6 +114,7 @@ class AIOSQSProducer:
         exc_tb: Optional[TracebackType],
     ) -> None:
         self.queue = None
+        self.queue_attributes = None
 
 
 class AIOSQSConsumer:
