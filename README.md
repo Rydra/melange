@@ -1,3 +1,7 @@
+NOTE: Since 2022 I've moved to Apache Kafka (using aiokafka) for message exchanging among microservices. It has a richer ecosystem, more library support and offers better performance and scalability that what you can achieve with Melange. This project has been a thrilling learning experience and I've managed to use it in production on products which implemented an event-driven architecture that had high scalability requirements.
+
+Please, consider forking this should you ever wish continue with this work.
+
 ![melange logo](docs/img/melange_logo.png)
 
 # Melange
